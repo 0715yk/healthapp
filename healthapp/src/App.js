@@ -1,48 +1,33 @@
 import "./App.css";
 import { useState } from "react";
-import Main from "./pages/Main";
-import Landing from "./pages/Landing";
+import Main from "./pages/Main/Main";
+import Landing from "./pages/Landing/Landing";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import Record from "./pages/Record";
 import Records from "./pages/Records";
+import WorkOut from "./pages/WorkOut/WorkOut";
 
 function App() {
-  const [workouts, setWorkouts] = useState([]);
-  const [color, setColor] = useState("black");
-  const [checkList, setCheckList] = useState({});
   const [startTime, setStartTime] = useState("");
-
+  const [user, setUser] = useState({ nickname: "" });
+  const [checkList, setCheckList] = useState({});
   return (
     <Router>
       <Switch>
         <Route path="/" exact>
-          <Landing
-            workouts={workouts}
-            setWorkouts={setWorkouts}
-            color={color}
-            setColor={setColor}
-            setStartTime={setStartTime}
-          />
+          <Landing setUser={setUser} setStartTime={setStartTime} />
         </Route>
         <Route path="/main">
-          <Main
-            workouts={workouts}
-            color={color}
-            setWorkouts={setWorkouts}
-            setCheckList={setCheckList}
-            checkList={checkList}
-          />
+          <Main user={user} />
         </Route>
         <Route path="/record">
-          <Record
-            startTime={startTime}
-            checkList={checkList}
-            setWorkouts={setWorkouts}
-            setCheckList={setCheckList}
-          />
+          <Record startTime={startTime} />
         </Route>
         <Route path="/records">
-          <Records color={color} />
+          <Records />
+        </Route>
+        <Route path="/workout">
+          <WorkOut setCheckList={setCheckList} checkList={checkList} />
         </Route>
       </Switch>
     </Router>

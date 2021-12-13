@@ -1,0 +1,63 @@
+.workoutPage {
+  background-color: black;
+  min-height: 100vh;
+  min-width: 100vw;
+}
+
+.registerArea {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 90vw;
+  height: 8vh;
+  margin-top: 10px;
+  padding-left: 15px;
+}
+
+.inputArea {
+  display: flex;
+  width: 69vw;
+  height: 100%;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.directInput {
+  height: 3.7vh;
+  outline: none;
+  font-size: 1rem;
+}
+
+.indirectInput {
+  height: 3.7vh;
+  font-size: 1rem;
+  outline: none;
+}
+
+.btnArea {
+  height: 100%;
+  width: 20vw;
+  border: none;
+  color: black;
+  background-color: white;
+  font-weight: bold;
+  font-size: 2.5rem;
+  border-radius: 5px;
+}
+
+#cacelBtn {
+  width: 90vw;
+  height: 7vh;
+  margin-left: 15px;
+  margin-top: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  outline: none;
+  color: white;
+  background-color: red;
+  font-weight: bold;
+  border-radius: 5px;
+  font-size: 5vw;
+}

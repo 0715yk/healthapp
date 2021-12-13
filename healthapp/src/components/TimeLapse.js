@@ -1,8 +1,10 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import moment from "moment";
 import styles from "./TimeLapse.module.css";
 
-const TimeLapse = ({ color, setTimeLapse, timeLapse }) => {
+const TimeLapse = () => {
+  const [timeLapse, setTimeLapse] = useState("");
+
   useEffect(() => {
     const now = moment();
     var timer = setInterval(() => {
@@ -15,7 +17,7 @@ const TimeLapse = ({ color, setTimeLapse, timeLapse }) => {
         sec: s.seconds(),
       };
 
-      setTimeLapse(`${time.hr}:${time.min}:${time.sec}`);
+      setTimeLapse(`${time.hr} : ${time.min} : ${time.sec}`);
     }, 1000);
 
     return () => {
@@ -24,10 +26,8 @@ const TimeLapse = ({ color, setTimeLapse, timeLapse }) => {
   }, []);
 
   return (
-    <div className={styles.timeLapse} style={{ backgroundColor: color }}>
-      <div className={styles.timeImage}>⏳</div>
-      <div className={styles.timeText}>timelapse :</div>
-      <div className={styles.time}>{timeLapse}</div>
+    <div className={styles.timeLapse}>
+      <div className={styles.timeText}>{`TimeLapse : ${timeLapse}`}</div>
     </div>
   );
 };
