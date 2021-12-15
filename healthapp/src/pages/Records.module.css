@@ -1,18 +1,18 @@
 .recordPage header {
-  color: black;
+  color: white;
   font-size: 2rem;
   font-weight: bold;
 }
 
 .recordPage table {
-  border: 1px solid black;
+  border: 1px solid white;
   text-align: center;
   width: 90vw;
 }
 
 .recordPage th,
 td {
-  border: 1px solid black;
+  border: 1px solid white;
 }
 
 .recordPage th {
@@ -64,6 +64,5 @@ td {
   justify-content: center;
   width: 100vw;
   height: 100vh;
-  font-size:2rem;
-  
+  font-size: 2rem;
 }

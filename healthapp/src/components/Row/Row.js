@@ -1,40 +1,31 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, { useState, useRef } from "react";
 import styles from "./Row.module.css";
 
-const Row = ({
-  keyIdx,
-  el,
-  workout,
-  workouts,
-  checkList,
-  setWorkouts,
-  setCheckList,
-}) => {
-  const [btnType, setBtnType] = useState("clear");
+const Row = ({ keyIdx, el, workout, checkList, setCheckList }) => {
   const kgRef = useRef();
   const repsRef = useRef();
 
   const clearRow = (workout, set) => {
-    const copyObj = Object.assign(checkList);
-    copyObj[workout][set - 1].kg = kgRef.current.value;
-    copyObj[workout][set - 1].reps = repsRef.current.value;
-    const copyArr = workouts.slice();
-    setCheckList(copyObj);
-    setWorkouts(copyArr);
-
-    if (btnType === "clear") {
-      setBtnType("fix");
-      kgRef.current.disabled = true;
-      repsRef.current.disabled = true;
+    const copyObj = Object.assign({}, checkList);
+    if (!copyObj[workout][set - 1].done) {
+      copyObj[workout][set - 1].kg =
+        kgRef.current.value === "" ? 0 : kgRef.current.value;
+      copyObj[workout][set - 1].reps =
+        repsRef.current.value === "" ? 0 : repsRef.current.value;
+      copyObj[workout][set - 1].done = true;
     } else {
-      setBtnType("clear");
-      kgRef.current.disabled = false;
-      repsRef.current.disabled = false;
+      copyObj[workout][set - 1].done = false;
+      setTimeout(() => {
+        kgRef.current.value = copyObj[workout][set - 1].kg;
+        repsRef.current.value = copyObj[workout][set - 1].reps;
+      });
     }
+
+    setCheckList(copyObj);
   };
 
   const deleteRow = (workout, set) => {
-    const copyObj = Object.assign(checkList);
+    const copyObj = Object.assign({}, checkList);
     let cnt = 1;
     copyObj[workout] = copyObj[workout].filter((el) => {
       if (el.set !== set) {
@@ -43,8 +34,7 @@ const Row = ({
         return true;
       } else return false;
     });
-    const copyArr = workouts.slice();
-    setWorkouts(copyArr);
+
     setCheckList(copyObj);
   };
 
@@ -52,19 +42,19 @@ const Row = ({
     <div className={styles.rowInput} key={keyIdx}>
       <div>{`set ${el.set}`}</div>
       <div id={styles.kgInput}>
-        kg :<input ref={kgRef} type="number" />
+        kg : {el.done ? el.kg : <input ref={kgRef} type="number" />}
       </div>
       <div id={styles.repsInput}>
-        reps :<input ref={repsRef} type="number" />
+        reps : {el.done ? el.reps : <input ref={repsRef} type="number" />}
       </div>
       <button
         onClick={() => {
           clearRow(workout, el.set);
         }}
       >
-        {btnType}
+        {el.done ? "fix" : "clear"}
       </button>
-      {btnType === "fix" ? (
+      {el.done ? (
         <span
           id={styles.xBtn}
           onClick={() => {

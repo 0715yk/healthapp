@@ -3,7 +3,7 @@ import styles from "./Record.module.css";
 import { useHistory } from "react-router-dom";
 import moment from "moment";
 
-const Record = ({ checkList, setWorkouts, setCheckList, startTime }) => {
+const Record = ({ checkList, setCheckList, startTime }) => {
   const [totalRecord, setTotalRecord] = useState({});
   const history = useHistory();
   const [bestSet, setBestSet] = useState({});
@@ -24,102 +24,96 @@ const Record = ({ checkList, setWorkouts, setCheckList, startTime }) => {
     const copySet = { ...bestSet };
     for (let [key, value] of Object.entries(copyObj)) {
       if (value.length === 0) continue;
-      var best = [-1, -1];
+      var best = [0, 0];
       for (let el of value) {
-        if (parseInt(best[0]) <= parseInt(el[0])) {
-          if (parseInt(best[0]) === parseInt(el[0])) {
-            if (parseInt(best[1]) < parseInt(el[1])) {
-              best = el;
+        if (parseInt(best[0]) <= parseInt(el.kg)) {
+          if (parseInt(best[0]) === parseInt(el.kg)) {
+            if (parseInt(best[1]) < parseInt(el.reps)) {
+              best = [el.kg, el.reps];
             }
             continue;
           }
-          best = el;
+          best = [el.kg, el.reps];
         }
       }
       copySet[key] = best;
     }
     setBestSet(copySet);
     const record = {};
-    const timeLapse = getQueryVariable("timelapse");
+    const endTIme = moment().format("HH:mm");
+    let [a, b] = startTime.split(":");
+    let [c, d] = endTIme.split(":");
+    a = parseInt(a);
+    b = parseInt(b);
+    c = parseInt(c);
+    d = parseInt(d);
 
-    record["timeLapse"] = `${timeLapse.split(":")[0]}h ${
-      timeLapse.split(":")[1]
-    }m`;
+    const hour = c - a;
+    const min = b > d ? 60 - b + d : d - b;
+
+    record["timeLapse"] = `${hour} hr ${min} min`;
     record["startTime"] = startTime;
     record["finishedTime"] = moment().format("HH:mm");
     setTotalRecord(record);
   }, []);
 
   const completeWorkout = () => {
-    setWorkouts([]);
     setCheckList({});
-    history.push("/");
+    history.push("/main");
   };
 
   return (
     <div className={styles.recordPage}>
+      <button className={styles.glowBtn} onClick={completeWorkout}></button>
       <header className={styles.recordHeader}>
         <h2>Records</h2>
       </header>
       <main>
         <article id={styles.totalRecordPart}>
-          <h3>Total</h3>
+          <h3 style={{ color: "gold" }}>Total ⏱</h3>
           <ul>
-            <li>{moment().format("h:mm A, ddd MMM D일 YYYY")}</li>
+            <li>{moment().format("YYYY-MM-D (dddd)")}</li>
             <li
               className={styles.timeLapsePart}
-            >{`⏱ ${totalRecord["timeLapse"]} [${totalRecord["startTime"]} ~ ${totalRecord["finishedTime"]}]`}</li>
+            >{`${totalRecord["timeLapse"]} [${totalRecord["startTime"]} ~ ${totalRecord["finishedTime"]}]`}</li>
             <li>
-              <span>Best set</span>
+              <h3 id={styles.bestSetH} style={{ color: "gold" }}>
+                Best set 🏅
+              </h3>
               <ul list-style="none">
                 {Object.keys(bestSet).map((el) => {
                   return (
-                    <li>{`${el} : ${bestSet[el][0]} kg x ${bestSet[el][1]}`}</li>
+                    <li>{`${el} : ${bestSet[el][0]} kg x ${bestSet[el][1]} reps`}</li>
                   );
                 })}
               </ul>
             </li>
-            {/* <li>연속 운동 일수 : 12시간</li> */}
           </ul>
         </article>
         <article id={styles.tablePart}>
+          <h3 id={styles.workoutsPart} style={{ color: "gold" }}>
+            Workouts ⭐
+          </h3>
           {Object.keys(checkList).map((workoutName) => {
             return (
               <section>
                 <h3>{workoutName}</h3>
-                <table>
-                  <thead>
-                    <th>set</th>
-                    {checkList[workoutName].map((_, key) => {
-                      return <th key={key}>{key + 1}</th>;
-                    })}
-                  </thead>
-                  <tbody>
-                    <tr>
-                      <th>weight</th>
-                      {checkList[workoutName].map((el, key) => {
-                        return <td key={key}>{el[0]}</td>;
-                      })}
-                    </tr>
-                    <tr>
-                      <th>reps</th>
-                      {checkList[workoutName].map((el, key) => {
-                        return <td key={key}>{el[1]}</td>;
-                      })}
-                    </tr>
-                  </tbody>
-                  <tfoot></tfoot>
-                </table>
+                <section id={styles.workoutList}>
+                  {checkList[workoutName].map((el, key) => {
+                    return (
+                      <div className={styles.record} key={key}>{`set ${
+                        key + 1
+                      } : ${el.kg === null ? 0 : el.kg} kg x ${
+                        el.reps === null ? 0 : el.reps
+                      } reps`}</div>
+                    );
+                  })}
+                </section>
               </section>
             );
           })}
         </article>
       </main>
-      <footer>
-        <nav>
-          <button onClick={completeWorkout}>GO BACK</button>
-        </nav>
-      </footer>
     </div>
   );
 };

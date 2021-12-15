@@ -4,7 +4,6 @@ import TimeLapse from "../../components/TimeLapse";
 import WriteFunc from "../../components/WriteFunc/WriteFunc";
 
 const WorkOut = ({ checkList, setCheckList }) => {
-  const [workouts, setWorkouts] = useState([]);
   const [workout, setWorkout] = useState("");
   const selectRef = useRef(null);
   const inputRef = useRef(null);
@@ -46,18 +45,20 @@ const WorkOut = ({ checkList, setCheckList }) => {
   };
 
   const registerWorkout = () => {
-    const copyArr = workouts.slice();
-    if (copyArr.includes(workout)) {
+    if (workout.replace(/ /g, "") === "") {
+      alert("please choose workout");
+      return;
+    }
+    const copyObj = Object.assign({}, checkList);
+
+    if (!copyObj[workout])
+      copyObj[workout] = [{ set: 1, kg: null, reps: null }];
+    else {
       alert("already taken");
       return;
     }
 
-    copyArr.push(workout);
-    const copyObj = Object.assign(checkList, {});
-    if (!copyObj[workout])
-      copyObj[workout] = [{ set: 1, kg: null, reps: null }];
     setCheckList(copyObj);
-    setWorkouts(copyArr);
 
     inputRef.current.value = null;
     selectRef.current.value = "choose basic workout";
@@ -66,39 +67,36 @@ const WorkOut = ({ checkList, setCheckList }) => {
   return (
     <div className={styles.workoutPage}>
       <main>
-        <TimeLapse />
-        <article className={styles.registerArea}>
-          <div className={styles.inputArea}>
-            <input
-              placeholder="direct input"
-              onKeyDown={getNormalInput}
-              ref={inputRef}
-              className={styles.directInput}
-              onChange={getNormalInput}
-            />
-            <select
-              ref={selectRef}
-              className={styles.indirectInput}
-              onChange={getSelectInput}
-              defaultValue="choose basic workout"
-            >
-              <option disabled>choose basic workout</option>
-              {workoutNames.map((name) => (
-                <option>{name}</option>
-              ))}
-            </select>
-          </div>
-          <button className={styles.btnArea} onClick={registerWorkout}>
-            +
-          </button>
+        <article id={styles.stickyNav}>
+          <TimeLapse />
+          <article className={styles.registerArea}>
+            <div className={styles.inputArea}>
+              <input
+                placeholder="direct input"
+                onKeyDown={getNormalInput}
+                ref={inputRef}
+                className={styles.directInput}
+                onChange={getNormalInput}
+              />
+              <select
+                ref={selectRef}
+                className={styles.indirectInput}
+                onChange={getSelectInput}
+                defaultValue="choose basic workout"
+              >
+                <option disabled>choose basic workout</option>
+                {workoutNames.map((name) => (
+                  <option>{name}</option>
+                ))}
+              </select>
+            </div>
+            <button className={styles.btnArea} onClick={registerWorkout}>
+              +
+            </button>
+          </article>
+          <button id={styles.cacelBtn}>Cancel Workout</button>
         </article>
-        <button id={styles.cacelBtn}>Cancel Workout</button>
-        <WriteFunc
-          setWorkouts={setWorkouts}
-          workouts={workouts}
-          checkList={checkList}
-          setCheckList={setCheckList}
-        />
+        <WriteFunc checkList={checkList} setCheckList={setCheckList} />
       </main>
     </div>
   );

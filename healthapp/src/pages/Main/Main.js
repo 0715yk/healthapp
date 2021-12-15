@@ -2,10 +2,12 @@ import React from "react";
 import styles from "./Main.module.css";
 import GlowHeader from "../../components/GlowHeader/GlowHeader";
 import { useHistory } from "react-router-dom";
+import moment from "moment";
 
-const Main = ({ user }) => {
+const Main = ({ setStartTime }) => {
   const history = useHistory();
   const startWorkOut = () => {
+    setStartTime(moment().format("HH:mm"));
     history.push("/workout");
   };
 

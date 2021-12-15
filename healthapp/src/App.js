@@ -18,10 +18,14 @@ function App() {
           <Landing setUser={setUser} setStartTime={setStartTime} />
         </Route>
         <Route path="/main">
-          <Main user={user} />
+          <Main setStartTime={setStartTime} />
         </Route>
         <Route path="/record">
-          <Record startTime={startTime} />
+          <Record
+            startTime={startTime}
+            checkList={checkList}
+            setCheckList={setCheckList}
+          />
         </Route>
         <Route path="/records">
           <Records />
