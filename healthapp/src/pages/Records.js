@@ -1,17 +1,21 @@
 import React, { useEffect, useState } from "react";
 import styles from "./Records.module.css";
 import { useHistory } from "react-router-dom";
+import { db } from "..";
 
-const Records = ({ color }) => {
-  const [checkLists, setCheckLists] = useState([]);
+const Records = ({ color, user }) => {
+  const [checkLists, setCheckLists] = useState({});
   const [empty, setEmpty] = useState(true);
   const history = useHistory();
 
-  useEffect(() => {
-    let records = JSON.parse(localStorage.getItem("records"));
-    if (!records) return;
-    setCheckLists(records);
-    setEmpty(false);
+  useEffect(async () => {
+    var recordRef = await db.collection("records").doc(user.email);
+    recordRef.get().then((doc) => {
+      if (doc.exists) {
+        const data = doc.data();
+        setCheckLists(data);
+      }
+    });
   }, []);
 
   const back = () => {
@@ -20,56 +24,48 @@ const Records = ({ color }) => {
 
   return (
     <div className={styles.recordPage}>
-      <button style={{ backgroundColor: color }} onClick={back}>
-        back
-      </button>
-      <header>🖊 ProgressiveDiary</header>
+      <button onClick={back}>back</button>
+      {/* <header>🖊 ProgressiveDiary</header> */}
       <main>
-        {empty ? (
-          <div className={styles.emptySign}>❌ empty records ❌</div>
-        ) : (
-          checkLists.map((el) => {
-            return (
-              <section>
-                <article id={styles.datePart}>📅 {el["date"]}</article>
-                <article id={styles.tablePart}>
-                  {Object.keys(el).map((workoutName) => {
-                    return (
-                      workoutName !== "date" && (
-                        <section>
-                          <h3>{workoutName}</h3>
-                          <table>
-                            <thead>
-                              <th>set</th>
-                              {el[workoutName].map((_, key) => {
-                                return <th key={key}>{key + 1}</th>;
-                              })}
-                            </thead>
-                            <tbody>
-                              <tr>
-                                <th>weight</th>
-                                {el[workoutName].map((el, key) => {
-                                  return <td key={key}>{el[0]}</td>;
+        {Object.keys(checkLists).map((date) => {
+          return (
+            <section>
+              <h2>{date}</h2>
+              <article id={styles.tablePart}>
+                {checkLists[date].map((workout, num) => {
+                  return (
+                    <div>
+                      <h1>{num}</h1>
+                      <div>
+                        {Object.keys(workout).map((workoutName) => {
+                          return (
+                            <section>
+                              <h3>{workoutName}</h3>
+                              <section id={styles.workoutList}>
+                                {workout[workoutName].map((el, key) => {
+                                  return (
+                                    <div
+                                      className={styles.record}
+                                      key={key}
+                                    >{`set ${key + 1} : ${
+                                      el.kg === null ? 0 : el.kg
+                                    } kg x ${
+                                      el.reps === null ? 0 : el.reps
+                                    } reps`}</div>
+                                  );
                                 })}
-                              </tr>
-                              <tr>
-                                <th>reps</th>
-                                {el[workoutName].map((el, key) => {
-                                  return <td key={key}>{el[1]}</td>;
-                                })}
-                              </tr>
-                            </tbody>
-                            <tfoot></tfoot>
-                          </table>
-                        </section>
-                      )
-                    );
-                  })}
-                </article>
-              </section>
-            );
-          })
-        )}
+                              </section>
+                            </section>
+                          );
+                        })}
+                      </div>
+                    </div>
+                  );
+                })}
+              </article>
+            </section>
+          );
+        })}
       </main>
     </div>
   );

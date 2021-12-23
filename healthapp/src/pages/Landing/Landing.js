@@ -1,9 +1,6 @@
 import React, { useEffect, useRef } from "react";
 import styles from "./Landing.module.css";
 import Login from "../Login/Login";
-import smoothscroll from "smoothscroll-polyfill";
-
-// kick off the polyfill!
 
 const Landing = ({ setUser }) => {
   const scrollRef = useRef(null);

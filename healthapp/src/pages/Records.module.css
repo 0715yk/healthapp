@@ -1,68 +1,25 @@
-.recordPage header {
+.recordPage {
+  background-color: black;
   color: white;
-  font-size: 2rem;
-  font-weight: bold;
+  min-height: 100vh;
+  min-width: 100vw;
+}
+.recordPage main section {
+  margin-top: 10px;
 }
 
-.recordPage table {
-  border: 1px solid white;
-  text-align: center;
-  width: 90vw;
+.record {
+  text-align: left;
+  width: 100%;
+  padding: 3px 0;
+  font-size: 4.5vw;
 }
 
-.recordPage th,
-td {
-  border: 1px solid white;
-}
-
-.recordPage th {
-}
-
-#tablePart section {
-  margin-top: 1rem;
+#workoutList {
+  text-align: left;
   display: flex;
   flex-direction: column;
-  align-items: center;
-}
-
-#tablePart h3 {
+  justify-content: flex-start;
   width: 90vw;
-}
-
-#datePart {
-  text-align: center;
-  font-weight: bold;
-}
-
-#tablePart {
-  margin-bottom: 3rem;
-}
-
-#tablePart table {
-  margin-top: 1rem;
-}
-
-.recordPage button {
-  position: fixed;
-  top: 1rem;
-  right: 1rem;
-  color: white;
-  width: 3rem;
-  height: 2rem;
-  border: none;
-  border-radius: 3px;
-  text-align: center;
-}
-
-.recordPage main {
-  margin-bottom: 10rem;
-}
-
-.emptySign {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 100vw;
-  height: 100vh;
-  font-size: 2rem;
+  margin-top: 5px;
 }

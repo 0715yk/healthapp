@@ -22,7 +22,10 @@ const Login = ({ scrollRef, setUser }) => {
       .auth()
       .signInWithEmailAndPassword(email, password)
       .then((response) => {
-        setUser({ nickname: response.user.displayName });
+        setUser({
+          nickname: response.user.displayName,
+          email: response.user.email,
+        });
         history.push("/main");
       })
       .catch((res) => {

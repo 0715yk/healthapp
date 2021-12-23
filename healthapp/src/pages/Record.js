@@ -2,22 +2,12 @@ import React, { useEffect, useState } from "react";
 import styles from "./Record.module.css";
 import { useHistory } from "react-router-dom";
 import moment from "moment";
+import { db } from "..";
 
-const Record = ({ checkList, setCheckList, startTime }) => {
+const Record = ({ checkList, setCheckList, startTime, user }) => {
   const [totalRecord, setTotalRecord] = useState({});
   const history = useHistory();
   const [bestSet, setBestSet] = useState({});
-  const getQueryVariable = (variable) => {
-    var query = window.location.search.substring(1);
-    var vars = query.split("&");
-    for (var i = 0; i < vars.length; i++) {
-      var pair = vars[i].split("=");
-      if (pair[0] === variable) {
-        return pair[1];
-      }
-    }
-    return false;
-  };
 
   useEffect(() => {
     const copyObj = { ...checkList };
@@ -57,7 +47,39 @@ const Record = ({ checkList, setCheckList, startTime }) => {
     setTotalRecord(record);
   }, []);
 
-  const completeWorkout = () => {
+  const completeWorkout = async () => {
+    const date = moment().format("YYYY/MM/DD");
+    var recordRef = await db.collection("records").doc(user.email);
+    recordRef
+      .get()
+      .then((doc) => {
+        if (doc.exists) {
+          const data = doc.data()[date];
+          if (data) {
+            data.push(checkList);
+            recordRef.set(
+              {
+                [date]: data,
+              },
+              { merge: true }
+            );
+          } else {
+            recordRef.set({
+              [date]: [checkList],
+            });
+          }
+        } else {
+          db.collection("records")
+            .doc(user.email)
+            .set({
+              [date]: [checkList],
+            });
+        }
+      })
+      .catch((error) => {
+        console.log("Error getting document:", error);
+      });
+
     setCheckList({});
     history.push("/main");
   };

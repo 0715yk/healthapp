@@ -22,13 +22,14 @@ function App() {
         </Route>
         <Route path="/record">
           <Record
+            user={user}
             startTime={startTime}
             checkList={checkList}
             setCheckList={setCheckList}
           />
         </Route>
         <Route path="/records">
-          <Records />
+          <Records user={user} />
         </Route>
         <Route path="/workout">
           <WorkOut setCheckList={setCheckList} checkList={checkList} />

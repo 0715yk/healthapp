@@ -29,7 +29,11 @@ const Main = ({ setStartTime }) => {
         <article>
           <h2>My Templates</h2>
           <section>
-            <div></div>
+            <div
+              onClick={() => {
+                history.push("/records");
+              }}
+            ></div>
             <div></div>
             <div></div>
             <div></div>
