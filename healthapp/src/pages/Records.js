@@ -19,13 +19,15 @@ const Records = ({ color, user }) => {
   }, []);
 
   const back = () => {
-    history.push("/");
+    history.push("/main");
   };
 
   return (
     <div className={styles.recordPage}>
-      <button onClick={back}>back</button>
-      {/* <header>🖊 ProgressiveDiary</header> */}
+      <header>
+        <h2>Records</h2>
+      </header>
+      <button className={styles.glowBtn} onClick={back}></button>
       <main>
         {Object.keys(checkLists).map((date) => {
           return (
@@ -34,9 +36,9 @@ const Records = ({ color, user }) => {
               <article id={styles.tablePart}>
                 {checkLists[date].map((workout, num) => {
                   return (
-                    <div>
-                      <h1>{num}</h1>
-                      <div>
+                    <div className={styles.playPart}>
+                      <h1>{`workout ${num + 1}`}</h1>
+                      <div className={styles.scorePart}>
                         {Object.keys(workout).map((workoutName) => {
                           return (
                             <section>

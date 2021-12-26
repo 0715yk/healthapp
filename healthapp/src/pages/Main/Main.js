@@ -10,7 +10,9 @@ const Main = ({ setStartTime }) => {
     setStartTime(moment().format("HH:mm"));
     history.push("/workout");
   };
-
+  const getRecords = () => {
+    history.push("/records");
+  };
   return (
     <div className={styles.mainPage}>
       <GlowHeader
@@ -27,8 +29,8 @@ const Main = ({ setStartTime }) => {
           <button onClick={startWorkOut}>Start an Empty Workout</button>
         </article>
         <article>
-          <h2>My Templates</h2>
-          <section>
+          <h2 onClick={getRecords}>Check Records</h2>
+          {/* <section>
             <div
               onClick={() => {
                 history.push("/records");
@@ -41,7 +43,7 @@ const Main = ({ setStartTime }) => {
             <div></div>
             <div></div>
             <div></div>
-          </section>
+          </section> */}
         </article>
       </main>
     </div>

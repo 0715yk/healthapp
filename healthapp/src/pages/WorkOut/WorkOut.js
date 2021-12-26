@@ -2,11 +2,13 @@ import React, { useState, useRef } from "react";
 import styles from "./WorkOut.module.css";
 import TimeLapse from "../../components/TimeLapse";
 import WriteFunc from "../../components/WriteFunc/WriteFunc";
+import { useHistory } from "react-router-dom";
 
 const WorkOut = ({ checkList, setCheckList }) => {
   const [workout, setWorkout] = useState("");
   const selectRef = useRef(null);
   const inputRef = useRef(null);
+  const history = useHistory();
   const workoutNames = [
     "pull up",
     "lat pulldown",
@@ -64,6 +66,9 @@ const WorkOut = ({ checkList, setCheckList }) => {
     selectRef.current.value = "choose basic workout";
   };
 
+  const cancelBtn = () => {
+    history.push("/main");
+  };
   return (
     <div className={styles.workoutPage}>
       <main>
@@ -94,7 +99,9 @@ const WorkOut = ({ checkList, setCheckList }) => {
               +
             </button>
           </article>
-          <button id={styles.cacelBtn}>Cancel Workout</button>
+          <button id={styles.cacelBtn} onClick={cancelBtn}>
+            Cancel Workout
+          </button>
         </article>
         <WriteFunc checkList={checkList} setCheckList={setCheckList} />
       </main>
