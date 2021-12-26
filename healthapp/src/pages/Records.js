@@ -9,6 +9,7 @@ const Records = ({ color, user }) => {
   const history = useHistory();
 
   useEffect(async () => {
+    console.log(user);
     var recordRef = await db.collection("records").doc(user.email);
     recordRef.get().then((doc) => {
       if (doc.exists) {

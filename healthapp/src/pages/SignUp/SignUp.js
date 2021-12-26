@@ -66,6 +66,7 @@ const SignUp = ({ setUser, signupRef }) => {
       .createUserWithEmailAndPassword(email, password)
       .then((result) => {
         result.user.updateProfile({
+          email: email,
           displayName: nickname,
         });
         setUser({ nickname });
