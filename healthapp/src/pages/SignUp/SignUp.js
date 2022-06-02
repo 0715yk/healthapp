@@ -69,7 +69,7 @@ const SignUp = ({ setUser, signupRef }) => {
           email: email,
           displayName: nickname,
         });
-        setUser({ nickname });
+        setUser({ nickname, email });
         history.push("/main");
       })
       .catch((response) => {

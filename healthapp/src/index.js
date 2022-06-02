@@ -5,6 +5,8 @@ import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 import firebase from "firebase/app";
 import "firebase/firestore";
+import { RecoilRoot } from "recoil";
+
 require("firebase/auth");
 
 var firebaseConfig = {
@@ -21,7 +23,9 @@ firebase.initializeApp(firebaseConfig);
 
 ReactDOM.render(
   <React.StrictMode>
-    <App />
+    <RecoilRoot>
+      <App />
+    </RecoilRoot>
   </React.StrictMode>,
   document.getElementById("root")
 );

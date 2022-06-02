@@ -1,68 +1,113 @@
 import React, { useState, useRef } from "react";
 import styles from "./PureWorkOut.module.css";
 import Row from "../Row/Row";
+import {
+  RecoilRoot,
+  atom,
+  selector,
+  useRecoilState,
+  useRecoilValue,
+} from "recoil";
+import { workoutState } from "../../states";
+import Modal from "../Modal/Modal";
 
-const PureWorkOut = ({ workout, idx, checkList, setCheckList }) => {
+const PureWorkOut = ({
+  workout,
+  idx,
+  checkList,
+  setCheckList,
+  workoutList,
+}) => {
+  const [workouts, setWorkouts] = useRecoilState(workoutState);
   const [fixMode, setFixMode] = useState(false);
+  const [modalOn, setModalOn] = useState({ on: false, message: "" });
   const titleRef = useRef();
-  const addSet = (workout) => {
-    const copyObj = Object.assign({}, checkList);
-    try {
-      copyObj[workout].push({
-        set: copyObj[workout][copyObj[workout].length - 1].set + 1,
-        reps: null,
-        kg: null,
-        done: false,
-      });
-    } catch {
-      copyObj[workout].push({
-        set: 1,
-        reps: null,
-        kg: null,
-        done: false,
-      });
+
+  const addSet = () => {
+    const copyArr = workouts.slice();
+    const copyWorkoutList = workoutList.slice();
+    if (
+      copyWorkoutList[copyWorkoutList.length - 1].kg === null &&
+      copyWorkoutList[copyWorkoutList.length - 1].reps === null
+    ) {
+      setModalOn((prev) => ({
+        on: !prev.on,
+        message: "이전 세트를 완료해주세요",
+      }));
+      return;
     }
 
-    setCheckList(copyObj);
+    copyWorkoutList.push({
+      name: copyWorkoutList[copyWorkoutList.length - 1].name,
+      set: copyWorkoutList[copyWorkoutList.length - 1].set + 1,
+      kg: null,
+      reps: null,
+      done: false,
+    });
+    copyArr[idx] = copyWorkoutList;
+    setWorkouts(copyArr);
   };
 
   const fixTitle = () => {
+    const copyWorkoutList = workoutList.slice();
+
     if (fixMode) {
-      if (
-        titleRef.current.value.replace(/ /g, "") === workout.replace(/ /g, "")
-      ) {
-        setFixMode(false);
+      const copyArr = workouts.slice();
+
+      if (titleRef.current.value.replace(/ /g, "") === "") {
+        setModalOn((prev) => ({
+          on: !prev.on,
+          message: "최소한 한글자 이상을 입력해주세요",
+        }));
         return;
       }
 
       setFixMode(false);
-      const copyObj = Object.assign({}, checkList);
-      copyObj[titleRef.current.value] = copyObj[workout];
-      delete copyObj[workout];
-      setCheckList(copyObj);
+
+      copyArr[idx] = [
+        ...copyWorkoutList.map((el) => {
+          const copyEl = Object.assign({}, el);
+          copyEl.name = titleRef.current.value;
+          return copyEl;
+        }),
+      ];
+      setWorkouts(copyArr);
     } else {
       setFixMode(true);
       setTimeout(() => {
-        titleRef.current.value = workout;
+        titleRef.current.value =
+          copyWorkoutList[copyWorkoutList.length - 1].name;
         titleRef.current.focus();
       });
     }
   };
 
   const deleteWorkout = () => {
-    const copyObj = Object.assign({}, checkList);
-    delete copyObj[workout];
-    setCheckList(copyObj);
+    let copyArr = workouts.slice();
+    copyArr = copyArr.filter((el, _) => {
+      if (idx === _) return false;
+      else return true;
+    });
+    setWorkouts(copyArr);
   };
 
   const handleKeyDown = (e) => {
     if (e.key === "Enter") fixTitle();
   };
 
+  const closeModal = () => {
+    setModalOn((prev) => ({ on: !prev.on, message: prev.message }));
+  };
+
   return (
     <>
+      <Modal modalOn={modalOn} closeModal={closeModal} />
       <div className={styles.title}>
-        {fixMode ? <input ref={titleRef} onKeyDown={handleKeyDown} /> : workout}
+        {fixMode ? (
+          <input ref={titleRef} onKeyDown={handleKeyDown} />
+        ) : (
+          workouts[idx] && workouts[idx][0]?.name
+        )}
         <i class="far fa-edit" id={styles.fixBtn} onClick={fixTitle}></i>
         <i
           class="far fa-trash-alt"
@@ -71,10 +116,11 @@ const PureWorkOut = ({ workout, idx, checkList, setCheckList }) => {
         ></i>
       </div>
       <div className={styles.rows} key={idx}>
-        {checkList[workout].map((el, keyIdx) => {
+        {workoutList.map((el) => {
           return (
             <Row
-              keyIdx={keyIdx}
+              workoutList={workoutList}
+              idx={idx}
               el={el}
               workout={workout}
               checkList={checkList}
@@ -82,7 +128,7 @@ const PureWorkOut = ({ workout, idx, checkList, setCheckList }) => {
             />
           );
         })}
-        <button id={styles.addBtn} onClick={() => addSet(workout)}>
+        <button id={styles.addBtn} onClick={addSet}>
           +
         </button>
       </div>

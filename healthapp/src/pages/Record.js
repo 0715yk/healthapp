@@ -2,12 +2,16 @@ import React, { useEffect, useState } from "react";
 import styles from "./Record.module.css";
 import { useHistory } from "react-router-dom";
 import moment from "moment";
-import { db } from "..";
+import { useRecoilState } from "recoil";
+import { workoutState } from "../states";
+import { startTimeState } from "../states";
 
-const Record = ({ checkList, setCheckList, startTime, user }) => {
+const Record = ({ checkList }) => {
+  const [startTime, setStartTime] = useRecoilState(startTimeState);
   const [totalRecord, setTotalRecord] = useState({});
   const history = useHistory();
   const [bestSet, setBestSet] = useState({});
+  const [workouts, setWorkouts] = useRecoilState(workoutState);
 
   useEffect(() => {
     const copyObj = { ...checkList };
@@ -48,39 +52,7 @@ const Record = ({ checkList, setCheckList, startTime, user }) => {
   }, []);
 
   const completeWorkout = async () => {
-    const date = moment().format("YYYY/MM/DD");
-    var recordRef = await db.collection("records").doc(user.email);
-    recordRef
-      .get()
-      .then((doc) => {
-        if (doc.exists) {
-          const data = doc.data()[date];
-          if (data) {
-            data.push(checkList);
-            recordRef.set(
-              {
-                [date]: data,
-              },
-              { merge: true }
-            );
-          } else {
-            recordRef.set({
-              [date]: [checkList],
-            });
-          }
-        } else {
-          db.collection("records")
-            .doc(user.email)
-            .set({
-              [date]: [checkList],
-            });
-        }
-      })
-      .catch((error) => {
-        console.log("Error getting document:", error);
-      });
-
-    setCheckList({});
+    setWorkouts([]);
     history.push("/main");
   };
 
@@ -95,9 +67,8 @@ const Record = ({ checkList, setCheckList, startTime, user }) => {
           <h3 style={{ color: "gold" }}>Total ⏱</h3>
           <ul>
             <li>{moment().format("YYYY-MM-D (dddd)")}</li>
-            <li
-              className={styles.timeLapsePart}
-            >{`${totalRecord["timeLapse"]} [${totalRecord["startTime"]} ~ ${totalRecord["finishedTime"]}]`}</li>
+            {/* {`${totalRecord["timeLapse"]} [${totalRecord["startTime"]} ~ ${totalRecord["finishedTime"]}]`} */}
+            <li className={styles.timeLapsePart}>{startTime}</li>
             <li>
               <h3 id={styles.bestSetH} style={{ color: "gold" }}>
                 Best set 🏅

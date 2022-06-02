@@ -3,11 +3,15 @@ import styles from "./Main.module.css";
 import GlowHeader from "../../components/GlowHeader/GlowHeader";
 import { useHistory } from "react-router-dom";
 import moment from "moment";
+import LatestWorkout from "../../components/LatestWorkout";
+import { startTimeState } from "../../states";
+import { useRecoilState } from "recoil";
 
-const Main = ({ setStartTime }) => {
+const Main = ({ user }) => {
+  const [startTime, setStartTime] = useRecoilState(startTimeState);
   const history = useHistory();
   const startWorkOut = () => {
-    setStartTime(moment().format("HH:mm"));
+    setStartTime(moment());
     history.push("/workout");
   };
   const getRecords = () => {
@@ -30,20 +34,7 @@ const Main = ({ setStartTime }) => {
         </article>
         <article>
           <h2 onClick={getRecords}>Check Records</h2>
-          {/* <section>
-            <div
-              onClick={() => {
-                history.push("/records");
-              }}
-            ></div>
-            <div></div>
-            <div></div>
-            <div></div>
-            <div></div>
-            <div></div>
-            <div></div>
-            <div></div>
-          </section> */}
+          <LatestWorkout user={user} />
         </article>
       </main>
     </div>

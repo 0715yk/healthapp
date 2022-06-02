@@ -9,7 +9,6 @@ const Records = ({ color, user }) => {
   const history = useHistory();
 
   useEffect(async () => {
-    console.log(user);
     var recordRef = await db.collection("records").doc(user.email);
     recordRef.get().then((doc) => {
       if (doc.exists) {
@@ -38,7 +37,9 @@ const Records = ({ color, user }) => {
                 {checkLists[date].map((workout, num) => {
                   return (
                     <div className={styles.playPart}>
-                      <h1>{`workout ${num + 1}`}</h1>
+                      <h1 style={{ fontSize: "25px" }}>{`workout ${
+                        num + 1
+                      }`}</h1>
                       <div className={styles.scorePart}>
                         {Object.keys(workout).map((workoutName) => {
                           return (

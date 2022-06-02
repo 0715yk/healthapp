@@ -15,16 +15,16 @@
 .registerArea {
   display: flex;
   align-items: center;
-  justify-content: space-between;
   width: 90vw;
   height: 8vh;
   margin-top: 10px;
   padding-left: 15px;
+  padding-right: 15px;
 }
 
 .inputArea {
   display: flex;
-  width: 69vw;
+  width: 70%;
   height: 100%;
   flex-direction: column;
   justify-content: space-between;
@@ -42,9 +42,14 @@
   outline: none;
 }
 
+.emptyArea {
+  width: 1%;
+  height: 100%;
+}
+
 .btnArea {
   height: 100%;
-  width: 20vw;
+  width: 29%;
   border: none;
   color: black;
   background-color: white;

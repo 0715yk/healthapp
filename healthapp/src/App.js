@@ -11,19 +11,19 @@ function App() {
   const [startTime, setStartTime] = useState("");
   const [user, setUser] = useState({ nickname: "" });
   const [checkList, setCheckList] = useState({});
+
   return (
     <Router>
       <Switch>
         <Route path="/" exact>
-          <Landing setUser={setUser} setStartTime={setStartTime} />
+          <Landing setUser={setUser} />
         </Route>
         <Route path="/main">
-          <Main setStartTime={setStartTime} />
+          <Main user={user} />
         </Route>
         <Route path="/record">
           <Record
             user={user}
-            startTime={startTime}
             checkList={checkList}
             setCheckList={setCheckList}
           />
@@ -32,7 +32,7 @@ function App() {
           <Records user={user} />
         </Route>
         <Route path="/workout">
-          <WorkOut setCheckList={setCheckList} checkList={checkList} />
+          <WorkOut user={user} />
         </Route>
       </Switch>
     </Router>

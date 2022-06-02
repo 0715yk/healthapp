@@ -1,10 +1,15 @@
 import React, { useState, useRef } from "react";
 import styles from "./WorkOut.module.css";
 import TimeLapse from "../../components/TimeLapse";
-import WriteFunc from "../../components/WriteFunc/WriteFunc";
+import WorkOutList from "../../components/WorkOutList/WorkOutList";
 import { useHistory } from "react-router-dom";
+import { useRecoilState } from "recoil";
+import { workoutState } from "../../states";
+import Modal from "../../components/Modal/Modal";
 
-const WorkOut = ({ checkList, setCheckList }) => {
+const WorkOut = ({ user }) => {
+  const [workouts, setWorkouts] = useRecoilState(workoutState);
+  const [modalOn, setModalOn] = useState({ on: false, message: "" });
   const [workout, setWorkout] = useState("");
   const selectRef = useRef(null);
   const inputRef = useRef(null);
@@ -47,30 +52,60 @@ const WorkOut = ({ checkList, setCheckList }) => {
   };
 
   const registerWorkout = () => {
+    const copyArr = workouts.slice();
+    const flag = copyArr.find((el) => {
+      return el[0].name === workout;
+    });
     if (workout.replace(/ /g, "") === "") {
-      alert("please choose workout");
+      setModalOn((prev) => ({
+        on: !prev.on,
+        message: "운동 종류를 선택해주세요",
+      }));
+
+      return;
+    } else if (flag) {
+      setModalOn((prev) => ({
+        on: !prev.on,
+        message: "이미 선택한 운동입니다.",
+      }));
+      return;
+    } else if (workout === "choose basic workout") {
+      setModalOn((prev) => ({
+        on: !prev.on,
+        message: "운동 종류를 선택해주세요",
+      }));
       return;
     }
-    const copyObj = Object.assign({}, checkList);
 
-    if (!copyObj[workout])
-      copyObj[workout] = [{ set: 1, kg: null, reps: null }];
-    else {
-      alert("already taken");
-      return;
-    }
+    copyArr.push([
+      {
+        name: workout,
+        set: 1,
+        kg: null,
+        reps: null,
+        done: false,
+      },
+    ]);
 
-    setCheckList(copyObj);
+    setWorkouts(copyArr);
 
+    setWorkout("");
     inputRef.current.value = null;
     selectRef.current.value = "choose basic workout";
   };
 
   const cancelBtn = () => {
+    setWorkouts([]);
     history.push("/main");
   };
+
+  const closeModal = () => {
+    setModalOn((prev) => ({ on: !prev.on, message: prev.message }));
+  };
+
   return (
     <div className={styles.workoutPage}>
+      <Modal modalOn={modalOn} closeModal={closeModal} />
       <main>
         <article id={styles.stickyNav}>
           <TimeLapse />
@@ -95,6 +130,7 @@ const WorkOut = ({ checkList, setCheckList }) => {
                 ))}
               </select>
             </div>
+            <div className={styles.emptyArea}></div>
             <button className={styles.btnArea} onClick={registerWorkout}>
               +
             </button>
@@ -103,7 +139,7 @@ const WorkOut = ({ checkList, setCheckList }) => {
             Cancel Workout
           </button>
         </article>
-        <WriteFunc checkList={checkList} setCheckList={setCheckList} />
+        <WorkOutList user={user} />
       </main>
     </div>
   );

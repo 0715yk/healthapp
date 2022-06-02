@@ -2,8 +2,11 @@ import React, { useState, useRef } from "react";
 import styles from "./Landing.module.css";
 import { useHistory } from "react-router-dom";
 import moment from "moment";
+import { startTimeState } from "../../states";
+import { useRecoilState } from "recoil";
 
-const Landing = ({ workouts, setWorkouts, color, setColor, setStartTime }) => {
+const Landing = ({ workouts, setWorkouts, color, setColor }) => {
+  const [startTime, setStartTime] = useRecoilState(startTimeState);
   const history = useHistory();
   const [workout, setWorkout] = useState("");
   const selectRef = useRef(null);
@@ -76,7 +79,7 @@ const Landing = ({ workouts, setWorkouts, color, setColor, setStartTime }) => {
       alert("must select more than a workout");
       return;
     }
-    setStartTime(moment().format("HH:mm"));
+    setStartTime(moment().format("HH:mm:ss"));
     history.push("/main");
   };
 
