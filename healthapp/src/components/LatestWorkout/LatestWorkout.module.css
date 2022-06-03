@@ -6,6 +6,10 @@
   color: yellow !important;
 }
 
+.date {
+  margin-top: 10px;
+  color: white;
+}
 .scorePart {
   display: flex;
   flex-direction: column;

@@ -1,12 +1,8 @@
 import React, { useEffect, useState } from "react";
-import moment from "moment";
 import styles from "./TimeLapse.module.css";
-import { startTimeState } from "../states";
-import { useRecoilState } from "recoil";
 
 const TimeLapse = () => {
   const [timeLapse, setTimeLapse] = useState("0 : 0 : 1");
-  const [startTime, setStartTime] = useRecoilState(startTimeState);
 
   useEffect(() => {
     let seconds = 2;
@@ -18,9 +14,6 @@ const TimeLapse = () => {
 
       setTimeLapse(`${hour} : ${min} : ${sec}`);
       seconds++;
-
-      const newStartTime = startTime.add(1, "seconds").format("HH:mm:ss");
-      setStartTime(newStartTime);
     }, 1000);
 
     return () => {

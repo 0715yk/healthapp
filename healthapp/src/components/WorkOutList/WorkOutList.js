@@ -5,11 +5,12 @@ import PureWorkOut from "../PureWorkOut/PureWorkOut";
 import { db } from "../../index";
 import moment from "moment";
 import Modal from "../Modal/Modal";
-import { useRecoilValue } from "recoil";
-import { workoutState } from "../../states";
+import { useRecoilValue, useRecoilState } from "recoil";
+import { workoutState, timeState } from "../../states";
 
 const WorkOutList = ({ user }) => {
   const workouts = useRecoilValue(workoutState);
+  const [time, setTime] = useRecoilState(timeState);
   const [nullCheckListErrorOn, setNullCheckListErrorOn] = useState(false);
   const history = useHistory();
   const finishWorkout = async () => {
@@ -17,6 +18,7 @@ const WorkOutList = ({ user }) => {
       setNullCheckListErrorOn((prev) => !prev);
       return;
     }
+    setTime({ ...time, endTime: moment() });
     // kg : null & reps: null 인것들 필터링
     let copyArr = workouts.slice();
     var idx = 0;

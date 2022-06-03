@@ -102,8 +102,8 @@ td {
     #ff0000
   );
   position: absolute;
-  top: -2px;
-  left: -2px;
+  left: 0;
+  top: 0;
   background-size: 400%;
   filter: blur(5px);
   -webkit-backdrop-filter: blur(5px);
