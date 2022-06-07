@@ -64,12 +64,11 @@ const Login = ({ scrollRef, setUser }) => {
         </section>
         <section className={styles.buttons}>
           <button className={styles.glowBtn} onClick={userLogin}>
-            User Login
+            Login
           </button>
-
-          <button className={styles.glowBtn} onClick={anonymousLogin}>
+          {/* <button className={styles.glowBtn} onClick={anonymousLogin}>
             Guest Login
-          </button>
+          </button> */}
           <button id={styles.signUpBtn} onClick={signUpPage}>
             Sign up
           </button>

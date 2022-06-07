@@ -1,0 +1,22 @@
+.record {
+  text-align: left;
+  width: 100%;
+  padding: 3px 0;
+  font-size: 4.5vw;
+}
+
+#deleteBtn {
+  color: white;
+  margin-left: 15px;
+  font-size: 18px;
+  position: relative;
+  bottom: 3px;
+}
+
+.fixBtn {
+  position: fixed;
+  bottom: 10px;
+  right: 10px;
+  width: 100px;
+  height: 50px;
+}
