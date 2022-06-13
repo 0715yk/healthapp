@@ -4,16 +4,16 @@ import GlowHeader from "../../components/GlowHeader/GlowHeader";
 import { useHistory } from "react-router-dom";
 import moment from "moment";
 import LatestWorkout from "../../components/LatestWorkout";
-import { timeState, allWorkoutState } from "../../states";
-import { useRecoilState, useRecoilValue } from "recoil";
+import { timeState } from "../../states";
+import { useRecoilState } from "recoil";
 import WorkoutModal from "../../components/WorkoutModal";
 import WorkoutData from "../../components/WorkoutData";
 import _ from "lodash";
+import { db } from "../../index";
 
 const Main = ({ user }) => {
   const dateRef = useRef("");
   const history = useHistory();
-  const allWorkouts = useRecoilValue(allWorkoutState);
   const [dateWorkout, setDateWorkout] = useState([]);
   const [modalOn, setModalOn] = useState(false);
   const [time, setTime] = useRecoilState(timeState);
@@ -22,21 +22,34 @@ const Main = ({ user }) => {
     history.push("/workout");
   };
 
-  const getRecords = () => {
-    history.push("/records");
-  };
+  const getWorkoutData = async () => {
+    const date = dateRef.current.value.replaceAll("-", "");
+    if (date === "") return;
 
-  const getWorkoutData = () => {
-    if (dateRef.current.value.replaceAll("-", "/") === "") return;
-    const workoutData =
-      allWorkouts[dateRef.current.value.replaceAll("-", "/")] || [];
+    var recordRef = await db.collection(user.email).doc(date);
+
+    recordRef
+      .get()
+      .then(function (querySnapshot) {
+        if (querySnapshot.exists) {
+          const dateWorkoutData = [];
+          const data = querySnapshot.data();
+          for (let key of Object.keys(data)) {
+            dateWorkoutData.push(JSON.parse(data[key]));
+          }
+          setDateWorkout(dateWorkoutData);
+        }
+      })
+      .catch(function (error) {
+        console.log("Error getting document:", error);
+      });
 
     setModalOn(true);
-    setDateWorkout(workoutData);
   };
 
   const closeModal = () => {
     dateRef.current.value = null;
+    setDateWorkout([]);
     setModalOn(false);
   };
 
@@ -62,7 +75,6 @@ const Main = ({ user }) => {
           <section style={{ color: "#ffffff" }}>
             <section id={styles.workoutList}>
               {dateWorkout.map((workout, idx) => {
-                workout = JSON.parse(workout);
                 return (
                   <WorkoutData
                     workout={workout}

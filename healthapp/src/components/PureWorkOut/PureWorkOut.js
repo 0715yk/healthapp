@@ -1,13 +1,7 @@
 import React, { useState, useRef } from "react";
 import styles from "./PureWorkOut.module.css";
 import Row from "../Row/Row";
-import {
-  RecoilRoot,
-  atom,
-  selector,
-  useRecoilState,
-  useRecoilValue,
-} from "recoil";
+import { useRecoilState } from "recoil";
 import { workoutState } from "../../states";
 import Modal from "../Modal/Modal";
 

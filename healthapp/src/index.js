@@ -2,7 +2,6 @@ import React from "react";
 import ReactDOM from "react-dom";
 import "./index.css";
 import App from "./App";
-import reportWebVitals from "./reportWebVitals";
 import firebase from "firebase/app";
 import "firebase/firestore";
 import { RecoilRoot } from "recoil";
@@ -22,15 +21,13 @@ var firebaseConfig = {
 firebase.initializeApp(firebaseConfig);
 
 ReactDOM.render(
-  <React.StrictMode>
-    <RecoilRoot>
+  <RecoilRoot>
+    <React.StrictMode>
       <App />
-    </RecoilRoot>
-  </React.StrictMode>,
+    </React.StrictMode>
+  </RecoilRoot>,
   document.getElementById("root")
 );
-
-reportWebVitals();
 
 export const db = firebase.firestore();
 export const fbase = firebase;

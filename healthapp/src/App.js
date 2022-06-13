@@ -6,18 +6,18 @@ import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import Record from "./pages/Record";
 import Records from "./pages/Records";
 import WorkOut from "./pages/WorkOut/WorkOut";
-import { useRecoilState, useRecoilValue } from "recoil";
+import { useSetRecoilState, useRecoilValue } from "recoil";
 import { allWorkoutState, workoutState } from "./states";
 import { db } from "./index";
 
 function App() {
   const [user, setUser] = useState({ nickname: "" });
   const workouts = useRecoilValue(workoutState);
-  const [allWorkouts, setallWorkouts] = useRecoilState(allWorkoutState);
+  const setallWorkouts = useSetRecoilState(allWorkoutState);
 
   const getWorkoutData = async () => {
     var recordRef = await db.collection("records").doc(user.email);
-    const result = {};
+
     recordRef
       .get()
       .then(function (querySnapshot) {

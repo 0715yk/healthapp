@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react";
+import React, { useRef } from "react";
 import styles from "./List.module.css";
 
 const List = ({ list, checkList, setCheckList, workoutName, color }) => {

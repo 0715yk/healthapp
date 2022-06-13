@@ -7,21 +7,24 @@ const LatestWorkout = ({ user }) => {
   const [date, setDate] = useState("");
 
   useEffect(async () => {
-    var recordRef = await db.collection("records").doc(user.email);
+    let records = await db.collectionGroup(user.email).orderBy("0", "desc");
 
-    recordRef.get().then((doc) => {
-      if (doc.exists) {
-        const data = doc.data();
-        const keys = Object.keys(data);
-        const latestDate = keys[keys.length - 1];
+    let data = null;
+    let date = null;
 
-        const latestWorkouts = JSON.parse(
-          data[latestDate][data[latestDate].length - 1]
-        );
-        setDate(latestDate);
-        setWorkouts(latestWorkouts);
-      }
+    await records.get().then((querySnapshot) => {
+      console.log(querySnapshot);
+      querySnapshot.forEach((doc) => {
+        data = doc.data();
+        date = doc.id;
+      });
     });
+
+    if (!data || !date) return;
+    setWorkouts(JSON.parse(data[0]));
+    setDate(
+      `${date.substring(0, 4)}/${date.substring(4, 6)}/${date.substring(6)}`
+    );
   }, []);
 
   return (

@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from "react";
+import React, { useState } from "react";
 import styles from "./WorkOutList.module.css";
 import { useHistory } from "react-router-dom";
 import PureWorkOut from "../PureWorkOut/PureWorkOut";
@@ -13,15 +13,19 @@ const WorkOutList = ({ user }) => {
   const [time, setTime] = useRecoilState(timeState);
   const [nullCheckListErrorOn, setNullCheckListErrorOn] = useState(false);
   const history = useHistory();
+
   const finishWorkout = async () => {
+    if (!user.email) return;
+
     if (workouts.length === 0) {
       setNullCheckListErrorOn((prev) => !prev);
       return;
     }
     setTime({ ...time, endTime: moment() });
-    // kg : null & reps: null 인것들 필터링
+
     let copyArr = workouts.slice();
     var idx = 0;
+
     for (let arr of copyArr) {
       arr = arr.filter((el) => {
         if (el.kg === null || el.reps === null) return false;
@@ -37,36 +41,38 @@ const WorkOutList = ({ user }) => {
       return;
     }
 
-    const date = moment().format("YYYY/MM/DD");
-    var recordRef = await db.collection("records").doc(user.email);
+    const date = moment().format("YYYYMMDD");
+    var recordRef = await db.collection(user.email).doc(date);
 
     recordRef
       .get()
       .then((doc) => {
         if (doc.exists) {
-          const data = doc.data()[date];
+          const data = doc.data();
+          const finalKey = parseInt(
+            Object.keys(data)[Object.keys(data).length - 1]
+          );
           if (data) {
-            data.push(JSON.stringify(copyArr));
             recordRef.set(
               {
-                [date]: data,
+                [finalKey + 1]: JSON.stringify(copyArr),
               },
               { merge: true }
             );
           } else {
             recordRef.set(
               {
-                [date]: [JSON.stringify(copyArr)],
+                0: JSON.stringify(copyArr),
               },
               { merge: true }
             );
           }
         } else {
-          db.collection("records")
-            .doc(user.email)
+          db.collection(user.email)
+            .doc(date)
             .set(
               {
-                [date]: [JSON.stringify(copyArr)],
+                0: JSON.stringify(copyArr),
               },
               { merge: true }
             );
