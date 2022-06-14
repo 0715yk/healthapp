@@ -15,9 +15,7 @@ const Records = () => {
         <h2>Records</h2>
       </header>
       <button className={styles.glowBtn} onClick={back}></button>
-      <main>
-        <input type="date" />
-      </main>
+      <main></main>
     </div>
   );
 };

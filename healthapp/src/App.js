@@ -9,7 +9,7 @@ import WorkOut from "./pages/WorkOut/WorkOut";
 import { useSetRecoilState, useRecoilValue } from "recoil";
 import { allWorkoutState, workoutState } from "./states";
 import { db } from "./index";
-
+import WorkoutModal from "./components/WorkoutModal";
 function App() {
   const [user, setUser] = useState({ nickname: "" });
   const workouts = useRecoilValue(workoutState);
@@ -49,7 +49,7 @@ function App() {
           <Record user={user} />
         </Route>
         <Route path="/records">
-          <Records user={user} />
+          <WorkoutModal user={user} />
         </Route>
         <Route path="/workout">
           <WorkOut user={user} />

@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { db } from "../../index";
 import styles from "./LatestWorkout.module.css";
 
-const LatestWorkout = ({ user, dateWorkout }) => {
+const LatestWorkout = ({ user }) => {
   const [workouts, setWorkouts] = useState([]);
   const [date, setDate] = useState("");
 
@@ -32,7 +32,7 @@ const LatestWorkout = ({ user, dateWorkout }) => {
       .catch((error) => {
         console.log("Error getting documents: ", error);
       });
-  }, [dateWorkout]);
+  }, []);
 
   return (
     <div className={styles.latestWorkout}>

@@ -20,3 +20,17 @@
   width: 100px;
   height: 50px;
 }
+
+.workoutName {
+  margin-bottom: 15px;
+  font-size: 23px;
+  display: "flex";
+  align-items: "center";
+}
+
+#updateBtn {
+  margin-left: 10px;
+  color: white !important;
+  width: 7px !important;
+  height: 7px !important;
+}

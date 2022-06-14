@@ -1,14 +1,50 @@
-import React from "react";
+import React, { useState } from "react";
 import styles from "./WorkoutModal.module.css";
+import WorkoutData from "../../components/WorkoutData";
+import _ from "lodash";
+import { db } from "../../index";
+import { useRecoilState } from "recoil";
+import { dateWorkoutState } from "../../states";
+import { useHistory } from "react-router-dom";
 
-const WorkoutModal = ({ modalOn, children, closeModal }) => {
+const WorkoutModal = () => {
+  const history = useHistory();
+  const [dateWorkout, setDateWorkout] = useRecoilState(dateWorkoutState);
+  const [fixMode, setFixMode] = useState(false);
+
+  const backBtn = () => {
+    setDateWorkout([]);
+    history.push("/main");
+  };
+
+  const setFixModeFunc = () => {
+    setFixMode((prev) => !prev);
+  };
+
   return (
-    modalOn && (
-      <div className={styles.safetyArea}>
-        <div className={styles.modal}>{children}</div>
-        <button className={styles.glowBtn} onClick={closeModal}></button>
+    <div className={styles.safetyArea}>
+      <div className={styles.modal}>
+        {dateWorkout.length !== 0 ? (
+          <section style={{ color: "#ffffff" }}>
+            <section id={styles.workoutList}>
+              {dateWorkout.map((workout, idx) => {
+                return (
+                  <WorkoutData
+                    workout={workout}
+                    idx={idx}
+                    fixMode={fixMode}
+                    setFixModeFunc={setFixModeFunc}
+                  />
+                );
+              })}
+            </section>
+          </section>
+        ) : (
+          <div className={styles.emptyWorkout}>Empty Wortout Data</div>
+        )}
       </div>
-    )
+      <button className={styles.glowBtn} onClick={backBtn}></button>
+    </div>
   );
 };
 

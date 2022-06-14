@@ -16,6 +16,11 @@ export const timeState = atom({
   default: { startTime: "", endTime: "" },
 });
 
+export const dateWorkoutState = atom({
+  key: "dateWorkoutState",
+  default: [],
+});
+
 export const durationState = selector({
   key: "durationState",
   get: ({ get }) => {
