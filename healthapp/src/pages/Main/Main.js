@@ -35,6 +35,7 @@ const Main = ({ user }) => {
           const dateWorkoutData = [];
           const data = querySnapshot.data();
           for (let key of Object.keys(data)) {
+            if (key === "order") continue;
             dateWorkoutData.push(JSON.parse(data[key]));
           }
           setDateWorkout(dateWorkoutData);
@@ -53,14 +54,23 @@ const Main = ({ user }) => {
     setModalOn(false);
   };
 
-  const deleteWorkout = (idx) => {
+  const deleteWorkout = async (idx) => {
+    var batch = db.batch();
     let copyWorkout = _.cloneDeep(dateWorkout);
     copyWorkout = copyWorkout.filter((el, _) => {
       if (_ === idx) return false;
       else return true;
     });
+    const fbData = {};
+    for (let i = 0; i < copyWorkout.length; i++) {
+      fbData.i = JSON.parse(copyWorkout[i]);
+    }
 
-    setDateWorkout(copyWorkout);
+    const recordRef = await db.collection("calmmne@naver.com").doc("20220614");
+    await batch.set(recordRef, fbData);
+    await batch.commit().then(() => {
+      setDateWorkout(copyWorkout);
+    });
   };
 
   const [fixMode, setFixMode] = useState(false);
@@ -115,7 +125,7 @@ const Main = ({ user }) => {
           />
         </article>
         <article>
-          <LatestWorkout user={user} />
+          <LatestWorkout user={user} dateWorkout={dateWorkout} />
         </article>
       </main>
     </div>

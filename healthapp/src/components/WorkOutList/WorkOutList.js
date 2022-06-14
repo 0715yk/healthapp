@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useMemo, useState } from "react";
 import styles from "./WorkOutList.module.css";
 import { useHistory } from "react-router-dom";
 import PureWorkOut from "../PureWorkOut/PureWorkOut";
@@ -50,32 +50,27 @@ const WorkOutList = ({ user }) => {
         if (doc.exists) {
           const data = doc.data();
           const finalKey = parseInt(
-            Object.keys(data)[Object.keys(data).length - 1]
+            Object.keys(data)[Object.keys(data).length - 2]
           );
-          if (data) {
+          if (!isNaN(finalKey + 1))
             recordRef.set(
               {
+                order: date,
                 [finalKey + 1]: JSON.stringify(copyArr),
               },
               { merge: true }
             );
-          } else {
-            recordRef.set(
-              {
-                0: JSON.stringify(copyArr),
-              },
-              { merge: true }
-            );
-          }
+          else
+            db.collection(user.email)
+              .doc(date)
+              .set(
+                { order: date, 0: JSON.stringify(copyArr) },
+                { merge: true }
+              );
         } else {
           db.collection(user.email)
             .doc(date)
-            .set(
-              {
-                0: JSON.stringify(copyArr),
-              },
-              { merge: true }
-            );
+            .set({ order: date, 0: JSON.stringify(copyArr) }, { merge: true });
         }
       })
       .catch((error) => {

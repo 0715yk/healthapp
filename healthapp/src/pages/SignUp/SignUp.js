@@ -5,6 +5,7 @@ import { fbase } from "../..";
 import Modal from "../../components/Modal/Modal";
 import GlowBtn from "../../components/GlowBtn/GlowBtn";
 import { duration } from "moment";
+import { db } from "../../index";
 
 const SignUp = ({ setUser, signupRef }) => {
   const history = useHistory();
@@ -28,7 +29,7 @@ const SignUp = ({ setUser, signupRef }) => {
     return reg.test(email);
   };
 
-  const signup = () => {
+  const signup = async () => {
     const email = emailRef.current.value;
     const password = pwdRef.current.value;
     const nickname = nicknameRef.current.value;
@@ -64,7 +65,7 @@ const SignUp = ({ setUser, signupRef }) => {
     fbase
       .auth()
       .createUserWithEmailAndPassword(email, password)
-      .then((result) => {
+      .then(async (result) => {
         result.user.updateProfile({
           email: email,
           displayName: nickname,

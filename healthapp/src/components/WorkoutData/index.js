@@ -29,9 +29,9 @@ const WorkoutData = ({
 
   return (
     <div style={{ marginTop: "20px" }}>
-      <button className={styles.fixBtn} onClick={setFixModeFunc}>
+      {/* <button className={styles.fixBtn} onClick={setFixModeFunc}>
         fix mode
-      </button>
+      </button> */}
       <Modal modalOn={modalOn} closeModal={closeModal} />
       <div style={{ color: "gold", fontSize: "25px" }}>
         {`Workout Num : ${idx}`}

@@ -2,30 +2,37 @@ import { useEffect, useState } from "react";
 import { db } from "../../index";
 import styles from "./LatestWorkout.module.css";
 
-const LatestWorkout = ({ user }) => {
+const LatestWorkout = ({ user, dateWorkout }) => {
   const [workouts, setWorkouts] = useState([]);
   const [date, setDate] = useState("");
 
   useEffect(async () => {
-    let records = await db.collectionGroup(user.email).orderBy("0", "desc");
+    let recordRef = await db
+      .collection(user.email)
+      .orderBy("order", "desc")
+      .limit(1);
 
-    let data = null;
-    let date = null;
+    recordRef
+      .get()
+      .then((querySnapshot) => {
+        querySnapshot.forEach((doc) => {
+          const data = doc.data();
+          const date = doc.id;
 
-    await records.get().then((querySnapshot) => {
-      console.log(querySnapshot);
-      querySnapshot.forEach((doc) => {
-        data = doc.data();
-        date = doc.id;
+          if (!data || !date) return;
+
+          setWorkouts(JSON.parse(data[Object.keys(data).length - 2]));
+          setDate(
+            `${date.substring(0, 4)}/${date.substring(4, 6)}/${date.substring(
+              6
+            )}`
+          );
+        });
+      })
+      .catch((error) => {
+        console.log("Error getting documents: ", error);
       });
-    });
-
-    if (!data || !date) return;
-    setWorkouts(JSON.parse(data[0]));
-    setDate(
-      `${date.substring(0, 4)}/${date.substring(4, 6)}/${date.substring(6)}`
-    );
-  }, []);
+  }, [dateWorkout]);
 
   return (
     <div className={styles.latestWorkout}>
