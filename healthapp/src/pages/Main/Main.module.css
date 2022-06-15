@@ -18,7 +18,7 @@
   overflow: scroll;
 }
 
-.mainPage main article button {
+.strtBtn {
   width: 100%;
   margin-top: 10px;
   background-color: white;
@@ -28,6 +28,7 @@
   padding: 5px 20px;
   border-radius: 5px;
   box-shadow: inset 3px 3px 2px #666;
+  color: black;
 }
 
 .mainPage article section {
@@ -58,8 +59,4 @@
   width: 100%;
   padding: 3px 0;
   font-size: 4.5vw;
-}
-
-input[type="date"]::-webkit-clear-button {
-  display: none;
 }

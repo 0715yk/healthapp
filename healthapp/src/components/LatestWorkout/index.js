@@ -7,8 +7,9 @@ const LatestWorkout = ({ user }) => {
   const [date, setDate] = useState("");
 
   useEffect(async () => {
+    if (!user?.email) return;
     let recordRef = await db
-      .collection(user.email)
+      .collection(user?.email)
       .orderBy("order", "desc")
       .limit(1);
 
@@ -46,7 +47,7 @@ const LatestWorkout = ({ user }) => {
           ? workouts.map((workout) => {
               return (
                 <section className={styles.workoutPart}>
-                  <h3 style={{ color: "white" }}>{workout[0].name}</h3>
+                  <h3 style={{ color: "white" }}>{workout[0]?.name}</h3>
                   <ul id={styles.workoutList}>
                     {workout.map((el, key) => {
                       return (

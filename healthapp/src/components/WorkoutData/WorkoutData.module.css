@@ -3,6 +3,8 @@
   width: 100%;
   padding: 3px 0;
   font-size: 4.5vw;
+  display: flex;
+  align-items: center;
 }
 
 #deleteBtn {
@@ -33,4 +35,22 @@
   color: white !important;
   width: 7px !important;
   height: 7px !important;
+}
+
+.updatePart {
+  display: flex;
+  align-items: center;
+}
+
+.setUpdatePart {
+  display: flex;
+  align-items: center;
+}
+
+.workoutNameInput {
+  border: none;
+  background-color: black;
+  color: white;
+  font-size: 23px;
+  outline: none;
 }

@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import styles from "./WorkoutModal.module.css";
 import WorkoutData from "../../components/WorkoutData";
 import _ from "lodash";
-import { db } from "../../index";
 import { useRecoilState } from "recoil";
 import { dateWorkoutState } from "../../states";
 import { useHistory } from "react-router-dom";

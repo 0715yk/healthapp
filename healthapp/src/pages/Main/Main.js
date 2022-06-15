@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import styles from "./Main.module.css";
 import GlowHeader from "../../components/GlowHeader/GlowHeader";
 import { useHistory } from "react-router-dom";
@@ -6,23 +6,27 @@ import moment from "moment";
 import LatestWorkout from "../../components/LatestWorkout";
 import { timeState, dateWorkoutState } from "../../states";
 import { useRecoilState } from "recoil";
-
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
 import _ from "lodash";
 import { db } from "../../index";
 
 const Main = ({ user }) => {
-  const dateRef = useRef("");
   const history = useHistory();
+  const [selectedDate, setSelectedDate] = useState(null);
   const [dateWorkout, setDateWorkout] = useRecoilState(dateWorkoutState);
-
   const [time, setTime] = useRecoilState(timeState);
   const startWorkOut = () => {
     setTime({ ...time, startTime: moment() });
     history.push("/workout");
   };
 
-  const getWorkoutData = async () => {
-    const date = dateRef.current.value.replaceAll("-", "");
+  useEffect(() => {
+    setSelectedDate(null);
+  }, []);
+
+  const getWorkoutData = async (selectedDate) => {
+    const date = moment(selectedDate).format("YYYYMMDD");
     if (date === "") return;
 
     var recordRef = await db.collection(user.email).doc(date);
@@ -49,6 +53,9 @@ const Main = ({ user }) => {
 
     history.push(`/records?date=${date}&email=${user?.email}`);
   };
+  const DatepickerInput = ({ ...props }) => (
+    <input type="text" {...props} readOnly />
+  );
 
   return (
     <div className={styles.mainPage}>
@@ -63,16 +70,21 @@ const Main = ({ user }) => {
       <main>
         <article>
           <h2>Quick Start</h2>
-          <button onClick={startWorkOut}>Start an Empty Workout</button>
+          <button className={styles.strtBtn} onClick={startWorkOut}>
+            Start an Empty Workout
+          </button>
         </article>
         <article>
           <h2>Check Records</h2>
-          <input
-            ref={dateRef}
-            type="date"
+          <DatePicker
             className={styles.dateInput}
-            max={moment().format("YYYY-MM-DD")}
             onChange={getWorkoutData}
+            maxDate={new Date()}
+            selected={selectedDate}
+            placeholderText={"Please select a date"}
+            onChangeRaw={(e) => e.preventDefault()}
+            withPortal
+            customInput={<DatepickerInput />}
           />
         </article>
         <article>
