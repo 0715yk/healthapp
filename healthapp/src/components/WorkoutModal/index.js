@@ -29,6 +29,7 @@ const WorkoutModal = () => {
               {dateWorkout.map((workout, idx) => {
                 return (
                   <WorkoutData
+                    key={idx}
                     workout={workout}
                     idx={idx}
                     fixMode={fixMode}
