@@ -124,7 +124,9 @@ const WorkOut = ({ user }) => {
                 onChange={getSelectInput}
                 defaultValue="choose basic workout"
               >
-                <option disabled>choose basic workout</option>
+                <option style={{ color: "black" }} disabled>
+                  choose basic workout
+                </option>
                 {workoutNames.map((name, key) => (
                   <option key={key}>{name}</option>
                 ))}
