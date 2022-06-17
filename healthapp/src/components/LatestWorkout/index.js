@@ -8,7 +8,8 @@ const LatestWorkout = ({ user }) => {
 
   useEffect(async () => {
     if (!user?.email) return;
-    let recordRef = await db
+
+    const recordRef = await db
       .collection(user?.email)
       .orderBy("order", "desc")
       .limit(1);

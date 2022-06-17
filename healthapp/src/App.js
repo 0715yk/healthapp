@@ -4,12 +4,12 @@ import Main from "./pages/Main/Main";
 import Landing from "./pages/Landing/Landing";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import Record from "./pages/Record";
-import Records from "./pages/Records";
 import WorkOut from "./pages/WorkOut/WorkOut";
 import { useSetRecoilState, useRecoilValue } from "recoil";
 import { allWorkoutState, workoutState } from "./states";
 import { db } from "./index";
 import WorkoutModal from "./components/WorkoutModal";
+
 function App() {
   const [user, setUser] = useState({ nickname: "" });
   const workouts = useRecoilValue(workoutState);

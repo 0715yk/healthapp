@@ -20,6 +20,11 @@ const WorkoutSet = ({
     on: false,
     message: "정말 삭제하시겠습니까?",
   });
+  const [alertOn, setAlertOn] = useState({
+    on: false,
+    message: "최소 한 개 이상의 reps를 기입해주세요.",
+  });
+
   const [inputValue, setInputValue] = useState({
     kg: el.kg,
     reps: el.reps,
@@ -32,6 +37,13 @@ const WorkoutSet = ({
   }, [fixMode]);
 
   const updateSet = async () => {
+    if (inputValue.reps <= 0) {
+      setAlertOn((prev) => ({
+        ...prev,
+        on: true,
+      }));
+      return;
+    }
     const batch = db.batch();
     const copyWorkout = _.cloneDeep(dateWorkout);
 
@@ -139,8 +151,28 @@ const WorkoutSet = ({
     });
   };
 
+  const closeAlert = () => {
+    setAlertOn((prev) => ({
+      ...prev,
+      on: false,
+    }));
+  };
+
+  const xBtnFunc = () => {
+    setInputValue({
+      kg: el.kg,
+      reps: el.reps,
+    });
+    setSetUpdateOn((prev) => !prev);
+  };
+
+  const handleKeyDown = (e) => {
+    if (e.key === "Enter") updateSet();
+  };
+
   return (
     <div className={styles.record}>
+      <Modal modalOn={alertOn} closeModal={closeAlert} />
       <Modal
         modalOn={modalOn}
         closeModal={closeModal}
@@ -153,7 +185,8 @@ const WorkoutSet = ({
               <div>{`set ${setIdx + 1} : `}&nbsp;</div>
               <input
                 className={styles.setInput}
-                value={inputValue?.kg || 0}
+                value={inputValue?.kg}
+                onKeyDown={handleKeyDown}
                 onChange={(e) =>
                   setInputValue((prev) => ({ ...prev, kg: e.target.value }))
                 }
@@ -162,7 +195,8 @@ const WorkoutSet = ({
               <div>kg x &nbsp;</div>
               <input
                 className={styles.setInput}
-                value={inputValue?.reps || 0}
+                value={inputValue?.reps}
+                onKeyDown={handleKeyDown}
                 onChange={(e) =>
                   setInputValue((prev) => ({ ...prev, reps: e.target.value }))
                 }
@@ -175,12 +209,7 @@ const WorkoutSet = ({
                 id={styles.deleteBtn}
                 onClick={setModalOnFunc}
               ></i>
-              <div
-                id={styles.xBtn}
-                onClick={() => {
-                  setSetUpdateOn((prev) => !prev);
-                }}
-              >
+              <div id={styles.xBtn} onClick={xBtnFunc}>
                 X
               </div>
             </div>

@@ -48,4 +48,4 @@ const WorkoutModal = () => {
   );
 };
 
-export default WorkoutModal;
+export default React.memo(WorkoutModal);

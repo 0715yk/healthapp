@@ -26,6 +26,11 @@ const WorkoutName = ({
     message: "정말 삭제하시겠습니까?",
   });
 
+  const [alertOn, setAlertOn] = useState({
+    on: false,
+    message: "한글자 이상의 단어로 작성해주세요.",
+  });
+
   useEffect(() => {
     setInputValue(el[0].name);
     setWorkoutUpdateOn(false);
@@ -81,7 +86,14 @@ const WorkoutName = ({
     if (el[0].name === inputValue) {
       setWorkoutUpdateOn(false);
       return;
+    } else if (inputValue.replace(/ /g, "").length === 0) {
+      setAlertOn((prev) => ({
+        ...prev,
+        on: true,
+      }));
+      return;
     }
+
     const batch = db.batch();
     const copyWorkout = _.cloneDeep(dateWorkout);
 
@@ -132,8 +144,22 @@ const WorkoutName = ({
     });
   };
 
+  const xBtnFunc = () => {
+    setInputValue(el[0].name);
+    setWorkoutUpdateOn((prev) => !prev);
+  };
+
+  const alertModal = () => {
+    setAlertOn((prev) => ({ ...prev, on: false }));
+  };
+
+  const handleKeyDown = (e) => {
+    if (e.key === "Enter") updateWorkoutName();
+  };
+
   const updateModeComponent = workoutUpdateOn ? (
     <div className={styles.updatePart}>
+      <Modal modalOn={alertOn} closeModal={alertModal} />
       <Modal
         modalOn={modalOn}
         closeModal={closeModal}
@@ -144,6 +170,7 @@ const WorkoutName = ({
         value={inputValue}
         onChange={(e) => setInputValue(e.target.value)}
         spellCheck={false}
+        onKeyDown={handleKeyDown}
       />
       <i
         className="far fa-edit"
@@ -155,12 +182,7 @@ const WorkoutName = ({
         id={styles.deleteBtn}
         onClick={setModalOnFunc}
       ></i>
-      <div
-        className={styles.xBtn}
-        onClick={() => {
-          setWorkoutUpdateOn((prev) => !prev);
-        }}
-      >
+      <div className={styles.xBtn} onClick={xBtnFunc}>
         X
       </div>
     </div>
@@ -180,4 +202,11 @@ const WorkoutName = ({
   return <div className={styles.workoutName}>{workoutNameComponent}</div>;
 };
 
-export default React.memo(WorkoutName);
+export default React.memo(WorkoutName, (prev, next) => {
+  const prevValue = prev.dateWorkout[prev.idx][prev.workoutNameIdx][0].name;
+  const nextValue = next.dateWorkout[next.idx][next.workoutNameIdx][0].name;
+
+  if (prev.fixMode !== next.fixMode) return false;
+  else if (prevValue !== nextValue) return false;
+  else return true;
+});

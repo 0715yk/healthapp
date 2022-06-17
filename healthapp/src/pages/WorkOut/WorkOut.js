@@ -125,8 +125,8 @@ const WorkOut = ({ user }) => {
                 defaultValue="choose basic workout"
               >
                 <option disabled>choose basic workout</option>
-                {workoutNames.map((name) => (
-                  <option>{name}</option>
+                {workoutNames.map((name, key) => (
+                  <option key={key}>{name}</option>
                 ))}
               </select>
             </div>
