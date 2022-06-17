@@ -116,7 +116,6 @@ const SignUp = ({ setUser, signupRef }) => {
           <GlowBtn
             props={{
               func: signup,
-              text: "Get Power",
             }}
           />
         </section>

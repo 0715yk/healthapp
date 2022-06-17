@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import styles from "./Main.module.css";
 import GlowHeader from "../../components/GlowHeader/GlowHeader";
+
 import { useHistory } from "react-router-dom";
 import moment from "moment";
 import LatestWorkout from "../../components/LatestWorkout";
@@ -10,6 +11,7 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import _ from "lodash";
 import { db } from "../../index";
+import GlowBtnLogout from "../../components/GlowBtnLogout";
 
 const Main = ({ user }) => {
   const history = useHistory();
@@ -59,6 +61,11 @@ const Main = ({ user }) => {
 
   return (
     <div className={styles.mainPage}>
+      <GlowBtnLogout
+        props={{
+          func: () => history.push("/"),
+        }}
+      />
       <GlowHeader
         title={"Start Workout"}
         style={{

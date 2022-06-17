@@ -73,7 +73,7 @@ const WorkoutData = ({ fixMode, workout, idx, setFixModeFunc }) => {
   return (
     <div style={{ marginTop: "20px" }}>
       <button className={styles.fixBtn} onClick={setFixModeFunc}>
-        {fixMode ? "done" : `fix mode`}
+        {fixMode ? "Done" : `Fix mode`}
       </button>
       <Modal
         modalOn={modalOn}
