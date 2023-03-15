@@ -2,7 +2,7 @@ import React, { useEffect, useRef } from "react";
 import styles from "./Landing.module.css";
 import Login from "../Login/Login";
 
-const Landing = ({ setUser }) => {
+const Landing = () => {
   const scrollRef = useRef(null);
   const buttonRef = useRef(null);
   const upperRef = useRef(null);
@@ -24,7 +24,7 @@ const Landing = ({ setUser }) => {
   }, []);
 
   return (
-    <div className={styles.frame}>
+    <div>
       <div className={styles.landingPage}>
         <header>
           <div ref={upperRef} className={styles.upperTitle}>
@@ -40,7 +40,7 @@ const Landing = ({ setUser }) => {
           </button>
         </section>
       </div>
-      <Login scrollRef={scrollRef} setUser={setUser} />
+      <Login ref={scrollRef} />
     </div>
   );
 };

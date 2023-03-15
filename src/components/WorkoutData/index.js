@@ -1,7 +1,6 @@
 import styles from "./WorkoutData.module.css";
 import React, { useState } from "react";
 import Modal from "../Modal/Modal";
-import { db } from "../../index";
 import { useRecoilState } from "recoil";
 import { dateWorkoutState } from "../../states";
 import WorkoutName from "../WorkoutName";
@@ -22,37 +21,33 @@ const WorkoutData = ({ fixMode, workout, idx, setFixModeFunc }) => {
 
   // workout 제거 함수
   const deleteWorkout = async () => {
-    var batch = db.batch();
-    let copyWorkout = _.cloneDeep(dateWorkout);
-    const fbData = {};
-
-    copyWorkout = copyWorkout.filter((el, _) => {
-      if (_ === idx) return false;
-      else return true;
-    });
-
-    for (let i = 0; i < copyWorkout.length; i++) {
-      fbData[i] = JSON.stringify(copyWorkout[i]);
-    }
-    fbData.order = date;
-
-    const recordRef = await db.collection(email).doc(date);
-
-    if (copyWorkout.length === 0) {
-      recordRef
-        .delete()
-        .then(() => {
-          setDateWorkout(copyWorkout);
-        })
-        .catch((error) => {
-          console.error("Error removing document: ", error);
-        });
-    } else {
-      await batch.set(recordRef, fbData);
-      await batch.commit().then(() => {
-        setDateWorkout(copyWorkout);
-      });
-    }
+    // var batch = db.batch();
+    // let copyWorkout = _.cloneDeep(dateWorkout);
+    // const fbData = {};
+    // copyWorkout = copyWorkout.filter((el, _) => {
+    //   if (_ === idx) return false;
+    //   else return true;
+    // });
+    // for (let i = 0; i < copyWorkout.length; i++) {
+    //   fbData[i] = JSON.stringify(copyWorkout[i]);
+    // }
+    // fbData.order = date;
+    // const recordRef = await db.collection(email).doc(date);
+    // if (copyWorkout.length === 0) {
+    //   recordRef
+    //     .delete()
+    //     .then(() => {
+    //       setDateWorkout(copyWorkout);
+    //     })
+    //     .catch((error) => {
+    //       console.error("Error removing document: ", error);
+    //     });
+    // } else {
+    //   await batch.set(recordRef, fbData);
+    //   await batch.commit().then(() => {
+    //     setDateWorkout(copyWorkout);
+    //   });
+    // }
   };
 
   // set 제거 함수

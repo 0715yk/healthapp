@@ -1,6 +1,5 @@
 import styles from "./WorkoutName.module.css";
 import React, { useEffect, useState } from "react";
-import { db } from "../../index";
 import _ from "lodash";
 import Modal from "../Modal/Modal";
 
@@ -38,48 +37,42 @@ const WorkoutName = ({
 
   // 운동 종목 제거 함수
   const deleteWorkoutName = async () => {
-    const batch = db.batch();
-    const copyWorkout = _.cloneDeep(dateWorkout);
-
-    const fbData = {};
-    const resultArr = [];
-
-    let key = 0;
-
-    for (let i = 0; i < copyWorkout.length; i++) {
-      let nowArr = null;
-      if (i !== idx) nowArr = copyWorkout[i];
-      else {
-        nowArr = copyWorkout[i]
-          .slice(0, workoutNameIdx)
-          .concat(copyWorkout[i].slice(workoutNameIdx + 1));
-      }
-
-      if (nowArr.length !== 0) {
-        fbData[key] = JSON.stringify(nowArr);
-        resultArr.push(nowArr);
-        key++;
-      }
-    }
-
-    fbData.order = date;
-    const recordRef = await db.collection(email).doc(date);
-
-    if (resultArr.length === 0) {
-      recordRef
-        .delete()
-        .then(() => {
-          setDateWorkout(resultArr);
-        })
-        .catch((error) => {
-          console.error("Error removing document: ", error);
-        });
-    } else {
-      await batch.set(recordRef, fbData);
-      await batch.commit().then(() => {
-        setDateWorkout(resultArr);
-      });
-    }
+    // const batch = db.batch();
+    // const copyWorkout = _.cloneDeep(dateWorkout);
+    // const fbData = {};
+    // const resultArr = [];
+    // let key = 0;
+    // for (let i = 0; i < copyWorkout.length; i++) {
+    //   let nowArr = null;
+    //   if (i !== idx) nowArr = copyWorkout[i];
+    //   else {
+    //     nowArr = copyWorkout[i]
+    //       .slice(0, workoutNameIdx)
+    //       .concat(copyWorkout[i].slice(workoutNameIdx + 1));
+    //   }
+    //   if (nowArr.length !== 0) {
+    //     fbData[key] = JSON.stringify(nowArr);
+    //     resultArr.push(nowArr);
+    //     key++;
+    //   }
+    // }
+    // fbData.order = date;
+    // const recordRef = await db.collection(email).doc(date);
+    // if (resultArr.length === 0) {
+    //   recordRef
+    //     .delete()
+    //     .then(() => {
+    //       setDateWorkout(resultArr);
+    //     })
+    //     .catch((error) => {
+    //       console.error("Error removing document: ", error);
+    //     });
+    // } else {
+    //   await batch.set(recordRef, fbData);
+    //   await batch.commit().then(() => {
+    //     setDateWorkout(resultArr);
+    //   });
+    // }
   };
 
   const updateWorkoutName = async () => {
@@ -94,7 +87,7 @@ const WorkoutName = ({
       return;
     }
 
-    const batch = db.batch();
+    // const batch = db.batch();
     const copyWorkout = _.cloneDeep(dateWorkout);
 
     const fbData = {};
@@ -123,12 +116,12 @@ const WorkoutName = ({
     }
 
     fbData.order = date;
-    const recordRef = await db.collection(email).doc(date);
-    await batch.set(recordRef, fbData);
-    await batch.commit().then(() => {
-      setDateWorkout(resultArr);
-    });
-    setWorkoutUpdateOn(false);
+    // const recordRef = await db.collection(email).doc(date);
+    // await batch.set(recordRef, fbData);
+    // await batch.commit().then(() => {
+    //   setDateWorkout(resultArr);
+    // });
+    // setWorkoutUpdateOn(false);
   };
 
   const closeModal = () => {

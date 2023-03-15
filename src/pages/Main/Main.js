@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import styles from "./Main.module.css";
 import GlowHeader from "../../components/GlowHeader/GlowHeader";
-
 import { useHistory } from "react-router-dom";
 import moment from "moment";
 import LatestWorkout from "../../components/LatestWorkout";
@@ -10,7 +9,6 @@ import { useRecoilState } from "recoil";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import _ from "lodash";
-import { db } from "../../index";
 import GlowBtnLogout from "../../components/GlowBtnLogout";
 
 const Main = ({ user }) => {
@@ -28,31 +26,11 @@ const Main = ({ user }) => {
   }, []);
 
   const getWorkoutData = async (selectedDate) => {
+    // 특정 날짜 값을 받고, 쿼리로 조회
     const date = moment(selectedDate).format("YYYYMMDD");
     if (date === "") return;
 
-    var recordRef = await db.collection(user.email).doc(date);
-
-    recordRef
-      .get()
-      .then(function (querySnapshot) {
-        if (querySnapshot.exists) {
-          const dateWorkoutData = [];
-          const data = querySnapshot.data();
-
-          for (let key of Object.keys(data)) {
-            if (key === "order") continue;
-            dateWorkoutData.push(JSON.parse(data[key]));
-          }
-          setDateWorkout(dateWorkoutData);
-        } else {
-          setDateWorkout([]);
-        }
-      })
-      .catch(function (error) {
-        console.log("Error getting document:", error);
-      });
-
+    // 조회한 뒤에는 날짜와 id 값을 통해 데이터를 조회(운동 기록)
     history.push(`/records?date=${date}&email=${user?.email}`);
   };
   const DatepickerInput = ({ ...props }) => (

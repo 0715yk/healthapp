@@ -1,6 +1,5 @@
 import styles from "./WorkoutSet.module.css";
 import React, { useEffect, useState } from "react";
-import { db } from "../../index";
 import _ from "lodash";
 import Modal from "../Modal/Modal";
 
@@ -37,105 +36,93 @@ const WorkoutSet = ({
   }, [fixMode]);
 
   const updateSet = async () => {
-    if (inputValue.reps <= 0) {
-      setAlertOn((prev) => ({
-        ...prev,
-        on: true,
-      }));
-      return;
-    }
-    const batch = db.batch();
-    const copyWorkout = _.cloneDeep(dateWorkout);
-
-    const fbData = {};
-    const resultArr = [];
-
-    let key = 0;
-
-    for (let i = 0; i < copyWorkout.length; i++) {
-      let nowArr = null;
-      if (i !== idx) nowArr = copyWorkout[i];
-      else {
-        nowArr = copyWorkout[i].map((arr, _) => {
-          if (_ === workoutNameIdx) {
-            return arr.map((j, k) => {
-              if (k === setIdx) {
-                j.kg = inputValue.kg;
-                j.reps = inputValue.reps;
-              }
-              return j;
-            });
-          } else return arr;
-        });
-      }
-      fbData[key] = JSON.stringify(nowArr);
-      resultArr.push(nowArr);
-      key++;
-    }
-
-    fbData.order = date;
-
-    const recordRef = await db.collection(email).doc(date);
-    await batch.set(recordRef, fbData);
-    await batch.commit().then(() => {
-      setDateWorkout(resultArr);
-    });
-    setSetUpdateOn((prev) => !prev);
+    // if (inputValue.reps <= 0) {
+    //   setAlertOn((prev) => ({
+    //     ...prev,
+    //     on: true,
+    //   }));
+    //   return;
+    // }
+    // const batch = db.batch();
+    // const copyWorkout = _.cloneDeep(dateWorkout);
+    // const fbData = {};
+    // const resultArr = [];
+    // let key = 0;
+    // for (let i = 0; i < copyWorkout.length; i++) {
+    //   let nowArr = null;
+    //   if (i !== idx) nowArr = copyWorkout[i];
+    //   else {
+    //     nowArr = copyWorkout[i].map((arr, _) => {
+    //       if (_ === workoutNameIdx) {
+    //         return arr.map((j, k) => {
+    //           if (k === setIdx) {
+    //             j.kg = inputValue.kg;
+    //             j.reps = inputValue.reps;
+    //           }
+    //           return j;
+    //         });
+    //       } else return arr;
+    //     });
+    //   }
+    //   fbData[key] = JSON.stringify(nowArr);
+    //   resultArr.push(nowArr);
+    //   key++;
+    // }
+    // fbData.order = date;
+    // const recordRef = await db.collection(email).doc(date);
+    // await batch.set(recordRef, fbData);
+    // await batch.commit().then(() => {
+    //   setDateWorkout(resultArr);
+    // });
+    // setSetUpdateOn((prev) => !prev);
   };
 
   const deleteSet = async () => {
-    var batch = db.batch();
-    let copyWorkout = _.cloneDeep(dateWorkout);
-    const fbData = {};
-    const resultArr = [];
-
-    let key = 0;
-
-    for (let i = 0; i < copyWorkout.length; i++) {
-      let nowArr = null;
-      if (i !== idx) nowArr = copyWorkout[i];
-      else {
-        nowArr = copyWorkout[i].map((arr, _) => {
-          if (_ === workoutNameIdx) {
-            return arr.filter((j, k) => {
-              if (k === setIdx) return false;
-              else return true;
-            });
-          } else return arr;
-        });
-      }
-      nowArr = nowArr.filter((el) => {
-        if (el.length === 0) return false;
-        else return true;
-      });
-
-      if (nowArr.length === 0) continue;
-
-      fbData[key] = JSON.stringify(nowArr);
-      resultArr.push(nowArr);
-      key++;
-    }
-
-    fbData.order = date;
-    const recordRef = await db.collection(email).doc(date);
-
-    if (resultArr.length === 0) {
-      recordRef
-        .delete()
-        .then(() => {
-          setDateWorkout(resultArr);
-        })
-        .catch((error) => {
-          console.error("Error removing document: ", error);
-        });
-    } else {
-      await batch.set(recordRef, fbData);
-      await batch.commit().then(() => {
-        setDateWorkout(resultArr);
-      });
-    }
-
-    setSetUpdateOn((prev) => !prev);
+    // var batch = db.batch();
+    // let copyWorkout = _.cloneDeep(dateWorkout);
+    // const fbData = {};
+    // const resultArr = [];
+    // let key = 0;
+    // for (let i = 0; i < copyWorkout.length; i++) {
+    //   let nowArr = null;
+    //   if (i !== idx) nowArr = copyWorkout[i];
+    //   else {
+    //     nowArr = copyWorkout[i].map((arr, _) => {
+    //       if (_ === workoutNameIdx) {
+    //         return arr.filter((j, k) => {
+    //           if (k === setIdx) return false;
+    //           else return true;
+    //         });
+    //       } else return arr;
+    //     });
+    //   }
+    //   nowArr = nowArr.filter((el) => {
+    //     if (el.length === 0) return false;
+    //     else return true;
+    //   });
+    //   if (nowArr.length === 0) continue;
+    //   fbData[key] = JSON.stringify(nowArr);
+    //   resultArr.push(nowArr);
+    //   key++;
+    // }
+    // fbData.order = date;
+    // const recordRef = await db.collection(email).doc(date);
+    // if (resultArr.length === 0) {
+    //   recordRef
+    //     .delete()
+    //     .then(() => {
+    //       setDateWorkout(resultArr);
+    //     })
+    //     .catch((error) => {
+    //       console.error("Error removing document: ", error);
+    //     });
+    // } else {
+    //   await batch.set(recordRef, fbData);
+    //   await batch.commit().then(() => {
+    //     setDateWorkout(resultArr);
+    //   });
+    // }
+    // setSetUpdateOn((prev) => !prev);
   };
 
   const setModalOnFunc = () => {

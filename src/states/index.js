@@ -1,6 +1,14 @@
 import { atom, selector } from "recoil";
 import _ from "lodash";
 
+export const userState = atom({
+  key: "userState",
+  default: {
+    nickname: "",
+    id: "",
+  },
+});
+
 export const workoutState = atom({
   key: "workoutState",
   default: [],

@@ -1,8 +1,7 @@
-import React, { useMemo, useState } from "react";
+import React, { useState } from "react";
 import styles from "./WorkOutList.module.css";
 import { useHistory } from "react-router-dom";
 import PureWorkOut from "../PureWorkOut/PureWorkOut";
-import { db } from "../../index";
 import moment from "moment";
 import Modal from "../Modal/Modal";
 import { useRecoilValue, useRecoilState } from "recoil";
@@ -42,40 +41,39 @@ const WorkOutList = ({ user }) => {
     }
 
     const date = moment().format("YYYYMMDD");
-    var recordRef = await db.collection(user.email).doc(date);
 
-    recordRef
-      .get()
-      .then((doc) => {
-        if (doc.exists) {
-          const data = doc.data();
-          const finalKey = parseInt(
-            Object.keys(data)[Object.keys(data).length - 2]
-          );
-          if (!isNaN(finalKey + 1))
-            recordRef.set(
-              {
-                order: date,
-                [finalKey + 1]: JSON.stringify(copyArr),
-              },
-              { merge: true }
-            );
-          else
-            db.collection(user.email)
-              .doc(date)
-              .set(
-                { order: date, 0: JSON.stringify(copyArr) },
-                { merge: true }
-              );
-        } else {
-          db.collection(user.email)
-            .doc(date)
-            .set({ order: date, 0: JSON.stringify(copyArr) }, { merge: true });
-        }
-      })
-      .catch((error) => {
-        console.log("Error getting document:", error);
-      });
+    // recordRef
+    //   .get()
+    //   .then((doc) => {
+    //     if (doc.exists) {
+    //       const data = doc.data();
+    //       const finalKey = parseInt(
+    //         Object.keys(data)[Object.keys(data).length - 2]
+    //       );
+    //       if (!isNaN(finalKey + 1))
+    //         recordRef.set(
+    //           {
+    //             order: date,
+    //             [finalKey + 1]: JSON.stringify(copyArr),
+    //           },
+    //           { merge: true }
+    //         );
+    //       else
+    //         db.collection(user.email)
+    //           .doc(date)
+    //           .set(
+    //             { order: date, 0: JSON.stringify(copyArr) },
+    //             { merge: true }
+    //           );
+    //     } else {
+    //       db.collection(user.email)
+    //         .doc(date)
+    //         .set({ order: date, 0: JSON.stringify(copyArr) }, { merge: true });
+    //     }
+    //   })
+    //   .catch((error) => {
+    //     console.log("Error getting document:", error);
+    //   });
     history.push("/record");
   };
 
