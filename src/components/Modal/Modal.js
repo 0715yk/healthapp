@@ -6,14 +6,19 @@ const Modal = ({
   closeModal,
   cancelModalOn = false,
   cancelModal = () => {},
+  btnOption = true,
 }) => {
   return (
     modalOn.on && (
       <div className={styles.safetyArea}>
         <div className={styles.modal}>
           <section>{modalOn.message}</section>
-          <button onClick={closeModal}>Confirm</button>
-          {cancelModal && <button onClick={cancelModal}>Cancel</button>}
+          {btnOption && (
+            <>
+              <button onClick={closeModal}>Confirm</button>
+              {cancelModalOn && <button onClick={cancelModal}>Cancel</button>}
+            </>
+          )}
         </div>
       </div>
     )

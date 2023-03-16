@@ -2,38 +2,27 @@ import Modal from "src/components/Modal/Modal";
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
-let flag = false;
 const DeleteAccount = () => {
   const [modalOn, setModalOn] = useState({ on: false, message: "" });
   const [cancelModalOn, setCancelModalOn] = useState(true);
-  const [closeModalFunc, setCloseModalFunc] = useState(() => {});
+  const [btnOption, setBtnOption] = useState(true);
   const navigate = useNavigate();
+  
+  const closeModal = () => {
+    console.log("회원탈퇴 진행");
+    // 탈퇴 api 호출
+    setCancelModalOn(false);
+    setBtnOption(false);
+    setModalOn({
+      on: true,
+      message:
+        "그동안 이용해주셔서 감사합니다. 5초 후에 랜딩 페이지로 이동합니다.",
+    });
+    setTimeout(() => {
+      navigate("/");
+    }, 5000);
+  };
   const onDeleteAccount = () => {
-    const closeModal = () => {
-      console.log("회원탈퇴 진행");
-      // 탈퇴 api 호출
-      setCancelModalOn(false);
-
-      const finishProcess = () => {
-        flag = true;
-        navigate("/");
-      };
-
-      setCloseModalFunc(finishProcess);
-
-      setModalOn({
-        on: true,
-        message:
-          "그동안 이용해주셔서 감사합니다. 5초 후에 랜딩 페이지로 이동합니다.",
-      });
-      setTimeout(() => {
-        if (!flag) {
-          finishProcess();
-        }
-      }, 5000);
-    };
-
-    setCloseModalFunc(closeModal);
     setModalOn({
       on: true,
       message:
@@ -54,9 +43,10 @@ const DeleteAccount = () => {
     <>
       <Modal
         modalOn={modalOn}
-        closeModal={closeModalFunc}
+        closeModal={closeModal}
         cancelModalOn={cancelModalOn}
         cancelModal={cancelModal}
+        btnOption={btnOption}
       />
       <button onClick={onDeleteAccount}>Delete Account</button>
     </>
