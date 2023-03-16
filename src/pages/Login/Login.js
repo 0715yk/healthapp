@@ -1,13 +1,13 @@
 import React, { useRef, useState } from "react";
 import styles from "./Login.module.css";
-import { useHistory } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import Modal from "../../components/Modal/Modal";
 import SignUp from "../SignUp/SignUp";
 import { useSetRecoilState } from "recoil";
 import { userState } from "../../states";
 
-const Login = ({ ref }) => {
-  const history = useHistory();
+const Login = React.forwardRef(({}, ref) => {
+  const navigate = useNavigate();
   const idRef = useRef();
   const pwdRef = useRef();
   const [modalOn, setModalOn] = useState({ on: false, message: "" });
@@ -23,7 +23,7 @@ const Login = ({ ref }) => {
     var id = idRef.current.value;
     var password = pwdRef.current.value;
     // 여기서 api 호출하고 호출 결과에 따른 메시지를 Modal로 보여줌
-    history.push("/main");
+    navigate("/main");
   };
 
   const anonymousLogin = async () => {};
@@ -60,6 +60,6 @@ const Login = ({ ref }) => {
       </main>
     </div>
   );
-};
+});
 
 export default Login;

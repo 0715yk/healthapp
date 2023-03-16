@@ -1,12 +1,12 @@
 import React, { useRef, useState } from "react";
 import styles from "./SignUp.module.css";
-import { useHistory } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import Modal from "../../components/Modal/Modal";
 import GlowBtn from "../../components/GlowBtn/GlowBtn";
 import { validateSignupForm } from "src/utils";
 
 const SignUp = ({ ref }) => {
-  const history = useHistory();
+  const navigate = useNavigate();
   const idRef = useRef();
   const pwdRef = useRef();
   const nicknameRef = useRef();
@@ -27,7 +27,7 @@ const SignUp = ({ ref }) => {
     const nickname = nicknameRef.current.value;
     const message = validateSignupForm(id, password, nickname);
     if (message === "") {
-      history.push("/main");
+      navigate("/main");
     } else {
       setModalOn({
         on: true,

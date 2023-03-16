@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import styles from "./WorkOutList.module.css";
-import { useHistory } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import PureWorkOut from "../PureWorkOut/PureWorkOut";
 import moment from "moment";
 import Modal from "../Modal/Modal";
@@ -11,7 +11,7 @@ const WorkOutList = ({ user }) => {
   const workouts = useRecoilValue(workoutState);
   const [time, setTime] = useRecoilState(timeState);
   const [nullCheckListErrorOn, setNullCheckListErrorOn] = useState(false);
-  const history = useHistory();
+  const navigate = useNavigate();
 
   const finishWorkout = async () => {
     if (!user.email) return;
@@ -74,7 +74,7 @@ const WorkOutList = ({ user }) => {
     //   .catch((error) => {
     //     console.log("Error getting document:", error);
     //   });
-    history.push("/record");
+    navigate("/main/record");
   };
 
   const closeModal = () => {

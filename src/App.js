@@ -1,35 +1,22 @@
 import "./App.css";
 import Main from "./pages/Main/Main";
 import Landing from "./pages/Landing/Landing";
-import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
-import Record from "./pages/Record";
-import WorkOut from "./pages/WorkOut/WorkOut";
-import WorkoutModal from "./components/WorkoutModal";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 import NavBar from "./components/NavBar";
+import Profile from "./pages/Profile";
 
 function App() {
   return (
-    <NavBar>
-      <Router>
-        <Switch>
-          <Route path="/" exact>
-            <Landing />
-          </Route>
-          <Route path="/main">
-            <Main />
-          </Route>
-          <Route path="/record">
-            <Record />
-          </Route>
-          <Route path="/records">
-            <WorkoutModal />
-          </Route>
-          <Route path="/workout">
-            <WorkOut />
-          </Route>
-        </Switch>
-      </Router>
-    </NavBar>
+    <BrowserRouter>
+      <NavBar>
+        <Routes>
+          <Route path="/" element={<Landing />} />
+          <Route path="/main/*" element={<Main />} />
+          <Route path="/about" element={<div>about</div>} />
+          <Route path="/profile" element={<Profile />} />
+        </Routes>
+      </NavBar>
+    </BrowserRouter>
   );
 }
 

@@ -1,13 +1,13 @@
 import React, { useState, useRef } from "react";
 import styles from "./Landing.module.css";
-import { useHistory } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import moment from "moment";
 import { startTimeState } from "../../states";
 import { useRecoilState } from "recoil";
 
 const Landing = ({ workouts, setWorkouts, color, setColor }) => {
   const [startTime, setStartTime] = useRecoilState(startTimeState);
-  const history = useHistory();
+  const navigate = useNavigate();
   const [workout, setWorkout] = useState("");
   const selectRef = useRef(null);
   const inputRef = useRef(null);
@@ -80,7 +80,7 @@ const Landing = ({ workouts, setWorkouts, color, setColor }) => {
       return;
     }
     setStartTime(moment().format("HH:mm:ss"));
-    history.push("/main");
+    navigate("/main");
   };
 
   const workoutNames = [
@@ -107,7 +107,7 @@ const Landing = ({ workouts, setWorkouts, color, setColor }) => {
   ];
 
   const recordsPage = () => {
-    history.push("/records");
+    navigate("/records");
   };
 
   return (

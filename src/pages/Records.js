@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from "react";
 import styles from "./Records.module.css";
-import { useHistory } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 const Records = () => {
-  const history = useHistory();
+  const navigate = useNavigate();
 
   const back = () => {
-    history.push("/main");
+    navigate("/main");
   };
 
   return (

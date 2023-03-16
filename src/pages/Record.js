@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo, useState } from "react";
 import styles from "./Record.module.css";
-import { useHistory } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import moment from "moment";
 import { useRecoilState, useRecoilValue } from "recoil";
 import {
@@ -15,7 +15,7 @@ const Record = () => {
   const durationTime = useRecoilValue(durationState);
   const bestSets = useRecoilValue(bestSetState);
   const workoutCnt = useRecoilValue(workoutCntState);
-  const history = useHistory();
+  const navigate = useNavigate();
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -23,7 +23,7 @@ const Record = () => {
 
   const completeWorkout = async () => {
     setWorkouts([]);
-    history.push("/main");
+    navigate("/main");
   };
 
   return (

@@ -4,8 +4,9 @@ import _ from "lodash";
 export const userState = atom({
   key: "userState",
   default: {
-    nickname: "",
+    nickname: "yongkini",
     id: "",
+    password: "6248579a",
   },
 });
 

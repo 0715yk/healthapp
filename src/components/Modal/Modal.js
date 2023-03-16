@@ -1,7 +1,12 @@
 import React from "react";
 import styles from "./Modal.module.css";
 
-const Modal = ({ modalOn, closeModal, cancelModal = false }) => {
+const Modal = ({
+  modalOn,
+  closeModal,
+  cancelModalOn = false,
+  cancelModal = () => {},
+}) => {
   return (
     modalOn.on && (
       <div className={styles.safetyArea}>

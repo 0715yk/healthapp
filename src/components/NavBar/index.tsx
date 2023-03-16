@@ -1,36 +1,46 @@
-import { useHistory } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import styles from "./NavBar.module.css";
+import { useEffect } from "react";
 
 const NavBar = ({ children }) => {
-  const history = useHistory();
+  const navigate = useNavigate();
+  const location = useLocation();
+
+  useEffect(() => {
+    const pathName = location.pathname;
+    if (pathName === "/") {
+    }
+  }, [location]);
 
   const setNavigation = (url: string) => {
-    history.push(url);
+    navigate(url);
   };
 
   return (
     <>
       {children}
-      <nav className={styles.navBar}>
-        <button
-          className={styles.navBtns}
-          onClick={() => setNavigation("/main")}
-        >
-          HOME
-        </button>
-        <button
-          className={styles.navBtns}
-          onClick={() => setNavigation("/main")}
-        >
-          ABOUT
-        </button>
-        <button
-          className={styles.navBtns}
-          onClick={() => setNavigation("/main")}
-        >
-          PROFILE
-        </button>
-      </nav>
+      {location.pathname !== "/" && (
+        <nav className={styles.navBar}>
+          <button
+            className={styles.navBtns}
+            onClick={() => setNavigation("/main")}
+          >
+            HOME
+          </button>
+          <button
+            className={styles.navBtns}
+            onClick={() => setNavigation("/about")}
+          >
+            ABOUT
+          </button>
+          <button
+            className={styles.navBtns}
+            onClick={() => setNavigation("/profile")}
+          >
+            PROFILE
+          </button>
+        </nav>
+      )}
     </>
   );
 };

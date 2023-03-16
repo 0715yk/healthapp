@@ -4,16 +4,16 @@ import WorkoutData from "../../components/WorkoutData";
 import _ from "lodash";
 import { useRecoilState } from "recoil";
 import { dateWorkoutState } from "../../states";
-import { useHistory } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 const WorkoutModal = () => {
-  const history = useHistory();
+  const navigate = useNavigate();
   const [dateWorkout, setDateWorkout] = useRecoilState(dateWorkoutState);
   const [fixMode, setFixMode] = useState(false);
 
   const backBtn = () => {
     setDateWorkout([]);
-    history.push("/main");
+    navigate("/main");
   };
 
   const setFixModeFunc = () => {

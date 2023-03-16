@@ -2,7 +2,7 @@ import React, { useState, useRef } from "react";
 import styles from "./WorkOut.module.css";
 import TimeLapse from "../../components/TimeLapse";
 import WorkOutList from "../../components/WorkOutList/WorkOutList";
-import { useHistory } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useRecoilState } from "recoil";
 import { workoutState } from "../../states";
 import Modal from "../../components/Modal/Modal";
@@ -13,7 +13,7 @@ const WorkOut = ({ user }) => {
   const [workout, setWorkout] = useState("");
   const selectRef = useRef(null);
   const inputRef = useRef(null);
-  const history = useHistory();
+  const navigate = useNavigate();
   const workoutNames = [
     "pull up",
     "lat pulldown",
@@ -96,7 +96,7 @@ const WorkOut = ({ user }) => {
 
   const cancelBtn = () => {
     setWorkouts([]);
-    history.push("/main");
+    navigate("/main");
   };
 
   const closeModal = () => {
