@@ -18,6 +18,6 @@ About 'Progressive OverHead'
 
 # **Final App View**
 
-# ** Coding Convention **
+# **Coding Convention**
 
 - 컴포넌트 & 메서드 등 전부다 화살표 함수로 통일
