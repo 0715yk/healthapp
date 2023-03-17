@@ -5,7 +5,7 @@ import Modal from "../../components/Modal/Modal";
 import GlowBtn from "../../components/GlowBtn/GlowBtn";
 import { validateSignupForm } from "src/utils";
 
-const SignUp = ({ ref }) => {
+const SignUp = React.forwardRef(({}, ref) => {
   const navigate = useNavigate();
   const idRef = useRef();
   const pwdRef = useRef();
@@ -66,6 +66,6 @@ const SignUp = ({ ref }) => {
       </main>
     </div>
   );
-};
+});
 
 export default SignUp;

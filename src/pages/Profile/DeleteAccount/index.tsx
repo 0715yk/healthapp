@@ -7,7 +7,7 @@ const DeleteAccount = () => {
   const [cancelModalOn, setCancelModalOn] = useState(true);
   const [btnOption, setBtnOption] = useState(true);
   const navigate = useNavigate();
-  
+
   const closeModal = () => {
     console.log("회원탈퇴 진행");
     // 탈퇴 api 호출
