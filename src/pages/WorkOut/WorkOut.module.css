@@ -1,6 +1,5 @@
 #stickyNav {
-  position: sticky;
-  position: -webkit-sticky;
+  position: fixed;
   top: 0;
   background-color: black;
   padding: 20px 0;
