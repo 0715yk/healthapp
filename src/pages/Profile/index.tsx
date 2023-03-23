@@ -19,10 +19,16 @@ const Profile = () => {
           paddingTop: "20px",
         }}
       />
-      <NicknameInput />
-      <PasswordInput />
-      <button onClick={onLogout}>Logout</button>
-      <DeleteAccount />
+      <div className={styles.bodyPart}>
+        <div className={styles.contents}>
+          <NicknameInput />
+          <PasswordInput />
+          <button className={styles.logoutbtn} onClick={onLogout}>
+            Logout
+          </button>
+          <DeleteAccount />
+        </div>
+      </div>
     </div>
   );
 };

@@ -4,6 +4,7 @@ import { userState } from "src/states";
 import Modal from "src/components/Modal/Modal";
 import { validateUserPwd, PWD_VALIDATION_MESSAGE } from "src/utils";
 import styles from "./style.module.css";
+import { axiosFetch } from "src/utils/axios";
 
 const PasswordInput = ({}) => {
   const [passwordInput, setPasswordInput] = useState("");
@@ -72,6 +73,10 @@ const PasswordInput = ({}) => {
       const message = PWD_VALIDATION_MESSAGE[resultCode];
       if (message === "") {
         // api 호출
+        axiosFetch(
+          `http://api.localhost:4000/users/password/${passwordInput}`,
+          "PATCH"
+        );
         setModalOn({ on: true, message: "성공적으로 수정됐습니다." });
         setUserInform((prev) => {
           return {
@@ -99,20 +104,24 @@ const PasswordInput = ({}) => {
     }
   };
   return (
-    <div ref={divRef}>
+    <div className={styles.updatePasswordWrapper} ref={divRef}>
       <Modal modalOn={modalOn} closeModal={closeModal} />
-      <div>
+      <div className={styles.passwordHeader}>Password</div>
+      <div className={styles.updatePassword}>
         <input
+          className={styles.updatePasswordInput}
           ref={inputRef}
           type="password"
           value={passwordInput}
           onChange={onChangeEvent}
         />
-        <span className={styles.hide} onClick={setHide}>
-          보이기
-        </span>
+        <button className={styles.updatePasswordBtn} onClick={onClickEvent}>
+          수정
+        </button>
+        <button className={styles.hideBtn} onClick={setHide}>
+          비밀번호 확인
+        </button>
       </div>
-      <button onClick={onClickEvent}>수정</button>
     </div>
   );
 };

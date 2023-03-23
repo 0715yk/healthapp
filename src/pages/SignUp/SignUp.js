@@ -4,8 +4,9 @@ import { useNavigate } from "react-router-dom";
 import Modal from "../../components/Modal/Modal";
 import GlowBtn from "../../components/GlowBtn/GlowBtn";
 import { validateSignupForm } from "src/utils";
+import { axiosFetch } from "src/utils/axios";
 
-const SignUp = ({ ref }) => {
+const SignUp = React.forwardRef(({}, ref) => {
   const navigate = useNavigate();
   const idRef = useRef();
   const pwdRef = useRef();
@@ -27,6 +28,11 @@ const SignUp = ({ ref }) => {
     const nickname = nicknameRef.current.value;
     const message = validateSignupForm(id, password, nickname);
     if (message === "") {
+      axiosFetch("http://api.localhost:4000/users/signup", "POST", {
+        id,
+        password,
+        nickname,
+      });
       navigate("/main");
     } else {
       setModalOn({
@@ -66,6 +72,6 @@ const SignUp = ({ ref }) => {
       </main>
     </div>
   );
-};
+});
 
 export default SignUp;

@@ -13,12 +13,18 @@ const Modal = ({
       <div className={styles.safetyArea}>
         <div className={styles.modal}>
           <section>{modalOn.message}</section>
-          {btnOption && (
-            <>
-              <button onClick={closeModal}>Confirm</button>
-              {cancelModalOn && <button onClick={cancelModal}>Cancel</button>}
-            </>
-          )}
+          <div className={styles.btnWrapper}>
+            {btnOption && (
+              <>
+                <button onClick={closeModal}>Confirm</button>
+                {cancelModalOn && (
+                  <button className={styles.bottomBtn} onClick={cancelModal}>
+                    Cancel
+                  </button>
+                )}
+              </>
+            )}
+          </div>
         </div>
       </div>
     )

@@ -20,7 +20,6 @@
 }
 
 .modal button {
-  margin-top: 20px;
   width: 50vw;
   height: 5vh;
   font-size: 4vw;
@@ -43,6 +42,15 @@
   align-items: center;
   color: white;
   margin-bottom: 100px;
+}
+
+.btnWrapper {
+  display: flex;
+  flex-direction: column;
+  margin-top: 10px;
+}
+.bottomBtn {
+  margin-top: 5px;
 }
 
 .modal:before {

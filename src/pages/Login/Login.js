@@ -5,6 +5,7 @@ import Modal from "../../components/Modal/Modal";
 import SignUp from "../SignUp/SignUp";
 import { useSetRecoilState } from "recoil";
 import { userState } from "../../states";
+import { axiosFetch } from "src/utils/axios";
 
 const Login = React.forwardRef(({}, ref) => {
   const navigate = useNavigate();
@@ -23,6 +24,12 @@ const Login = React.forwardRef(({}, ref) => {
     var id = idRef.current.value;
     var password = pwdRef.current.value;
     // 여기서 api 호출하고 호출 결과에 따른 메시지를 Modal로 보여줌
+
+    axiosFetch("http://api.localhost:4000/users/login", "POST", {
+      id,
+      password,
+    });
+
     navigate("/main");
   };
 

@@ -1,16 +1,22 @@
 import Modal from "src/components/Modal/Modal";
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { axiosFetch } from "src/utils/axios";
+import { useRecoilValue } from "recoil";
+import { userState } from "src/states";
+import styles from "./style.module.css";
 
 const DeleteAccount = () => {
+  const userInform = useRecoilValue(userState);
   const [modalOn, setModalOn] = useState({ on: false, message: "" });
   const [cancelModalOn, setCancelModalOn] = useState(true);
   const [btnOption, setBtnOption] = useState(true);
   const navigate = useNavigate();
-  
+
   const closeModal = () => {
     console.log("회원탈퇴 진행");
     // 탈퇴 api 호출
+    axiosFetch(`http://api.localhost:4000/users/quit/test`, "DELETE");
     setCancelModalOn(false);
     setBtnOption(false);
     setModalOn({
@@ -30,8 +36,6 @@ const DeleteAccount = () => {
     });
   };
 
-  useEffect(() => {}, []);
-
   const cancelModal = () => {
     setModalOn({
       on: false,
@@ -48,7 +52,9 @@ const DeleteAccount = () => {
         cancelModal={cancelModal}
         btnOption={btnOption}
       />
-      <button onClick={onDeleteAccount}>Delete Account</button>
+      <button className={styles.deleteBtn} onClick={onDeleteAccount}>
+        Delete Account
+      </button>
     </>
   );
 };

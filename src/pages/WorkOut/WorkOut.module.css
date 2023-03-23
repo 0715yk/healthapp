@@ -8,9 +8,9 @@
 
 .workoutPage {
   background-color: black;
-
   min-width: 100vw;
-  padding-bottom: 100px;
+  min-height: 100vh;
+  padding-bottom: calc(120px + 10vh);
 }
 
 .registerArea {

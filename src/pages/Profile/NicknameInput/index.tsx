@@ -3,6 +3,8 @@ import { useRecoilState } from "recoil";
 import { userState } from "src/states";
 import Modal from "src/components/Modal/Modal";
 import { validateUserNickname, NICKNAME_VALIDATION_MESSAGE } from "src/utils";
+import { axiosFetch } from "src/utils/axios";
+import styles from "./style.module.css";
 
 const NicknameInput = ({}) => {
   const [nicknameInput, setNicknameInput] = useState("");
@@ -70,6 +72,10 @@ const NicknameInput = ({}) => {
       const message = NICKNAME_VALIDATION_MESSAGE[resultCode];
       if (message === "") {
         // api 호출
+        axiosFetch(
+          `http://api.localhost:4000/users/nickname/${nicknameInput}`,
+          "PATCH"
+        );
         setModalOn({ on: true, message: "성공적으로 수정됐습니다." });
         setUserInform((prev) => {
           return {
@@ -90,10 +96,20 @@ const NicknameInput = ({}) => {
   };
 
   return (
-    <div ref={divRef}>
+    <div className={styles.updateNickname} ref={divRef}>
+      <div className={styles.nicknameHeader}>Nickname</div>
       <Modal modalOn={modalOn} closeModal={closeModal} />
-      <input type="text" value={nicknameInput} onChange={onChangeEvent} />
-      <button onClick={onClickEvent}>수정</button>
+      <div className={styles.inputWrapper}>
+        <input
+          className={styles.updateNicknameInput}
+          type="text"
+          value={nicknameInput}
+          onChange={onChangeEvent}
+        />
+        <button className={styles.updateNicknameBtn} onClick={onClickEvent}>
+          수정
+        </button>
+      </div>
     </div>
   );
 };
