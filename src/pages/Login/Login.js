@@ -5,7 +5,8 @@ import Modal from "../../components/Modal/Modal";
 import SignUp from "../SignUp/SignUp";
 import { useSetRecoilState } from "recoil";
 import { userState } from "../../states";
-import { axiosFetch } from "src/utils/axios";
+import { customAxios } from "src/utils/axios";
+import cookies from "react-cookies";
 
 const Login = React.forwardRef(({}, ref) => {
   const navigate = useNavigate();
@@ -20,17 +21,35 @@ const Login = React.forwardRef(({}, ref) => {
     signupRef.current.style.transitionDuration = "700ms";
     signupRef.current.style.transform = "translate(-100vw, 0)";
   };
-  const userLogin = () => {
-    var id = idRef.current.value;
-    var password = pwdRef.current.value;
-    // 여기서 api 호출하고 호출 결과에 따른 메시지를 Modal로 보여줌
+  const userLogin = async () => {
+    const userIdInput = idRef.current.value;
+    const passwordInput = pwdRef.current.value;
 
-    axiosFetch("http://api.localhost:4000/users/login", "POST", {
-      id,
-      password,
-    });
-
-    navigate("/main");
+    try {
+      const response = await customAxios.post("/users/login", {
+        userId: userIdInput,
+        password: passwordInput,
+      });
+      const expires = new Date();
+      const { token, nickname } = response?.data;
+      expires.setMinutes(expires.getMinutes() + 60);
+      cookies.save("access_token", token, {
+        path: "/",
+        expires,
+        // secure : true,
+        // httpOnly: true,
+      });
+      setUserState({
+        nickname,
+      });
+      navigate("/main");
+    } catch (err) {
+      const message = err?.response?.data?.message;
+      setModalOn({
+        on: true,
+        message: message,
+      });
+    }
   };
 
   const anonymousLogin = async () => {};

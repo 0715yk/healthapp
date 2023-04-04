@@ -1,11 +1,21 @@
 import GlowHeader from "../../components/GlowHeader/GlowHeader";
 import DeleteAccount from "./DeleteAccount";
 import NicknameInput from "./NicknameInput";
-import PasswordInput from "./PasswordInput";
+// import PasswordInput from "./PasswordInput";
+import cookies from "react-cookies";
+import { useNavigate } from "react-router-dom";
 import styles from "./style.module.css";
+// import useToken from "src/hooks/useToken";
+import { useSetRecoilState } from "recoil";
+import { userState } from "src/states";
+
 const Profile = () => {
+  const navigate = useNavigate();
+  const setUserState = useSetRecoilState(userState);
   const onLogout = () => {
-    console.log("logout api");
+    setUserState({ nickname: "" });
+    cookies.remove("access_token", { path: "/" }, 1000);
+    navigate("/");
   };
 
   return (
@@ -22,7 +32,7 @@ const Profile = () => {
       <div className={styles.bodyPart}>
         <div className={styles.contents}>
           <NicknameInput />
-          <PasswordInput />
+          {/* <PasswordInput /> */}
           <button className={styles.logoutbtn} onClick={onLogout}>
             Logout
           </button>

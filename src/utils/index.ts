@@ -69,10 +69,10 @@ export const validateUserId = (id: string): number => {
   // }
   if (nullValidationCode !== SUCEED_STATUS_CODE) {
     return nullValidationCode;
-  } else if (lengthValidationCode !== SUCEED_STATUS_CODE) {
-    return lengthValidationCode;
   } else if (specialCharacterValidationCode !== SUCEED_STATUS_CODE) {
     return specialCharacterValidationCode;
+  } else if (lengthValidationCode !== SUCEED_STATUS_CODE) {
+    return lengthValidationCode;
   } else {
     return SUCEED_STATUS_CODE;
   }
@@ -121,10 +121,10 @@ export const validateUserNickname = (nickname: string): number => {
 
   if (nullValidationCode !== SUCEED_STATUS_CODE) {
     return nullValidationCode;
-  } else if (lengthValidationCode !== SUCEED_STATUS_CODE) {
-    return lengthValidationCode;
   } else if (specialCharacterValidationCode !== SUCEED_STATUS_CODE) {
     return specialCharacterValidationCode;
+  } else if (lengthValidationCode !== SUCEED_STATUS_CODE) {
+    return lengthValidationCode;
   } else {
     return SUCEED_STATUS_CODE;
   }
@@ -137,7 +137,7 @@ export const validateSignupForm = (
 ): string => {
   const idStatusCode = validateUserId(id);
   const pwdStatusCode = validateUserPwd(pwd);
-  const nicknameStatusCode = validateUserId(nickname);
+  const nicknameStatusCode = validateUserNickname(nickname);
 
   if (idStatusCode !== SUCEED_STATUS_CODE) {
     return ID_VALIDATION_MESSAGE[idStatusCode];

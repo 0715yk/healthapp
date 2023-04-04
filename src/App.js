@@ -4,24 +4,8 @@ import Landing from "./pages/Landing/Landing";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import NavBar from "./components/NavBar";
 import Profile from "./pages/Profile";
-import axios from "axios";
-import { useEffect } from "react";
 
 function App() {
-  useEffect(() => {
-    axios
-      .post("http://api.localhost:4000/users", {
-        id: "hyk1993",
-        lastName: "6248579a",
-      })
-      .then(function (response) {
-        console.log(response);
-      })
-      .catch(function (error) {
-        console.log(error);
-      });
-  }, []);
-
   return (
     <BrowserRouter>
       <NavBar>

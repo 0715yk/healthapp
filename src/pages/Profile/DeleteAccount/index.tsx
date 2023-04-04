@@ -1,33 +1,44 @@
 import Modal from "src/components/Modal/Modal";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { axiosFetch } from "src/utils/axios";
-import { useRecoilValue } from "recoil";
-import { userState } from "src/states";
+import { customAxios } from "src/utils/axios";
 import styles from "./style.module.css";
+import cookies from "react-cookies";
+import { useSetRecoilState } from "recoil";
+import { userState } from "src/states";
 
 const DeleteAccount = () => {
-  const userInform = useRecoilValue(userState);
+  // const userInform = useRecoilValue(userState);
   const [modalOn, setModalOn] = useState({ on: false, message: "" });
   const [cancelModalOn, setCancelModalOn] = useState(true);
   const [btnOption, setBtnOption] = useState(true);
   const navigate = useNavigate();
+  const setUserState = useSetRecoilState(userState);
 
-  const closeModal = () => {
-    console.log("회원탈퇴 진행");
+  const closeModal = async () => {
     // 탈퇴 api 호출
-    axiosFetch(`http://api.localhost:4000/users/quit/test`, "DELETE");
-    setCancelModalOn(false);
-    setBtnOption(false);
-    setModalOn({
-      on: true,
-      message:
-        "그동안 이용해주셔서 감사합니다. 5초 후에 랜딩 페이지로 이동합니다.",
-    });
-    setTimeout(() => {
-      navigate("/");
-    }, 5000);
+    try {
+      await customAxios.delete(`/users`);
+      setCancelModalOn(false);
+      setBtnOption(false);
+      setModalOn({
+        on: true,
+        message:
+          "그동안 이용해주셔서 감사합니다. 5초 후에 랜딩 페이지로 이동합니다.",
+      });
+      setTimeout(() => {
+        setUserState({ nickname: "" });
+        cookies.remove("access_token", { path: "/" }, 1000);
+        navigate("/");
+      }, 5000);
+    } catch {
+      setModalOn({
+        on: true,
+        message: "서버 에러 잠시후 다시 시도해주세요.",
+      });
+    }
   };
+
   const onDeleteAccount = () => {
     setModalOn({
       on: true,

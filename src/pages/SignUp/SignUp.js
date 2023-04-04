@@ -4,7 +4,10 @@ import { useNavigate } from "react-router-dom";
 import Modal from "../../components/Modal/Modal";
 import GlowBtn from "../../components/GlowBtn/GlowBtn";
 import { validateSignupForm } from "src/utils";
-import { axiosFetch } from "src/utils/axios";
+import { customAxios } from "src/utils/axios";
+import cookies from "react-cookies";
+import { useSetRecoilState } from "recoil";
+import { userState } from "src/states";
 
 const SignUp = React.forwardRef(({}, ref) => {
   const navigate = useNavigate();
@@ -12,7 +15,7 @@ const SignUp = React.forwardRef(({}, ref) => {
   const pwdRef = useRef();
   const nicknameRef = useRef();
   const [modalOn, setModalOn] = useState({ on: false, message: "" });
-
+  const setUserState = useSetRecoilState(userState);
   const closeModal = () => {
     setModalOn({ on: false, message: "" });
   };
@@ -22,18 +25,38 @@ const SignUp = React.forwardRef(({}, ref) => {
     ref.current.style.transform = "translate(100vw, 0)";
   };
 
-  const signup = () => {
+  const signup = async () => {
     const id = idRef.current.value;
     const password = pwdRef.current.value;
     const nickname = nicknameRef.current.value;
     const message = validateSignupForm(id, password, nickname);
     if (message === "") {
-      axiosFetch("http://api.localhost:4000/users/signup", "POST", {
-        id,
-        password,
-        nickname,
-      });
-      navigate("/main");
+      try {
+        const response = await customAxios.post("/users", {
+          userId: id,
+          password,
+          nickname,
+        });
+        const expires = new Date();
+        const token = response?.data?.jwtToken;
+        expires.setMinutes(expires.getMinutes() + 60);
+        cookies.save("access_token", token, {
+          path: "/",
+          expires,
+          // secure : true,
+          // httpOnly: true,
+        });
+        setUserState({
+          nickname,
+        });
+        navigate("/main");
+      } catch (err) {
+        const message = err?.response?.data?.message;
+        setModalOn({
+          on: true,
+          message: message,
+        });
+      }
     } else {
       setModalOn({
         on: true,

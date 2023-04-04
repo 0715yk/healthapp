@@ -3,7 +3,7 @@ import { useRecoilState } from "recoil";
 import { userState } from "src/states";
 import Modal from "src/components/Modal/Modal";
 import { validateUserNickname, NICKNAME_VALIDATION_MESSAGE } from "src/utils";
-import { axiosFetch } from "src/utils/axios";
+import { customAxios } from "src/utils/axios";
 import styles from "./style.module.css";
 
 const NicknameInput = ({}) => {
@@ -58,7 +58,7 @@ const NicknameInput = ({}) => {
   };
 
   const onClickEvent = useCallback(
-    (e: React.onClickEvent) => {
+    async (e: React.onClickEvent) => {
       // 여기서 유효성 검사가 통과하면 api 호출 아니면 Modal 호출
       const resultCode = validateUserNickname(nicknameInput);
       if (nicknameInput === userInform.nickname) {
@@ -70,19 +70,25 @@ const NicknameInput = ({}) => {
       }
 
       const message = NICKNAME_VALIDATION_MESSAGE[resultCode];
+
       if (message === "") {
         // api 호출
-        axiosFetch(
-          `http://api.localhost:4000/users/nickname/${nicknameInput}`,
-          "PATCH"
-        );
-        setModalOn({ on: true, message: "성공적으로 수정됐습니다." });
-        setUserInform((prev) => {
-          return {
-            ...prev,
+        try {
+          await customAxios.patch(`/users/nickname`, {
             nickname: nicknameInput,
-          };
-        });
+          });
+
+          setModalOn({ on: true, message: "성공적으로 수정됐습니다." });
+          setUserInform((prev) => {
+            return {
+              ...prev,
+              nickname: nicknameInput,
+            };
+          });
+        } catch (err) {
+          const response = err?.response?.data;
+          setModalOn({ on: true, message: response?.message });
+        }
       } else {
         setModalOn({ on: true, message: message });
         return;
