@@ -5,32 +5,6 @@ const LatestWorkout = ({ user }) => {
   const [workouts, setWorkouts] = useState([]);
   const [date, setDate] = useState("");
 
-  useEffect(() => {
-    // if (!user?.email) return;
-    // const recordRef = await db
-    //   .collection(user?.email)
-    //   .orderBy("order", "desc")
-    //   .limit(1);
-    // recordRef
-    //   .get()
-    //   .then((querySnapshot) => {
-    //     querySnapshot.forEach((doc) => {
-    //       const data = doc.data();
-    //       const date = doc.id;
-    //       if (!data || !date) return;
-    //       setWorkouts(JSON.parse(data[Object.keys(data).length - 2]));
-    //       setDate(
-    //         `${date.substring(0, 4)}/${date.substring(4, 6)}/${date.substring(
-    //           6
-    //         )}`
-    //       );
-    //     });
-    //   })
-    //   .catch((error) => {
-    //     console.log("Error getting documents: ", error);
-    //   });
-  }, []);
-
   return (
     <div className={styles.latestWorkout}>
       <h2 className={styles.title}>Latest Workout</h2>

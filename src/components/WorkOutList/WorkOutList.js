@@ -6,6 +6,7 @@ import moment from "moment";
 import Modal from "../Modal/Modal";
 import { useRecoilValue, useRecoilState } from "recoil";
 import { workoutState, timeState } from "../../states";
+import { customAxios } from "src/utils/axios";
 
 const WorkOutList = ({ user }) => {
   const workouts = useRecoilValue(workoutState);
@@ -14,7 +15,7 @@ const WorkOutList = ({ user }) => {
   const navigate = useNavigate();
 
   const finishWorkout = async () => {
-    if (!user.email) return;
+    // if (!user.email) return;
 
     if (workouts.length === 0) {
       setNullCheckListErrorOn((prev) => !prev);
@@ -41,7 +42,11 @@ const WorkOutList = ({ user }) => {
     }
 
     const date = moment().format("YYYYMMDD");
-
+    const response = await customAxios.post("/workout", {
+      date: date,
+      data: copyArr,
+    });
+    console.log(response);
     // recordRef
     //   .get()
     //   .then((doc) => {
@@ -74,7 +79,7 @@ const WorkOutList = ({ user }) => {
     //   .catch((error) => {
     //     console.log("Error getting document:", error);
     //   });
-    navigate("/main/record");
+    // navigate("/main/record");
   };
 
   const closeModal = () => {

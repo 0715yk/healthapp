@@ -8,9 +8,6 @@ const InfiniteScroll = () => {
   useEffect(() => {
     document.addEventListener("scroll", () => {
       //   setInform(JSON.stringify(scrollRef.current.getBoundingClientRect()));
-      console.log("1)" + window.innerHeight);
-      console.log("2)" + window.scrollY);
-      console.log("3)" + document.body.offsetHeight);
     });
   }, []);
   return (

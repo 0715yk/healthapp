@@ -12,7 +12,6 @@ const Landing = () => {
     upperRef.current.style.transform = "translate(-100vw,0)";
     lowerRef.current.style.transform = "translate(100vw,0)";
     buttonRef.current.style.transform = "translate(100vw,0)";
-    console.log(scrollRef);
     scrollRef.current.style.transform = "translate(0,-100vh)";
   };
 

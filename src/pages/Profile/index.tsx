@@ -8,6 +8,7 @@ import styles from "./style.module.css";
 // import useToken from "src/hooks/useToken";
 import { useSetRecoilState } from "recoil";
 import { userState } from "src/states";
+import useCheckToken from "src/hooks/useCheckToken";
 
 const Profile = () => {
   const navigate = useNavigate();
@@ -17,7 +18,8 @@ const Profile = () => {
     cookies.remove("access_token", { path: "/" }, 1000);
     navigate("/");
   };
-
+  useCheckToken();
+  
   return (
     <div className={styles.profilePage}>
       <GlowHeader

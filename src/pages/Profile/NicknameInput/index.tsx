@@ -5,6 +5,7 @@ import Modal from "src/components/Modal/Modal";
 import { validateUserNickname, NICKNAME_VALIDATION_MESSAGE } from "src/utils";
 import { customAxios } from "src/utils/axios";
 import styles from "./style.module.css";
+import cookies from "react-cookies";
 
 const NicknameInput = ({}) => {
   const [nicknameInput, setNicknameInput] = useState("");

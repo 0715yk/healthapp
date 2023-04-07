@@ -37,12 +37,9 @@ const SignUp = React.forwardRef(({}, ref) => {
           password,
           nickname,
         });
-        const expires = new Date();
         const token = response?.data?.jwtToken;
-        expires.setMinutes(expires.getMinutes() + 60);
         cookies.save("access_token", token, {
           path: "/",
-          expires,
           // secure : true,
           // httpOnly: true,
         });
@@ -51,7 +48,9 @@ const SignUp = React.forwardRef(({}, ref) => {
         });
         navigate("/main");
       } catch (err) {
-        const message = err?.response?.data?.message;
+        const message =
+          err?.response?.data?.message ??
+          "서버 에러 입니다. 잠시후 다시 시도해주세요.";
         setModalOn({
           on: true,
           message: message,

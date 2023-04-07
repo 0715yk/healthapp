@@ -58,15 +58,8 @@ export const ID_VALIDATION_MESSAGE = {
 
 export const validateUserId = (id: string): number => {
   const lengthValidationCode = checkByteLength(id, 4, 30);
-  console.log(lengthValidationCode);
   const specialCharacterValidationCode = checkSpecialCharacters(id);
   const nullValidationCode = checkNull(id);
-  // 여기서 axios로 백엔드 한번 타야할 것 같다. 이에 따라 statusCode를 임의로 지정해서 처리한다.
-  // 중복된 닉네임은 서버에서밖에 처리할 수 없다.
-  // const serverStatusCode  = axios('')
-  //   else if (serverStatusCode !== 2000) {
-  //     return serverStatusCode;
-  // }
   if (nullValidationCode !== SUCEED_STATUS_CODE) {
     return nullValidationCode;
   } else if (specialCharacterValidationCode !== SUCEED_STATUS_CODE) {

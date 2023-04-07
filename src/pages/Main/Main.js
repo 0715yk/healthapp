@@ -4,7 +4,7 @@ import GlowHeader from "../../components/GlowHeader/GlowHeader";
 import moment from "moment";
 import LatestWorkout from "../../components/LatestWorkout";
 import { timeState, dateWorkoutState } from "../../states";
-import { useRecoilState } from "recoil";
+import { useRecoilState, useRecoilValue } from "recoil";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import _ from "lodash";
@@ -13,16 +13,19 @@ import { Route, Routes, useNavigate } from "react-router-dom";
 import Record from "../Record";
 import WorkOut from "../WorkOut/WorkOut";
 import WorkoutModal from "../../components/WorkoutModal";
+import useCheckToken from "src/hooks/useCheckToken";
 
 const Main = ({ user }) => {
   const navigate = useNavigate();
   const [selectedDate, setSelectedDate] = useState(null);
-  const [dateWorkout, setDateWorkout] = useRecoilState(dateWorkoutState);
+  const dateWorkout = useRecoilValue(dateWorkoutState);
   const [time, setTime] = useRecoilState(timeState);
   const startWorkOut = () => {
     setTime({ ...time, startTime: moment() });
     navigate("/main/workout");
   };
+
+  useCheckToken();
 
   useEffect(() => {
     setSelectedDate(null);
