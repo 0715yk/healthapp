@@ -9,11 +9,7 @@ export const customAxios: AxiosInstance = axios.create({
 });
 
 customAxios.interceptors.request.use((config) => {
-  if (
-    config.headers.Authorization === "Bearer undefined" &&
-    cookies.load("access_token") !== undefined
-  ) {
-    config.headers.Authorization = `Bearer ${cookies.load("access_token")}`;
-  }
+  config.headers.Authorization = `Bearer ${cookies.load("access_token")}`;
+
   return config;
 });

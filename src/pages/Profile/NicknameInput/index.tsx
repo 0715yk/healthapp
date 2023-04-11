@@ -5,9 +5,8 @@ import Modal from "src/components/Modal/Modal";
 import { validateUserNickname, NICKNAME_VALIDATION_MESSAGE } from "src/utils";
 import { customAxios } from "src/utils/axios";
 import styles from "./style.module.css";
-import cookies from "react-cookies";
 
-const NicknameInput = ({}) => {
+const NicknameInput = () => {
   const [nicknameInput, setNicknameInput] = useState("");
   const [userInform, setUserInform] = useRecoilState(userState);
   const [modalOn, setModalOn] = useState({ on: false, message: "" });
@@ -15,17 +14,12 @@ const NicknameInput = ({}) => {
 
   const updateUserInform = useCallback(() => {
     const nickname = userInform.nickname;
-
-    if (nickname) {
-      setNicknameInput(nickname);
-    }
+    setNicknameInput(nickname);
   }, [userInform.nickname]);
 
   useEffect(() => {
-    updateUserInform();
-
     const ref = divRef.current;
-
+    updateUserInform();
     document.addEventListener(
       "click",
       (e) => {

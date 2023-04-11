@@ -28,7 +28,7 @@ const DeleteAccount = () => {
       });
       setTimeout(() => {
         setUserState({ nickname: "" });
-        cookies.remove("access_token", { path: "/" }, 1000);
+        cookies.remove("access_token", { path: "/" });
         navigate("/");
       }, 5000);
     } catch {

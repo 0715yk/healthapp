@@ -46,7 +46,7 @@ const WorkOutList = ({ user }) => {
       date: date,
       data: copyArr,
     });
-    console.log(response);
+   
     // recordRef
     //   .get()
     //   .then((doc) => {
@@ -79,7 +79,7 @@ const WorkOutList = ({ user }) => {
     //   .catch((error) => {
     //     console.log("Error getting document:", error);
     //   });
-    // navigate("/main/record");
+    navigate("/main/record");
   };
 
   const closeModal = () => {
