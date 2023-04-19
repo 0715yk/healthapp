@@ -4,26 +4,29 @@ import { useNavigate } from "react-router-dom";
 import PureWorkOut from "../PureWorkOut/PureWorkOut";
 import moment from "moment";
 import Modal from "../Modal/Modal";
-import { useRecoilValue, useRecoilState } from "recoil";
+import { useRecoilState } from "recoil";
 import { workoutState, timeState } from "../../states";
 import { customAxios } from "src/utils/axios";
+import _ from "lodash";
 
 const WorkOutList = ({ user }) => {
-  const workouts = useRecoilValue(workoutState);
+  const [workouts, setWorkouts] = useRecoilState(workoutState);
   const [time, setTime] = useRecoilState(timeState);
-  const [nullCheckListErrorOn, setNullCheckListErrorOn] = useState(false);
+  const [modalOn, setModalOn] = useState({ on: false, message: "" });
+
   const navigate = useNavigate();
 
   const finishWorkout = async () => {
-    // if (!user.email) return;
-
     if (workouts.length === 0) {
-      setNullCheckListErrorOn((prev) => !prev);
+      setModalOn({
+        on: true,
+        message: "하나 이상의 루틴을 실행해 주세요",
+      });
       return;
     }
     setTime({ ...time, endTime: moment() });
 
-    let copyArr = workouts.slice();
+    let copyArr = _.cloneDeep(workouts);
     var idx = 0;
 
     for (let arr of copyArr) {
@@ -36,65 +39,63 @@ const WorkOutList = ({ user }) => {
     }
 
     copyArr = copyArr.filter((el) => el.length !== 0);
+
     if (copyArr.length === 0) {
-      setNullCheckListErrorOn((prev) => !prev);
+      setModalOn({
+        on: true,
+        message: "하나 이상의 루틴을 실행해 주세요",
+      });
       return;
     }
 
-    const date = moment().format("YYYYMMDD");
-    const response = await customAxios.post("/workout", {
-      date: date,
-      data: copyArr,
+    const bestSets = copyArr.map((workout) => {
+      const copyArr = workout.slice();
+      workout.sort((x, y) => {
+        const prevScore =
+          (parseInt(x.reps) === 0 ? 1 : parseInt(x.reps)) *
+          (parseInt(x.kg) === 0 ? 1 : parseInt(x.kg));
+
+        const nextScore =
+          (parseInt(y.reps) === 0 ? 1 : parseInt(y.reps)) *
+          (parseInt(y.kg) === 0 ? 1 : parseInt(y.kg));
+
+        if (nextScore === prevScore) {
+          return parseInt(y.kg) - parseInt(x.kg);
+        } else return nextScore - prevScore;
+      });
+
+      const setNum = workout[0].set - 1;
+      copyArr[setNum].bestSet = true;
+      return copyArr;
     });
-   
-    // recordRef
-    //   .get()
-    //   .then((doc) => {
-    //     if (doc.exists) {
-    //       const data = doc.data();
-    //       const finalKey = parseInt(
-    //         Object.keys(data)[Object.keys(data).length - 2]
-    //       );
-    //       if (!isNaN(finalKey + 1))
-    //         recordRef.set(
-    //           {
-    //             order: date,
-    //             [finalKey + 1]: JSON.stringify(copyArr),
-    //           },
-    //           { merge: true }
-    //         );
-    //       else
-    //         db.collection(user.email)
-    //           .doc(date)
-    //           .set(
-    //             { order: date, 0: JSON.stringify(copyArr) },
-    //             { merge: true }
-    //           );
-    //     } else {
-    //       db.collection(user.email)
-    //         .doc(date)
-    //         .set({ order: date, 0: JSON.stringify(copyArr) }, { merge: true });
-    //     }
-    //   })
-    //   .catch((error) => {
-    //     console.log("Error getting document:", error);
-    //   });
-    navigate("/main/record");
+
+    const date = moment().format("YYYYMMDD");
+
+    try {
+      await customAxios.post("/workout", {
+        date: date,
+        workouts: bestSets,
+      });
+      setWorkouts(copyArr);
+      navigate("/main/record");
+    } catch {
+      setModalOn({
+        on: true,
+        message: "서버 에러 입니다. 잠시후 다시 시도해주세요.",
+      });
+    }
   };
 
   const closeModal = () => {
-    setNullCheckListErrorOn((prev) => !prev);
+    setModalOn({
+      on: false,
+      message: "",
+    });
   };
 
   return (
     <div className={styles.writeFunc}>
-      <Modal
-        modalOn={{
-          on: nullCheckListErrorOn,
-          message: "하나 이상의 루틴을 실행해 주세요",
-        }}
-        closeModal={closeModal}
-      />
+      <Modal modalOn={modalOn} closeModal={closeModal} />
       <main>
         <section>
           {workouts.map((workout, idx) => {

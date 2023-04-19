@@ -2,24 +2,19 @@ import styles from "./WorkoutName.module.css";
 import React, { useEffect, useState } from "react";
 import _ from "lodash";
 import Modal from "../Modal/Modal";
+import { customAxios } from "src/utils/axios";
+import { recordWorkoutState } from "src/states";
+import { useRecoilState } from "recoil";
 
-const WorkoutName = ({
-  el,
-  fixMode,
-  idx,
-  workoutNameIdx,
-  dateWorkout,
-  setDateWorkout,
-  email,
-  date,
-}) => {
+const WorkoutName = ({ el, fixMode, idx, workoutNameIdx, date, datesId }) => {
+  const [recordWorkout, setRecordWorkout] = useRecoilState(recordWorkoutState);
   const [workoutUpdateOn, setWorkoutUpdateOn] = useState(false);
   useEffect(() => {
     if (fixMode === false) {
       setWorkoutUpdateOn(false);
     }
   }, [fixMode]);
-  const [inputValue, setInputValue] = useState(el[0].name);
+  const [inputValue, setInputValue] = useState(el?.workoutName);
   const [modalOn, setModalOn] = useState({
     on: false,
     message: "정말 삭제하시겠습니까?",
@@ -31,48 +26,48 @@ const WorkoutName = ({
   });
 
   useEffect(() => {
-    setInputValue(el[0].name);
+    setInputValue(el?.workoutName);
     setWorkoutUpdateOn(false);
   }, [el]);
 
   // 운동 종목 제거 함수
   const deleteWorkoutName = async () => {
-    // const batch = db.batch();
-    // const copyWorkout = _.cloneDeep(dateWorkout);
-    // const fbData = {};
-    // const resultArr = [];
-    // let key = 0;
-    // for (let i = 0; i < copyWorkout.length; i++) {
-    //   let nowArr = null;
-    //   if (i !== idx) nowArr = copyWorkout[i];
-    //   else {
-    //     nowArr = copyWorkout[i]
-    //       .slice(0, workoutNameIdx)
-    //       .concat(copyWorkout[i].slice(workoutNameIdx + 1));
-    //   }
-    //   if (nowArr.length !== 0) {
-    //     fbData[key] = JSON.stringify(nowArr);
-    //     resultArr.push(nowArr);
-    //     key++;
-    //   }
-    // }
-    // fbData.order = date;
-    // const recordRef = await db.collection(email).doc(date);
-    // if (resultArr.length === 0) {
-    //   recordRef
-    //     .delete()
-    //     .then(() => {
-    //       setDateWorkout(resultArr);
-    //     })
-    //     .catch((error) => {
-    //       console.error("Error removing document: ", error);
-    //     });
-    // } else {
-    //   await batch.set(recordRef, fbData);
-    //   await batch.commit().then(() => {
-    //     setDateWorkout(resultArr);
-    //   });
-    // }
+    const id = el.id;
+    const workoutNumId = el.workoutNumId;
+
+    try {
+      const response = await customAxios.delete("workout/workoutName", {
+        data: {
+          id,
+          workoutNumId,
+          datesId,
+        },
+      });
+      if (response.status === 200) {
+        const resultArr = [];
+        const copyWorkout = _.cloneDeep(recordWorkout);
+
+        for (let i = 0; i < copyWorkout.length; i++) {
+          let nowArr = null;
+          if (i !== idx) nowArr = copyWorkout[i].workoutNames;
+          else {
+            nowArr = copyWorkout[i].workoutNames
+              .slice(0, workoutNameIdx)
+              .concat(copyWorkout[i].workoutNames.slice(workoutNameIdx + 1));
+          }
+          if (nowArr.length !== 0) {
+            resultArr.push(nowArr);
+          }
+        }
+        setRecordWorkout(resultArr);
+      }
+    } catch (err) {
+      console.log(err);
+      setModalOn({
+        on: true,
+        message: "서버 에러 입니다. 잠시후 다시 시도해주세요.",
+      });
+    }
   };
 
   const updateWorkoutName = async () => {
@@ -88,7 +83,7 @@ const WorkoutName = ({
     }
 
     // const batch = db.batch();
-    const copyWorkout = _.cloneDeep(dateWorkout);
+    const copyWorkout = _.cloneDeep(recordWorkout);
 
     const fbData = {};
     const resultArr = [];
@@ -138,7 +133,7 @@ const WorkoutName = ({
   };
 
   const xBtnFunc = () => {
-    setInputValue(el[0].name);
+    setInputValue(el?.workoutName);
     setWorkoutUpdateOn((prev) => !prev);
   };
 
@@ -157,6 +152,7 @@ const WorkoutName = ({
         modalOn={modalOn}
         closeModal={closeModal}
         cancelModal={setModalOnFunc}
+        cancelModalOn={true}
       />
       <input
         className={styles.workoutNameInput}
@@ -181,7 +177,7 @@ const WorkoutName = ({
     </div>
   ) : (
     <>
-      {el[0]?.name}
+      {el?.workoutName}
       <i
         class="far fa-edit"
         id={styles.updateBtn}
@@ -191,15 +187,16 @@ const WorkoutName = ({
       ></i>
     </>
   );
-  const workoutNameComponent = fixMode ? updateModeComponent : el[0]?.name;
+  const workoutNameComponent = fixMode ? updateModeComponent : el?.workoutName;
   return <div className={styles.workoutName}>{workoutNameComponent}</div>;
 };
 
-export default React.memo(WorkoutName, (prev, next) => {
-  const prevValue = prev.dateWorkout[prev.idx][prev.workoutNameIdx][0].name;
-  const nextValue = next.dateWorkout[next.idx][next.workoutNameIdx][0].name;
+export default WorkoutName;
+// export default React.memo(WorkoutName, (prev, next) => {
+//   const prevValue = prev.dateWorkout[prev.idx][prev.workoutNameIdx][0].name;
+//   const nextValue = next.dateWorkout[next.idx][next.workoutNameIdx][0].name;
 
-  if (prev.fixMode !== next.fixMode) return false;
-  else if (prevValue !== nextValue) return false;
-  else return true;
-});
+//   if (prev.fixMode !== next.fixMode) return false;
+//   else if (prevValue !== nextValue) return false;
+//   else return true;
+// });

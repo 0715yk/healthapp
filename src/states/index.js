@@ -28,6 +28,11 @@ export const dateWorkoutState = atom({
   default: [],
 });
 
+export const recordWorkoutState = atom({
+  key: "recordWorkoutState",
+  default: [],
+});
+
 export const durationState = selector({
   key: "durationState",
   get: ({ get }) => {
@@ -96,6 +101,36 @@ export const bestSetState = selector({
     return bestSets;
   },
 });
+
+// export const apiState = selector({
+//   key: "apiState",
+//   get: ({ get }) => {
+//     const workouts = get(workoutState);
+//     const copyWorkouts = _.cloneDeep(workouts);
+//     const bestSets = copyWorkouts.map((workout) => {
+//       const copyArr = workout.slice();
+//       workout.sort((x, y) => {
+//         const prevScore =
+//           (parseInt(x.reps) === 0 ? 1 : parseInt(x.reps)) *
+//           (parseInt(x.kg) === 0 ? 1 : parseInt(x.kg));
+
+//         const nextScore =
+//           (parseInt(y.reps) === 0 ? 1 : parseInt(y.reps)) *
+//           (parseInt(y.kg) === 0 ? 1 : parseInt(y.kg));
+
+//         if (nextScore === prevScore) {
+//           return parseInt(y.kg) - parseInt(x.kg);
+//         } else return nextScore - prevScore;
+//       });
+
+//       const setNum = workout[0].set - 1;
+//       copyArr[setNum].bestSet = true;
+//       return copyArr;
+//     });
+
+//     return bestSets;
+//   },
+// });
 
 export const workoutCntState = selector({
   key: "workoutCntState",

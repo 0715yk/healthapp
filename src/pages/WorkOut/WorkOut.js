@@ -83,6 +83,7 @@ const WorkOut = ({ user }) => {
         set: 1,
         kg: null,
         reps: null,
+        bestSet: false,
         done: false,
       },
     ]);
@@ -148,3 +149,8 @@ const WorkOut = ({ user }) => {
 };
 
 export default WorkOut;
+
+// N+1이슈(one to many)
+// id =number로
+// Procedure => 자주 사용되는 명령어를 하나로 묶어서 처리하면 롤백하는 이슈는 어느정도 해결할 수 있을듯
+// 프론트단에서 버튼 api 호출 연속으로 못하도록 막기

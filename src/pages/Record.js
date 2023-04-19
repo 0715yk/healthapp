@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect } from "react";
 import styles from "./Record.module.css";
 import { useNavigate } from "react-router-dom";
 import moment from "moment";
@@ -14,6 +14,7 @@ const Record = () => {
   const [workouts, setWorkouts] = useRecoilState(workoutState);
   const durationTime = useRecoilValue(durationState);
   const bestSets = useRecoilValue(bestSetState);
+
   const workoutCnt = useRecoilValue(workoutCntState);
   const navigate = useNavigate();
 

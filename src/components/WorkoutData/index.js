@@ -1,14 +1,15 @@
 import styles from "./WorkoutData.module.css";
-import React, { useState } from "react";
+import React, { useState, useCallback } from "react";
 import Modal from "../Modal/Modal";
 import { useRecoilState } from "recoil";
-import { dateWorkoutState } from "../../states";
+import { recordWorkoutState } from "../../states";
 import WorkoutName from "../WorkoutName";
 import WorkoutSet from "../WorkoutSet";
 import _ from "lodash";
+import { customAxios } from "src/utils/axios";
 
 const WorkoutData = ({ fixMode, workout, idx, setFixModeFunc }) => {
-  const [dateWorkout, setDateWorkout] = useRecoilState(dateWorkoutState);
+  const [recordWorkout, setRecordWorkout] = useRecoilState(recordWorkoutState);
   const [modalOn, setModalOn] = useState({
     on: false,
     message: "정말 삭제하시겠습니까?",
@@ -16,39 +17,32 @@ const WorkoutData = ({ fixMode, workout, idx, setFixModeFunc }) => {
 
   const queryString = window.location.search;
   const urlParams = new URLSearchParams(queryString);
-  const email = urlParams.get("email");
   const date = urlParams.get("date");
 
   // workout 제거 함수
-  const deleteWorkout = async () => {
-    // var batch = db.batch();
-    // let copyWorkout = _.cloneDeep(dateWorkout);
-    // const fbData = {};
-    // copyWorkout = copyWorkout.filter((el, _) => {
-    //   if (_ === idx) return false;
-    //   else return true;
-    // });
-    // for (let i = 0; i < copyWorkout.length; i++) {
-    //   fbData[i] = JSON.stringify(copyWorkout[i]);
-    // }
-    // fbData.order = date;
-    // const recordRef = await db.collection(email).doc(date);
-    // if (copyWorkout.length === 0) {
-    //   recordRef
-    //     .delete()
-    //     .then(() => {
-    //       setDateWorkout(copyWorkout);
-    //     })
-    //     .catch((error) => {
-    //       console.error("Error removing document: ", error);
-    //     });
-    // } else {
-    //   await batch.set(recordRef, fbData);
-    //   await batch.commit().then(() => {
-    //     setDateWorkout(copyWorkout);
-    //   });
-    // }
-  };
+  const deleteWorkout = useCallback(async () => {
+    // 삭제를 하려면 특정 날짜 값을 일단 보내야하고(query string에 있는걸 보내면 될듯)
+    // api 요청 후에 성공하면 아래 로직 적용
+    try {
+      // apicall
+      const response = await customAxios.delete(`/workout/workoutNum`, {
+        data: { workoutNum: workout.id, datesId: workout.datesId },
+      });
+      if (response.status === 200) {
+        let copyWorkout = _.cloneDeep(recordWorkout);
+        copyWorkout = copyWorkout.filter((el, _) => {
+          if (_ === idx) return false;
+          else return true;
+        });
+        setRecordWorkout(copyWorkout);
+      }
+    } catch {
+      setModalOn({
+        on: true,
+        message: "서버 에러 입니다. 잠시후 다시 시도해주세요.",
+      });
+    }
+  }, [idx, recordWorkout, setRecordWorkout, workout.datesId, workout.id]);
 
   // set 제거 함수
 
@@ -74,6 +68,7 @@ const WorkoutData = ({ fixMode, workout, idx, setFixModeFunc }) => {
         modalOn={modalOn}
         closeModal={closeModal}
         cancelModal={setModalOnFunc}
+        cancelModalOn={true}
       />
       <div style={{ color: "gold", fontSize: "27px" }}>
         {`Workout Num : ${idx}`}
@@ -86,7 +81,8 @@ const WorkoutData = ({ fixMode, workout, idx, setFixModeFunc }) => {
         )}
       </div>
 
-      {workout.map((el, workoutNameIdx) => {
+      {workout?.workoutNames?.map((el, workoutNameIdx) => {
+        console.log(el);
         return (
           <>
             <WorkoutName
@@ -95,25 +91,22 @@ const WorkoutData = ({ fixMode, workout, idx, setFixModeFunc }) => {
               fixMode={fixMode}
               idx={idx}
               workoutNameIdx={workoutNameIdx}
-              dateWorkout={dateWorkout}
-              setDateWorkout={setDateWorkout}
               date={date}
-              email={email}
+              datesId={workout?.datesId}
             />
             <div style={{ marginTop: "20px" }}>
-              {el.map((_, setIdx) => {
+              {el?.workouts?.map((_, setIdx) => {
                 return (
                   <WorkoutSet
                     key={setIdx}
                     el={_}
                     setIdx={setIdx}
                     fixMode={fixMode}
-                    dateWorkout={dateWorkout}
-                    setDateWorkout={setDateWorkout}
                     idx={idx}
                     workoutNameIdx={workoutNameIdx}
                     date={date}
-                    email={email}
+                    datesId={workout?.datesId}
+                    workoutNumId={el?.workoutNumId}
                   />
                 );
               })}

@@ -3,8 +3,8 @@ import styles from "./Main.module.css";
 import GlowHeader from "../../components/GlowHeader/GlowHeader";
 import moment from "moment";
 import LatestWorkout from "../../components/LatestWorkout";
-import { timeState, dateWorkoutState } from "../../states";
-import { useRecoilState, useRecoilValue } from "recoil";
+import { timeState, dateWorkoutState, recordWorkoutState } from "../../states";
+import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import _ from "lodash";
@@ -14,12 +14,16 @@ import Record from "../Record";
 import WorkOut from "../WorkOut/WorkOut";
 import WorkoutModal from "../../components/WorkoutModal";
 import useCheckToken from "src/hooks/useCheckToken";
+import { customAxios } from "src/utils/axios";
+import Modal from "src/components/Modal/Modal";
 
 const Main = ({ user }) => {
   const navigate = useNavigate();
   const [selectedDate, setSelectedDate] = useState(null);
   const dateWorkout = useRecoilValue(dateWorkoutState);
+  const setRecordWorkout = useSetRecoilState(recordWorkoutState);
   const [time, setTime] = useRecoilState(timeState);
+  const [modalOn, setModalOn] = useState({ on: false, message: "" });
   const startWorkOut = () => {
     setTime({ ...time, startTime: moment() });
     navigate("/main/workout");
@@ -37,15 +41,30 @@ const Main = ({ user }) => {
     if (date === "") return;
 
     // 조회한 뒤에는 날짜와 id 값을 통해 데이터를 조회(운동 기록)
-    navigate(`/main/records?date=${date}&email=${user?.email}`);
+    try {
+      const response = await customAxios.get(`/workout/${date}`);
+      setRecordWorkout(response?.data);
+      navigate(`/main/records?date=${date}`);
+    } catch {
+      setModalOn({
+        on: true,
+        message: "서버 에러 입니다. 잠시후 다시 시도해주세요.",
+      });
+    }
   };
+
   const DatepickerInput = ({ ...props }) => (
     <input type="text" {...props} readOnly />
   );
 
+  const closeModal = () => {
+    setModalOn({ on: false, message: "" });
+  };
+
   const Main = () => {
     return (
       <div className={styles.mainPage}>
+        <Modal modalOn={modalOn} closeModal={closeModal} />
         <GlowBtnLogout
           props={{
             func: () => navigate("/"),

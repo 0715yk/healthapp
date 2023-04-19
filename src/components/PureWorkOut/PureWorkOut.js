@@ -36,6 +36,7 @@ const PureWorkOut = ({
       set: copyWorkoutList[copyWorkoutList.length - 1].set + 1,
       kg: null,
       reps: null,
+      bestSet: false,
       done: false,
     });
     copyArr[idx] = copyWorkoutList;

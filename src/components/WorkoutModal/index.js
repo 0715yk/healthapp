@@ -3,16 +3,16 @@ import styles from "./WorkoutModal.module.css";
 import WorkoutData from "../../components/WorkoutData";
 import _ from "lodash";
 import { useRecoilState } from "recoil";
-import { dateWorkoutState } from "../../states";
+import { recordWorkoutState } from "../../states";
 import { useNavigate } from "react-router-dom";
 
 const WorkoutModal = () => {
   const navigate = useNavigate();
-  const [dateWorkout, setDateWorkout] = useRecoilState(dateWorkoutState);
+  const [recordWorkout, setRecordWorkout] = useRecoilState(recordWorkoutState);
   const [fixMode, setFixMode] = useState(false);
 
   const backBtn = () => {
-    setDateWorkout([]);
+    setRecordWorkout([]);
     navigate("/main");
   };
 
@@ -23,15 +23,15 @@ const WorkoutModal = () => {
   return (
     <div className={styles.safetyArea}>
       <div className={styles.modal}>
-        {dateWorkout.length !== 0 ? (
+        {recordWorkout.length !== 0 ? (
           <section style={{ color: "#ffffff" }}>
             <section id={styles.workoutList}>
-              {dateWorkout.map((workout, idx) => {
+              {recordWorkout.map((workout, idx) => {
                 return (
                   <WorkoutData
                     key={idx}
-                    workout={workout}
                     idx={idx}
+                    workout={workout}
                     fixMode={fixMode}
                     setFixModeFunc={setFixModeFunc}
                   />

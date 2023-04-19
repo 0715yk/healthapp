@@ -2,18 +2,21 @@ import styles from "./WorkoutSet.module.css";
 import React, { useEffect, useState } from "react";
 import _ from "lodash";
 import Modal from "../Modal/Modal";
+import { customAxios } from "src/utils/axios";
+import { useRecoilState } from "recoil";
+import { recordWorkoutState } from "src/states";
 
 const WorkoutSet = ({
   el,
   setIdx,
   fixMode,
-  dateWorkout,
-  setDateWorkout,
+  datesId,
   idx,
   workoutNameIdx,
+  workoutNumId,
   date,
-  email,
 }) => {
+  const [recordWorkout, setRecordWorkout] = useRecoilState(recordWorkoutState);
   const [setUpdateOn, setSetUpdateOn] = useState(false);
   const [modalOn, setModalOn] = useState({
     on: false,
@@ -76,8 +79,60 @@ const WorkoutSet = ({
     // });
     // setSetUpdateOn((prev) => !prev);
   };
-
+  //  id: number;
+  //  datesId: number;
+  //  workoutNumId: number;
+  //  workoutNameId: number;
   const deleteSet = async () => {
+    const id = el.id;
+    const workoutNameId = el.workoutNameId;
+    try {
+      const response = await customAxios.delete("workout/workout", {
+        data: {
+          id,
+          workoutNumId,
+          datesId,
+          workoutNameId,
+        },
+      });
+
+      if (response.status === 200) {
+        let copyWorkout = _.cloneDeep(recordWorkout);
+
+        const resultArr = [];
+
+        for (let i = 0; i < copyWorkout.length; i++) {
+          let nowArr = null;
+          if (i !== idx) nowArr = copyWorkout[i].workoutNames;
+          else {
+            nowArr = copyWorkout[i].workoutNames.map((arr, _) => {
+              if (_ === workoutNameIdx) {
+                return arr?.workouts.filter((j, k) => {
+                  if (k === setIdx) return false;
+                  else return true;
+                });
+              } else return arr?.workouts;
+            });
+          }
+          nowArr = nowArr.filter((el) => {
+            if (el.length === 0) return false;
+            else return true;
+          });
+          if (nowArr.length === 0) continue;
+
+          resultArr.push(nowArr);
+        }
+        console.log(resultArr, recordWorkout);
+        setRecordWorkout(resultArr);
+        setSetUpdateOn((prev) => !prev);
+      }
+    } catch (err) {
+      console.log(err);
+      setModalOn({
+        on: true,
+        message: "서버 에러 입니다. 잠시후 다시 시도해주세요.",
+      });
+    }
     // var batch = db.batch();
     // let copyWorkout = _.cloneDeep(dateWorkout);
     // const fbData = {};
