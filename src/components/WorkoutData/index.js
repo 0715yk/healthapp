@@ -82,11 +82,10 @@ const WorkoutData = ({ fixMode, workout, idx, setFixModeFunc }) => {
       </div>
 
       {workout?.workoutNames?.map((el, workoutNameIdx) => {
-        console.log(el);
         return (
           <>
             <WorkoutName
-              key={workoutNameIdx}
+              key={el.id}
               el={el}
               fixMode={fixMode}
               idx={idx}
@@ -95,16 +94,14 @@ const WorkoutData = ({ fixMode, workout, idx, setFixModeFunc }) => {
               datesId={workout?.datesId}
             />
             <div style={{ marginTop: "20px" }}>
-              {el?.workouts?.map((_, setIdx) => {
+              {el?.workouts?.map((_) => {
                 return (
                   <WorkoutSet
-                    key={setIdx}
+                    key={_.id}
                     el={_}
-                    setIdx={setIdx}
                     fixMode={fixMode}
                     idx={idx}
                     workoutNameIdx={workoutNameIdx}
-                    date={date}
                     datesId={workout?.datesId}
                     workoutNumId={el?.workoutNumId}
                   />

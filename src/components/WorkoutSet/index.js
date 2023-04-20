@@ -1,20 +1,19 @@
 import styles from "./WorkoutSet.module.css";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import _ from "lodash";
 import Modal from "../Modal/Modal";
 import { customAxios } from "src/utils/axios";
 import { useRecoilState } from "recoil";
 import { recordWorkoutState } from "src/states";
 
+// TODO = 옛날 자료 구조에 맞게 변경해서 업데이트 해야한다.
 const WorkoutSet = ({
   el,
-  setIdx,
   fixMode,
   datesId,
-  idx,
-  workoutNameIdx,
   workoutNumId,
-  date,
+  workoutNameIdx,
+  idx,
 }) => {
   const [recordWorkout, setRecordWorkout] = useRecoilState(recordWorkoutState);
   const [setUpdateOn, setSetUpdateOn] = useState(false);
@@ -28,9 +27,16 @@ const WorkoutSet = ({
   });
 
   const [inputValue, setInputValue] = useState({
-    kg: el.kg,
-    reps: el.reps,
+    kg: "",
+    reps: "",
   });
+
+  useEffect(() => {
+    setInputValue({
+      kg: el.kg,
+      reps: el.reps,
+    });
+  }, []);
 
   useEffect(() => {
     if (fixMode === false) {
@@ -38,51 +44,47 @@ const WorkoutSet = ({
     }
   }, [fixMode]);
 
-  const updateSet = async () => {
-    // if (inputValue.reps <= 0) {
-    //   setAlertOn((prev) => ({
-    //     ...prev,
-    //     on: true,
-    //   }));
-    //   return;
-    // }
-    // const batch = db.batch();
-    // const copyWorkout = _.cloneDeep(dateWorkout);
-    // const fbData = {};
-    // const resultArr = [];
-    // let key = 0;
-    // for (let i = 0; i < copyWorkout.length; i++) {
-    //   let nowArr = null;
-    //   if (i !== idx) nowArr = copyWorkout[i];
-    //   else {
-    //     nowArr = copyWorkout[i].map((arr, _) => {
-    //       if (_ === workoutNameIdx) {
-    //         return arr.map((j, k) => {
-    //           if (k === setIdx) {
-    //             j.kg = inputValue.kg;
-    //             j.reps = inputValue.reps;
-    //           }
-    //           return j;
-    //         });
-    //       } else return arr;
-    //     });
-    //   }
-    //   fbData[key] = JSON.stringify(nowArr);
-    //   resultArr.push(nowArr);
-    //   key++;
-    // }
-    // fbData.order = date;
-    // const recordRef = await db.collection(email).doc(date);
-    // await batch.set(recordRef, fbData);
-    // await batch.commit().then(() => {
-    //   setDateWorkout(resultArr);
-    // });
-    // setSetUpdateOn((prev) => !prev);
-  };
-  //  id: number;
-  //  datesId: number;
-  //  workoutNumId: number;
-  //  workoutNameId: number;
+  const updateSet = useCallback(async () => {
+    if (inputValue.reps <= 0) {
+      setAlertOn({
+        message: "최소 한 개 이상의 reps를 입력해야 합니다.",
+        on: true,
+      });
+      return;
+    } else if (el.kg === inputValue.kg && el.reps === inputValue.reps) {
+      setSetUpdateOn(false);
+      return;
+    }
+
+    const primaryKey = el.id;
+    try {
+      // apicall
+      const response = await customAxios.patch(
+        `/workout/workoutSet/${primaryKey}`,
+        {
+          ...inputValue,
+        }
+      );
+
+      if (response.status === 200) {
+        const copyWorkout = _.cloneDeep(recordWorkout);
+        const workoutsObj = copyWorkout[idx].workoutNames[
+          workoutNameIdx
+        ].workouts.find((workout) => workout.set === el.set);
+        workoutsObj.kg = inputValue.kg;
+        workoutsObj.reps = inputValue.reps;
+        setRecordWorkout(copyWorkout);
+        setSetUpdateOn((prev) => !prev);
+      }
+    } catch (err) {
+      console.log(err);
+      setModalOn({
+        on: true,
+        message: "서버 에러 입니다. 잠시후 다시 시도해주세요.",
+      });
+    }
+  }, [inputValue, el, idx, recordWorkout, setRecordWorkout, workoutNameIdx]);
+
   const deleteSet = async () => {
     const id = el.id;
     const workoutNameId = el.workoutNameId;
@@ -99,32 +101,26 @@ const WorkoutSet = ({
       if (response.status === 200) {
         let copyWorkout = _.cloneDeep(recordWorkout);
 
-        const resultArr = [];
+        copyWorkout[idx].workoutNames[workoutNameIdx].workouts = copyWorkout[
+          idx
+        ].workoutNames[workoutNameIdx].workouts.filter(
+          (workout) => workout.set !== el.set
+        );
 
-        for (let i = 0; i < copyWorkout.length; i++) {
-          let nowArr = null;
-          if (i !== idx) nowArr = copyWorkout[i].workoutNames;
-          else {
-            nowArr = copyWorkout[i].workoutNames.map((arr, _) => {
-              if (_ === workoutNameIdx) {
-                return arr?.workouts.filter((j, k) => {
-                  if (k === setIdx) return false;
-                  else return true;
-                });
-              } else return arr?.workouts;
-            });
+        if (
+          copyWorkout[idx].workoutNames[workoutNameIdx].workouts.length === 0
+        ) {
+          copyWorkout[idx].workoutNames = copyWorkout[idx].workoutNames.filter(
+            (el) => el.id !== workoutNameId
+          );
+
+          if (copyWorkout[idx].workoutNames.length === 0) {
+            copyWorkout = copyWorkout.filter((_, index) => idx !== index);
           }
-          nowArr = nowArr.filter((el) => {
-            if (el.length === 0) return false;
-            else return true;
-          });
-          if (nowArr.length === 0) continue;
-
-          resultArr.push(nowArr);
         }
-        console.log(resultArr, recordWorkout);
-        setRecordWorkout(resultArr);
-        setSetUpdateOn((prev) => !prev);
+
+        setRecordWorkout(copyWorkout);
+        setSetUpdateOn(false);
       }
     } catch (err) {
       console.log(err);
@@ -133,54 +129,9 @@ const WorkoutSet = ({
         message: "서버 에러 입니다. 잠시후 다시 시도해주세요.",
       });
     }
-    // var batch = db.batch();
-    // let copyWorkout = _.cloneDeep(dateWorkout);
-    // const fbData = {};
-    // const resultArr = [];
-    // let key = 0;
-    // for (let i = 0; i < copyWorkout.length; i++) {
-    //   let nowArr = null;
-    //   if (i !== idx) nowArr = copyWorkout[i];
-    //   else {
-    //     nowArr = copyWorkout[i].map((arr, _) => {
-    //       if (_ === workoutNameIdx) {
-    //         return arr.filter((j, k) => {
-    //           if (k === setIdx) return false;
-    //           else return true;
-    //         });
-    //       } else return arr;
-    //     });
-    //   }
-    //   nowArr = nowArr.filter((el) => {
-    //     if (el.length === 0) return false;
-    //     else return true;
-    //   });
-    //   if (nowArr.length === 0) continue;
-    //   fbData[key] = JSON.stringify(nowArr);
-    //   resultArr.push(nowArr);
-    //   key++;
-    // }
-    // fbData.order = date;
-    // const recordRef = await db.collection(email).doc(date);
-    // if (resultArr.length === 0) {
-    //   recordRef
-    //     .delete()
-    //     .then(() => {
-    //       setDateWorkout(resultArr);
-    //     })
-    //     .catch((error) => {
-    //       console.error("Error removing document: ", error);
-    //     });
-    // } else {
-    //   await batch.set(recordRef, fbData);
-    //   await batch.commit().then(() => {
-    //     setDateWorkout(resultArr);
-    //   });
-    // }
-    // setSetUpdateOn((prev) => !prev);
   };
 
-  const setModalOnFunc = () => {
+  const setModalOnFunc = (e) => {
     setModalOn((prev) => {
       return { ...prev, on: !prev.on };
     });
@@ -224,7 +175,7 @@ const WorkoutSet = ({
         <>
           {setUpdateOn ? (
             <div className={styles.setUpdatePart}>
-              <div>{`set ${setIdx + 1} : `}&nbsp;</div>
+              <div>{`set ${el?.set} : `}&nbsp;</div>
               <input
                 className={styles.setInput}
                 value={inputValue?.kg}
@@ -257,7 +208,7 @@ const WorkoutSet = ({
             </div>
           ) : (
             <>
-              {`set ${setIdx + 1} : ${el?.kg || 0} kg x ${el?.reps || 0} reps`}
+              {`set ${el?.set} : ${el?.kg || 0} kg x ${el?.reps || 0} reps`}
               <i
                 class="far fa-edit"
                 id={styles.fixBtn}
@@ -269,7 +220,7 @@ const WorkoutSet = ({
           )}
         </>
       ) : (
-        `set ${setIdx + 1} : ${el.kg === null ? 0 : el.kg} kg x ${
+        `set ${el?.set} : ${el.kg === null ? 0 : el.kg} kg x ${
           el.reps === null ? 0 : el.reps
         } reps`
       )}

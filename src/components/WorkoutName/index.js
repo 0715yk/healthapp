@@ -1,5 +1,5 @@
 import styles from "./WorkoutName.module.css";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import _ from "lodash";
 import Modal from "../Modal/Modal";
 import { customAxios } from "src/utils/axios";
@@ -44,22 +44,17 @@ const WorkoutName = ({ el, fixMode, idx, workoutNameIdx, date, datesId }) => {
         },
       });
       if (response.status === 200) {
-        const resultArr = [];
-        const copyWorkout = _.cloneDeep(recordWorkout);
+        let copyWorkout = _.cloneDeep(recordWorkout);
 
-        for (let i = 0; i < copyWorkout.length; i++) {
-          let nowArr = null;
-          if (i !== idx) nowArr = copyWorkout[i].workoutNames;
-          else {
-            nowArr = copyWorkout[i].workoutNames
-              .slice(0, workoutNameIdx)
-              .concat(copyWorkout[i].workoutNames.slice(workoutNameIdx + 1));
-          }
-          if (nowArr.length !== 0) {
-            resultArr.push(nowArr);
-          }
+        copyWorkout[idx].workoutNames = copyWorkout[idx].workoutNames.filter(
+          (el) => el.id !== id
+        );
+
+        if (copyWorkout[idx].workoutNames.length === 0) {
+          copyWorkout = copyWorkout.filter((_, index) => idx !== index);
         }
-        setRecordWorkout(resultArr);
+
+        setRecordWorkout(copyWorkout);
       }
     } catch (err) {
       console.log(err);
@@ -70,54 +65,42 @@ const WorkoutName = ({ el, fixMode, idx, workoutNameIdx, date, datesId }) => {
     }
   };
 
-  const updateWorkoutName = async () => {
-    if (el[0].name === inputValue) {
+  const updateWorkoutName = useCallback(async () => {
+    const primaryKey = el.id;
+
+    if (el.workoutName === inputValue) {
       setWorkoutUpdateOn(false);
       return;
     } else if (inputValue.replace(/ /g, "").length === 0) {
-      setAlertOn((prev) => ({
-        ...prev,
+      setAlertOn(() => ({
+        message: "최소 한 자 이상의 운동명을 입력해 주세요.",
         on: true,
       }));
       return;
     }
 
-    // const batch = db.batch();
-    const copyWorkout = _.cloneDeep(recordWorkout);
+    try {
+      // apicall
+      const response = await customAxios.patch(
+        `/workout/workoutName/${primaryKey}`,
+        {
+          workoutName: inputValue,
+        }
+      );
+      if (response.status === 200) {
+        const copyWorkout = _.cloneDeep(recordWorkout);
+        const workoutNameObj = copyWorkout[idx].workoutNames[workoutNameIdx];
+        workoutNameObj.workoutName = inputValue;
 
-    const fbData = {};
-    const resultArr = [];
-
-    let key = 0;
-    for (let i = 0; i < copyWorkout.length; i++) {
-      let nowArr = null;
-      if (i !== idx) nowArr = copyWorkout[i];
-      else {
-        nowArr = copyWorkout[i].map((arr, _) => {
-          if (_ === workoutNameIdx) {
-            return arr.map((el) => {
-              el.name = inputValue;
-              return el;
-            });
-          } else return arr;
-        });
+        setRecordWorkout(copyWorkout);
+        setWorkoutUpdateOn(false);
       }
 
-      if (nowArr.length !== 0) {
-        fbData[key] = JSON.stringify(nowArr);
-        resultArr.push(nowArr);
-        key++;
-      }
+      // }
+    } catch (err) {
+      console.log(err);
     }
-
-    fbData.order = date;
-    // const recordRef = await db.collection(email).doc(date);
-    // await batch.set(recordRef, fbData);
-    // await batch.commit().then(() => {
-    //   setDateWorkout(resultArr);
-    // });
-    // setWorkoutUpdateOn(false);
-  };
+  }, [inputValue, el, setRecordWorkout, workoutNameIdx, idx, recordWorkout]);
 
   const closeModal = () => {
     deleteWorkoutName();
@@ -191,12 +174,4 @@ const WorkoutName = ({ el, fixMode, idx, workoutNameIdx, date, datesId }) => {
   return <div className={styles.workoutName}>{workoutNameComponent}</div>;
 };
 
-export default WorkoutName;
-// export default React.memo(WorkoutName, (prev, next) => {
-//   const prevValue = prev.dateWorkout[prev.idx][prev.workoutNameIdx][0].name;
-//   const nextValue = next.dateWorkout[next.idx][next.workoutNameIdx][0].name;
-
-//   if (prev.fixMode !== next.fixMode) return false;
-//   else if (prevValue !== nextValue) return false;
-//   else return true;
-// });
+export default React.memo(WorkoutName);
