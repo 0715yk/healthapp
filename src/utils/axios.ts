@@ -1,6 +1,8 @@
 import axios, { AxiosInstance } from "axios";
 import cookies from "react-cookies";
 
+
+
 export const customAxios: AxiosInstance = axios.create({
   baseURL: `${process.env.REACT_APP_API_URL}`,
   headers: {

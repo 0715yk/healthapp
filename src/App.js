@@ -4,9 +4,10 @@ import Landing from "./pages/Landing/Landing";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import NavBar from "./components/NavBar";
 import Profile from "./pages/Profile";
+import { isMobile } from "react-device-detect";
 
 function App() {
-  return (
+  return isMobile ? (
     <BrowserRouter>
       <NavBar>
         <Routes>
@@ -17,6 +18,8 @@ function App() {
         </Routes>
       </NavBar>
     </BrowserRouter>
+  ) : (
+    <>모바일을 통해서만 접근 가능한 서비스 입니다.</>
   );
 }
 
