@@ -1,0 +1,40 @@
+.latestWorkout {
+}
+
+.title {
+  font-weight: bold !important;
+  color: yellow !important;
+}
+
+.date {
+  margin-top: 10px;
+  color: white;
+}
+
+.scorePart {
+  display: flex;
+  flex-direction: column;
+  color: white;
+  overflow-y: scroll;
+  padding-bottom: 100px;
+  box-sizing: border-box;
+}
+
+.workoutPart {
+  display: flex !important;
+  flex-direction: column;
+}
+
+#workoutList {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  background-color: black;
+  color: white;
+}
+
+.workoutName {
+  width: 70vw;
+  overflow-x: scroll;
+  white-space: nowrap;
+}
