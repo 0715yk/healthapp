@@ -31,7 +31,7 @@ const Record = () => {
   const completeWorkout = async () => {
     setNowWorking({ nowWorking: false });
     setWorkouts([]);
-    navigate("/main");
+    navigate("/main", { state: "ON" });
   };
 
   return (

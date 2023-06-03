@@ -13,7 +13,7 @@ const WorkoutModal = () => {
 
   const backBtn = () => {
     setRecordWorkout([]);
-    navigate("/main");
+    navigate("/main", { state: "ON" });
   };
 
   const setFixModeFunc = (e: React.MouseEvent<HTMLButtonElement>) => {
