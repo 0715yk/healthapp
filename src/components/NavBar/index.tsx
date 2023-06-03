@@ -74,9 +74,6 @@ const NavBar = ({ children }: Props) => {
     setModalOn({ on: false, message: "" });
   };
 
-  useEffect(() => {
-    console.log(location.pathname);
-  }, [location.pathname]);
   return (
     <>
       {children}

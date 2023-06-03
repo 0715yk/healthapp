@@ -19,7 +19,7 @@ const Record = () => {
   const setNowWorking = useSetRecoilState(nowWorkingState);
   const workoutCnt = useRecoilValue(workoutCntState);
   const navigate = useNavigate();
-  console.log(workoutCnt);
+
   useEffect(() => {
     window.scrollTo(0, 0);
 
@@ -89,13 +89,13 @@ const Record = () => {
                       <div className={styles.record} key={key}>{`set ${
                         key + 1
                       } : ${
-                        el.kg === null
+                        el.kg === ""
                           ? 0
                           : String(el.kg).length >= 5
                           ? `${String(el.kg).substring(0, 5)}...`
                           : el.kg || 0
                       } kg x ${
-                        el.reps === null
+                        el.reps === ""
                           ? 0
                           : String(el.reps).length >= 5
                           ? `${String(el.reps).substring(0, 5)}...`

@@ -12,3 +12,135 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
     monospace;
 }
+
+@media only screen and (min-width: 320px) {
+  body {
+    font-size: 13px;
+  }
+}
+
+@media only screen and (min-width: 360px) {
+  body {
+    font-size: 15px;
+  }
+}
+
+@media only screen and (min-width: 375px) {
+  body {
+    font-size: 15.5px;
+  }
+}
+
+@media only screen and (min-width: 384px) {
+  body {
+    font-size: 16px;
+  }
+}
+
+@media only screen and (min-width: 390px) {
+  body {
+    font-size: 16.5px;
+  }
+}
+
+@media only screen and (min-width: 393px) {
+  body {
+    font-size: 16.5px;
+  }
+}
+
+@media only screen and (min-width: 412px) {
+  body {
+    font-size: 17px;
+  }
+}
+
+@media only screen and (min-width: 414px) {
+  body {
+    font-size: 17px;
+  }
+}
+
+@media only screen and (min-width: 428px) {
+  body {
+    font-size: 17px;
+  }
+}
+
+@media only screen and (min-width: 430px) {
+  body {
+    font-size: 18px;
+  }
+}
+
+/*
+// 320 = 4개
+// 아이폰 SE : 320
+// Samsung Galaxy Z Fold : 320
+// Apple iPhone 5 : 320
+// Apple iPhone 5s : 320
+
+// 360 = 10개
+// Apple iPhone 12 Mini : 360
+// Apple iPhone 13 Mini : 360
+// Samsung Galaxy S7 : 360
+// Samsung Galaxy S7 edge : 360
+// Samsung Galaxy S8 : 360
+// Samsung Galaxy S8+ : 360
+// Samsung Galaxy S9 : 360
+// Samsung Galaxy S9+ : 360
+// Samsung Galaxy S10 : 360
+// Samsung Galaxy S20 : 360
+
+// 375 = 9개
+// SE(2020) : 375
+// SE(2022) : 375
+// Apple iPhone 6 : 375
+// Apple iPhone 6s : 375
+// Apple iPhone 7 : 375
+// Apple iPhone 8 : 375
+// Apple iPhone X :	375
+// Apple iPhone XS :	375
+// Apple iPhone 11 Pro : 375
+
+// 384 = 1개
+// Samsung Galaxy S20+ : 384
+
+// 390 = 4개
+// Apple iPhone 12 : 390
+// Apple iPhone 12 Pro : 390
+// Apple iPhone 13 : 390
+// Apple iPhone 13 Pro : 390
+// Apple iPhone 14 : 390
+
+// 393 = 1개
+// Apple iPhone 14 Pro : 393
+
+// 412 = 1개
+// Samsung Galaxy Note 10 : 412
+// Samsung Galaxy Note 10+ : 412
+// Samsung Galaxy Note 20 : 412
+// Samsung Galaxy Note 20 Ultra : 412
+// Samsung Galaxy S10 Lite : 412
+// Samsung Galaxy S10+ : 412
+// Samsung Galaxy S20 Ultra : 412
+// Samsung Galaxy S20 Ultra : 412
+
+// 414 = 8개
+// Apple iPhone 6s+ : 414
+// Apple iPhone 7+ : 414
+// Apple iPhone 8+ :	414
+// Apple iPhone 11 : 414
+// Apple iPhone XS Max :	414
+// Apple iPhone 11 Pro Max : 414
+// Samsung Galaxy Note 8 : 414
+// Samsung Galaxy Note 9 : 414
+
+// 428 = 3개
+// Apple iPhone 12 Pro Max : 428
+// Apple iPhone 13 Pro Max : 428
+// Apple iPhone 14 Plus : 428
+
+// 430 = 1개
+// Apple iPhone 14 Pro Max : 430
+*/

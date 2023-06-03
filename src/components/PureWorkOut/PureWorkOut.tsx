@@ -18,12 +18,13 @@ const PureWorkOut = ({ idx, workoutList }: Props) => {
   const [modalOn, setModalOn] = useState({ on: false, message: "" });
   const titleRef = useRef<HTMLInputElement | null>(null);
 
-  const addSet = () => {
+  const addSet = useCallback(() => {
     const copyArr = workouts.slice();
     const copyWorkoutList = workoutList.slice();
+
     if (
-      copyWorkoutList[copyWorkoutList.length - 1].kg === null &&
-      copyWorkoutList[copyWorkoutList.length - 1].reps === null
+      copyWorkoutList[copyWorkoutList.length - 1].kg === "" &&
+      copyWorkoutList[copyWorkoutList.length - 1].reps === ""
     ) {
       setModalOn((prev) => ({
         on: !prev.on,
@@ -42,11 +43,11 @@ const PureWorkOut = ({ idx, workoutList }: Props) => {
     });
     copyArr[idx] = copyWorkoutList;
     setWorkouts(copyArr);
-  };
+  }, [idx, setWorkouts, workouts, workoutList]);
 
   const fixTitle = () => {
     const copyWorkoutList = workoutList.slice();
-    console.log("here");
+
     if (fixMode) {
       const copyArr = workouts.slice();
 

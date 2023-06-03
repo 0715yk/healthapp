@@ -18,57 +18,61 @@ const Row = ({ idx, el, workoutList }: Props) => {
   const kgRef = useRef<HTMLInputElement | null>(null);
   const repsRef = useRef<HTMLInputElement | null>(null);
 
-  const clearRow = (set: number) => {
-    const copyArr = [...workouts];
-    let copyWorkoutList = [...workoutList];
-    let prevKg = "",
-      prevReps = "";
+  const clearRow = useCallback(
+    (set: number) => {
+      const copyArr = [...workouts];
+      let copyWorkoutList = [...workoutList];
+      let prevKg = "",
+        prevReps = "";
 
-    if (el.done) {
-      copyWorkoutList = copyWorkoutList.map((el) => {
-        const copyEl = Object.assign({}, el);
-        if (copyEl.set === set) {
-          prevKg = copyEl.kg;
-          prevReps = copyEl.reps;
-          copyEl.done = false;
-          return copyEl;
-        } else return copyEl;
-      });
-
-      copyArr[idx] = copyWorkoutList;
-      setWorkouts(copyArr);
-
-      setTimeout(() => {
-        if (repsRef?.current && kgRef?.current) {
-          repsRef.current.value = prevReps;
-          kgRef.current.value = prevKg;
-        }
-      });
-    } else {
-      if (repsRef?.current) {
-        if (
-          repsRef.current.value.replace(/ /g, "") === "" ||
-          parseInt(repsRef.current.value) <= 0
-        ) {
-          setModalOn({ on: true, message: "최소 한 번의 reps를 채워주세요" });
-
-          return;
-        }
-
+      if (el.done) {
         copyWorkoutList = copyWorkoutList.map((el) => {
           const copyEl = Object.assign({}, el);
-          if (copyEl.set === set && kgRef?.current && repsRef?.current) {
-            copyEl.kg = kgRef.current.value === "" ? "0" : kgRef.current.value;
-            copyEl.reps = repsRef.current.value;
-            copyEl.done = true;
+          if (copyEl.set === set) {
+            prevKg = copyEl.kg;
+            prevReps = copyEl.reps;
+            copyEl.done = false;
             return copyEl;
           } else return copyEl;
         });
+
         copyArr[idx] = copyWorkoutList;
         setWorkouts(copyArr);
+
+        setTimeout(() => {
+          if (repsRef?.current && kgRef?.current) {
+            repsRef.current.value = prevReps;
+            kgRef.current.value = prevKg;
+          }
+        });
+      } else {
+        if (repsRef?.current) {
+          if (
+            repsRef.current.value.replace(/ /g, "") === "" ||
+            parseInt(repsRef.current.value) <= 0
+          ) {
+            setModalOn({ on: true, message: "최소 한 번의 reps를 채워주세요" });
+
+            return;
+          }
+
+          copyWorkoutList = copyWorkoutList.map((el) => {
+            const copyEl = Object.assign({}, el);
+            if (copyEl.set === set && kgRef?.current && repsRef?.current) {
+              copyEl.kg =
+                kgRef.current.value === "" ? "0" : kgRef.current.value;
+              copyEl.reps = repsRef.current.value;
+              copyEl.done = true;
+              return copyEl;
+            } else return copyEl;
+          });
+          copyArr[idx] = copyWorkoutList;
+          setWorkouts(copyArr);
+        }
       }
-    }
-  };
+    },
+    [el, idx, setWorkouts, workoutList, workouts]
+  );
 
   const deleteRow = useCallback(
     (name: string, set: number) => {

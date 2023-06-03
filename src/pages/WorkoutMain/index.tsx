@@ -63,10 +63,6 @@ const WorkoutMain = () => {
     }
   };
 
-  const DatepickerInput = ({ ...props }) => (
-    <input type="text" {...props} readOnly />
-  );
-
   const closeModal = () => {
     setModalOn({ on: false, message: "" });
   };
@@ -102,7 +98,6 @@ const WorkoutMain = () => {
               e.preventDefault()
             }
             withPortal
-            customInput={<DatepickerInput />}
           />
         </article>
         <article>

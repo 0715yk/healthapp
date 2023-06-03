@@ -55,7 +55,7 @@
   touch-action: manipulation;
   white-space: nowrap;
   will-change: box-shadow, transform;
-  font-size: 1rem;
+  font-size: 0.8rem;
   font-weight: bold;
 }
 
@@ -73,4 +73,16 @@
 .fixBtn:active {
   box-shadow: #d6d6e7 0 3px 7px inset;
   transform: translateY(2px);
+}
+
+.workoutNumPart {
+  color: white;
+  font-size: 1.3rem;
+  color: yellow;
+}
+
+.workoutSetPart {
+  font-size: 0.9rem;
+  margin-top: 20px;
+  padding-left: 1rem;
 }

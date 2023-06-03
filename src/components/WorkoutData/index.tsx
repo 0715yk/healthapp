@@ -89,7 +89,7 @@ const WorkoutData = ({ fixMode, workout, idx, setFixModeFunc }: Props) => {
         cancelModal={setModalOnFunc}
         cancelModalOn={true}
       />
-      <div style={{ color: "white", fontSize: "27px" }}>
+      <div className={styles.workoutNumPart}>
         {`Workout Num : ${idx}`}
         {fixMode && (
           <i
@@ -111,7 +111,7 @@ const WorkoutData = ({ fixMode, workout, idx, setFixModeFunc }: Props) => {
               workoutNameIdx={workoutNameIdx}
               datesId={workout?.datesId}
             />
-            <div style={{ marginTop: "20px" }}>
+            <div className={styles.workoutSetPart}>
               {el?.workouts?.map((_, setIdx: number) => {
                 return (
                   <WorkoutSet

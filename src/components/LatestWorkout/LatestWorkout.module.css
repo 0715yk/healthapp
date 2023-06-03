@@ -4,6 +4,7 @@
 .title {
   font-weight: bold !important;
   color: yellow !important;
+  font-size: 1.3rem !important;
 }
 
 .date {
@@ -37,4 +38,11 @@
   width: 70vw;
   overflow-x: scroll;
   white-space: nowrap;
+  font-size: 1.1rem;
+}
+
+.workoutSetPart {
+  font-size: 1rem;
+  color: #ffffff;
+  padding-left: 1rem;
 }

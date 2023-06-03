@@ -37,7 +37,7 @@ const WorkOutList = ({ offsetHeight }: Props) => {
 
     for (let arr of copyArr) {
       arr = arr.filter((el) => {
-        if (el.kg === null || el.reps === null) return false;
+        if (el.kg === "" || el.reps === "") return false;
         else return true;
       });
       copyArr[idx] = arr;

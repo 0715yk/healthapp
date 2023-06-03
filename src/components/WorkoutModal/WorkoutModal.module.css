@@ -27,6 +27,7 @@
   right: 20px;
   border-radius: 10px !important;
   position: fixed;
+  font-size: 1rem;
 }
 
 .glowBtn:before {
@@ -60,7 +61,7 @@
 
 .glowBtn:after {
   display: flex;
-  font-size: 2.6vh;
+
   align-items: center;
   justify-content: center;
   content: "Back";

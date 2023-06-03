@@ -64,17 +64,17 @@ const LatestWorkout = () => {
                     {workout?.workouts?.map((el, key) => {
                       return (
                         <li
-                          className={styles.record}
+                          className={styles.workoutSetPart}
                           key={el.set}
                           style={el.bestSet ? { color: "yellow" } : {}}
                         >{`set ${key + 1} : ${
-                          el.kg === null
+                          el.kg === ""
                             ? 0
                             : String(el.kg).length >= 5
                             ? `${String(el.kg).substring(0, 5)}...`
                             : el.kg || 0
                         } kg x ${
-                          el.reps === null
+                          el.reps === ""
                             ? 0
                             : String(el.reps).length >= 5
                             ? `${String(el.reps).substring(0, 5)}...`

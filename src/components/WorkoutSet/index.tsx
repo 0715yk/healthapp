@@ -272,13 +272,13 @@ const WorkoutSet = ({
         </>
       ) : (
         `set ${setIdx} : ${
-          el.kg === null
+          el.kg === ""
             ? 0
             : String(el.kg).length >= 5
             ? `${String(el.kg).substring(0, 5)}...`
             : el.kg
         } kg x ${
-          el.reps === null
+          el.reps === ""
             ? 0
             : String(el.reps).length >= 5
             ? `${String(el.kg).substring(0, 5)}...`
