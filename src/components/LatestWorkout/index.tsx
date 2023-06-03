@@ -56,7 +56,7 @@ const LatestWorkout = () => {
         {workouts.length !== 0
           ? workouts.map((workout) => {
               return (
-                <section className={styles.workoutPart}>
+                <section className={styles.workoutPart} key={workout.id}>
                   <h3 style={{ color: "white" }} className={styles.workoutName}>
                     {workout?.workoutName}
                   </h3>
