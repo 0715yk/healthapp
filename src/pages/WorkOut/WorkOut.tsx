@@ -69,7 +69,7 @@ const WorkOut = () => {
     }
   };
 
-  const registerWorkout = () => {
+  const registerWorkout = useCallback(() => {
     if (inputRef?.current && selectRef?.current) {
       const copyArr = workouts.slice();
       const flag = copyArr.find((el) => {
@@ -113,7 +113,7 @@ const WorkOut = () => {
       inputRef.current.value = "";
       selectRef.current.value = "choose basic workout";
     }
-  };
+  }, [setWorkouts, workout, workouts]);
 
   const cancelBtn = () => {
     setBtnOption(true);

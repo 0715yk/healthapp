@@ -1,23 +1,36 @@
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState, useRef, useCallback } from "react";
 import styles from "./LatestWorkout.module.css";
 import { customAxios } from "src/utils/axios";
 import { useRecoilState, useSetRecoilState } from "recoil";
 import {
   getLatestFlagState,
+  latestWorkoutDateState,
   latestWorkoutState,
   loadingState,
 } from "src/states";
-import { useLocation } from "react-router-dom";
+import { useLocation, useSearchParams } from "react-router-dom";
+import cookies from "react-cookies";
 
 const LatestWorkout = () => {
   const { state } = useLocation();
   const divRef = useRef<HTMLDivElement | null>(null);
-  const [date, setDate] = useState("");
+  const [date, setDate] = useRecoilState(latestWorkoutDateState);
   const [workouts, setWorkouts] = useRecoilState(latestWorkoutState);
   const setLoadingSpinner = useSetRecoilState(loadingState);
   const setLatestFlag = useSetRecoilState(getLatestFlagState);
+  const [queryParameters] = useSearchParams();
 
-  const getLatest = async () => {
+  const getLatest = useCallback(async () => {
+    const socialToken = queryParameters.get("code");
+
+    if (socialToken) {
+      const jwtToken = cookies.load("access_token");
+      if (!jwtToken) {
+        cookies.save("access_token", socialToken, {
+          path: "/",
+        });
+      }
+    }
     setLoadingSpinner({ isLoading: true });
     try {
       const response = await customAxios.get("/workout/latest");
@@ -36,10 +49,15 @@ const LatestWorkout = () => {
       console.log(err);
       setLoadingSpinner({ isLoading: false });
     }
-  };
+  }, [setDate, queryParameters, setLoadingSpinner, setWorkouts]);
 
   useEffect(() => {
-    if (divRef?.current && (state === "ON" || state === "login")) {
+    const socialToken = queryParameters.get("code");
+
+    if (
+      divRef?.current &&
+      (state === "ON" || state === "login" || socialToken)
+    ) {
       setLatestFlag("OFF");
       void getLatest();
       const rect = divRef.current.getBoundingClientRect();

@@ -4,8 +4,13 @@ import { useNavigate } from "react-router-dom";
 import { customAxios } from "src/utils/axios";
 import styles from "./style.module.css";
 import cookies from "react-cookies";
-import { useSetRecoilState } from "recoil";
-import { loadingState, userState } from "src/states";
+import { useResetRecoilState, useSetRecoilState } from "recoil";
+import {
+  latestWorkoutDateState,
+  latestWorkoutState,
+  loadingState,
+  userState,
+} from "src/states";
 
 const DeleteAccount = () => {
   const [modalOn, setModalOn] = useState({ on: false, message: "" });
@@ -14,7 +19,8 @@ const DeleteAccount = () => {
   const navigate = useNavigate();
   const setUserState = useSetRecoilState(userState);
   const setLoadingSpinner = useSetRecoilState(loadingState);
-
+  const resetLatestWorkout = useResetRecoilState(latestWorkoutState);
+  const resetLatestWorkoutDate = useResetRecoilState(latestWorkoutDateState);
   const closeModal = async () => {
     // 탈퇴 api 호출
     try {
@@ -32,6 +38,8 @@ const DeleteAccount = () => {
         setLoadingSpinner({ isLoading: false });
         setTimeout(() => {
           setUserState({ nickname: "" });
+          resetLatestWorkout();
+          resetLatestWorkoutDate();
           cookies.remove("access_token", { path: "/" });
           navigate("/");
         }, 5000);

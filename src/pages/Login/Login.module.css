@@ -52,14 +52,18 @@
   flex-direction: column;
 }
 
-.buttons button {
-  margin-top: 15px;
+.glowBtn {
+  margin-top: 0.5rem;
   background-color: black;
   color: white;
   border: 1px solid white;
   padding: 12px 0;
   border-radius: 5px;
   font-size: 1.1rem;
+  height: 5vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 #signUpBtn {
@@ -69,4 +73,25 @@
   color: grey;
   margin-top: 10px;
   padding: unset;
+}
+
+.socialLogin {
+  width: 100% !important;
+  height: 100%;
+  background: #fee501;
+  font-size: 1.1rem;
+  outline: none;
+  color: #3c1d1e;
+  border: 1px solid #ffffff;
+  border-radius: 5px;
+}
+
+.linkBtn {
+  text-decoration: none;
+  margin-top: 0.5rem;
+  height: 5vh;
+}
+
+#signUpBtn {
+  font-size: 1.1rem;
 }

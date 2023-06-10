@@ -9,21 +9,15 @@ const TimeLapse = () => {
   const time = useRecoilValue(timeState);
 
   useEffect(() => {
-    let seconds = moment.duration(moment().diff(time.startTime)).asSeconds();
-    let hour = (seconds / 3600).toFixed(0);
-    let min = ((seconds % 3600) / 60).toFixed(0);
-    let sec = (seconds % 60).toFixed(0);
+    const diff = moment().diff(time.startTime);
+    const workoutTime = moment.utc(diff).format("HH:mm:ss");
 
-    setTimeLapse(`${hour} : ${min} : ${sec}`);
+    setTimeLapse(workoutTime);
 
     const timer = setInterval(() => {
-      let seconds = moment.duration(moment().diff(time.startTime)).asSeconds();
-
-      let hour = (seconds / 3600).toFixed(0);
-      let min = ((seconds % 3600) / 60).toFixed(0);
-      let sec = (seconds % 60).toFixed(0);
-
-      setTimeLapse(`${hour} : ${min} : ${sec}`);
+      const diff = moment().diff(time.startTime);
+      const workoutTime = moment.utc(diff).format("HH:mm:ss");
+      setTimeLapse(workoutTime);
     });
 
     return () => {

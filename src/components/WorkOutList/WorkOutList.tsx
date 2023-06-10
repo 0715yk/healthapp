@@ -39,18 +39,14 @@ const WorkOutList = ({ offsetHeight }: Props) => {
     setTime({ ...time, endTime: moment() });
 
     let copyArr = _.cloneDeep(workouts);
-    var idx = 0;
-
-    for (let arr of copyArr) {
-      arr = arr.filter((el) => {
-        if (el.kg === "" || el.reps === "") return false;
-        else return true;
-      });
-      copyArr[idx] = arr;
-      idx++;
-    }
-
-    copyArr = copyArr.filter((el) => el.length !== 0);
+    copyArr = copyArr
+      .map((arr) => {
+        return arr.filter((el) => {
+          if (el.kg === "" || el.reps === "") return false;
+          else return true;
+        });
+      })
+      .filter((el) => el.length !== 0);
 
     if (copyArr.length === 0) {
       setBtnOption(false);
@@ -63,8 +59,8 @@ const WorkOutList = ({ offsetHeight }: Props) => {
     }
 
     const bestSets = copyArr.map((workout) => {
-      const copyArr = workout.slice();
-      workout.sort((x, y) => {
+      const workoutCopyArr = workout.slice();
+      workoutCopyArr.sort((x, y) => {
         const prevScore =
           (parseInt(x.reps) === 0 ? 1 : parseInt(x.reps)) *
           (parseInt(x.kg) === 0 ? 1 : parseInt(x.kg));
@@ -78,9 +74,9 @@ const WorkOutList = ({ offsetHeight }: Props) => {
         } else return nextScore - prevScore;
       });
 
-      const setNum = workout[0].set - 1;
-      copyArr[setNum].bestSet = true;
-      return copyArr;
+      const setNum = workoutCopyArr[0].set - 1;
+      workout[setNum].bestSet = true;
+      return workout;
     });
 
     const date = moment().format("YYYYMMDD");
