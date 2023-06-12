@@ -19,6 +19,7 @@
   overflow-y: scroll;
   padding-bottom: 100px;
   box-sizing: border-box;
+  margin-top: 2vh;
 }
 
 .workoutPart {

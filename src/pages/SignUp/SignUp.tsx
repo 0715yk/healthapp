@@ -84,19 +84,19 @@ const SignUp = React.forwardRef(({}, ref: ForwardedRef<HTMLDivElement>) => {
       </button>
       <header>Sign Up Form</header>
       <main>
-        <section>
+        <section className={styles.signupSection}>
           <h2>Id</h2>
           <input type="text" ref={idRef}></input>
         </section>
-        <section>
+        <section className={styles.signupSection}>
           <h2>Password</h2>
           <input type="password" ref={pwdRef}></input>
         </section>
-        <section>
+        <section className={styles.signupSection}>
           <h2>Nickname</h2>
           <input type="text" ref={nicknameRef}></input>
         </section>
-        <section>
+        <section className={styles.signupSection}>
           <GlowBtn
             props={{
               func: signup,

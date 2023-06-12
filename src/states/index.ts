@@ -143,3 +143,15 @@ export const latestWorkoutState = atom<WorkoutNameType[]>({
   default: [],
   effects_UNSTABLE: [persistAtom],
 });
+
+export const latestWorkoutDateState = atom<string>({
+  key: "latestWorkoutDateState",
+  default: "",
+  effects_UNSTABLE: [persistAtom],
+});
+
+export const loginStatusState = atom<"kakao" | "naver" | "us" | "guest">({
+  key: "loginStatusState",
+  default: "us",
+  effects_UNSTABLE: [persistAtom],
+});

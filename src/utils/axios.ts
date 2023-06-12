@@ -2,7 +2,11 @@ import axios, { AxiosInstance } from "axios";
 import cookies from "react-cookies";
 
 export const customAxios: AxiosInstance = axios.create({
-  baseURL: `${process.env.REACT_APP_API_URL}`,
+  baseURL: `${
+    process.env.REACT_APP_MODE === "dev"
+      ? process.env.REACT_APP_DEV_API_URL
+      : process.env.REACT_APP_API_URL
+  }`,
   headers: {
     Authorization: `Bearer ${cookies.load("access_token")}`,
   },

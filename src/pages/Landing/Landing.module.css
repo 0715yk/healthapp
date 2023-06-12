@@ -13,7 +13,7 @@
 }
 
 .landingPage header div {
-  font-size: 15vw;
+  font-size: 3.5rem;
   font-weight: 800;
   outline: none;
   text-align: center;
@@ -56,9 +56,18 @@
   border: none;
   color: grey;
   line-height: 100%;
-  font-size: 8vw;
+  font-size: 2.4rem;
   transition-duration: 800ms;
   margin-top: 50px;
   position: relative;
   top: 100vh;
+}
+
+.landingPageBackground {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: black;
 }

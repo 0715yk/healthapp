@@ -13,62 +13,67 @@ code {
     monospace;
 }
 
-@media only screen and (min-width: 320px) {
-  body {
+@media only screen and (min-width: 0px) and (max-width: 280px) {
+  * {
+    font-size: 11px;
+  }
+}
+
+@media only screen and (min-width: 281px) and (max-width: 320px) {
+  * {
     font-size: 13px;
   }
 }
 
-@media only screen and (min-width: 360px) {
-  body {
+@media only screen and (min-width: 321px) and (max-width: 360px) {
+  * {
     font-size: 15px;
   }
 }
-
-@media only screen and (min-width: 375px) {
-  body {
+@media only screen and (min-width: 361px) and (max-width: 375px) {
+  * {
     font-size: 15.5px;
   }
 }
 
-@media only screen and (min-width: 384px) {
-  body {
+@media only screen and (min-width: 376px) and (max-width: 384px) {
+  * {
     font-size: 16px;
   }
 }
 
-@media only screen and (min-width: 390px) {
-  body {
+@media only screen and (min-width: 385px) and (max-width: 390px) {
+  * {
     font-size: 16.5px;
   }
 }
 
-@media only screen and (min-width: 393px) {
-  body {
+@media only screen and (min-width: 391px) and (max-width: 393px) {
+  * {
     font-size: 16.5px;
   }
 }
 
-@media only screen and (min-width: 412px) {
-  body {
+@media only screen and (min-width: 394px) and (max-width: 412px) {
+  * {
     font-size: 17px;
   }
 }
 
-@media only screen and (min-width: 414px) {
-  body {
+@media only screen and (min-width: 413px) and (max-width: 414px) {
+  * {
     font-size: 17px;
   }
 }
 
-@media only screen and (min-width: 428px) {
-  body {
+@media only screen and (min-width: 415px) and (max-width: 428px) {
+  * {
     font-size: 17px;
   }
 }
 
-@media only screen and (min-width: 430px) {
-  body {
+@media only screen and (min-width: 429px) and (max-width: 430px) {
+  * {
     font-size: 18px;
   }
 }

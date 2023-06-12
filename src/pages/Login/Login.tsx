@@ -1,10 +1,10 @@
 import React, { useRef, useState, useCallback, ForwardedRef } from "react";
 import styles from "./Login.module.css";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Modal from "../../components/Modal/Modal";
 import SignUp from "../SignUp/SignUp";
 import { useSetRecoilState } from "recoil";
-import { loadingState, userState } from "../../states";
+import { loadingState, loginStatusState, userState } from "../../states";
 import { customAxios } from "src/utils/axios";
 import cookies from "react-cookies";
 import axios from "axios";
@@ -15,8 +15,8 @@ const Login = React.forwardRef(({}, ref: ForwardedRef<HTMLDivElement>) => {
   const idRef = useRef<HTMLInputElement | null>(null);
   const pwdRef = useRef<HTMLInputElement | null>(null);
   const [modalOn, setModalOn] = useState({ on: false, message: "" });
-
   const setUserState = useSetRecoilState(userState);
+  const setLoginStatusState = useSetRecoilState(loginStatusState);
 
   const signupRef = useRef<HTMLDivElement | null>(null);
   const signUpPage = () => {
@@ -47,6 +47,7 @@ const Login = React.forwardRef(({}, ref: ForwardedRef<HTMLDivElement>) => {
           nickname,
         });
         setLoadingSpinner({ isLoading: false });
+        setLoginStatusState("us");
         navigate("/main", {
           state: "login",
         });
@@ -63,7 +64,7 @@ const Login = React.forwardRef(({}, ref: ForwardedRef<HTMLDivElement>) => {
         }
       }
     }
-  }, [navigate, setLoadingSpinner, setUserState]);
+  }, [navigate, setLoadingSpinner, setUserState, setLoginStatusState]);
 
   const closeModal = () => {
     setModalOn({ on: false, message: "" });
@@ -75,21 +76,28 @@ const Login = React.forwardRef(({}, ref: ForwardedRef<HTMLDivElement>) => {
       <Modal modalOn={modalOn} closeModal={closeModal} />
       <header>Welcome to Strong</header>
       <main>
-        <section>
+        <section className={styles.loginSection}>
           <h2>Id</h2>
           <input type="text" ref={idRef}></input>
         </section>
-        <section>
+        <section className={styles.loginSection}>
           <h2>Password</h2>
           <input type="password" ref={pwdRef}></input>
         </section>
         <section className={styles.buttons}>
+          <Link
+            className={styles.linkBtn}
+            onClick={(e) => {
+              setLoadingSpinner({ isLoading: true });
+              setLoginStatusState("kakao");
+            }}
+            to={`https://kauth.kakao.com/oauth/authorize?client_id=${process.env.REACT_APP_REST_API_KEY}&redirect_uri=${process.env.REACT_APP_REDIRECT_URI}&response_type=code`}
+          >
+            <button className={styles.socialLogin}>Kakao Login </button>
+          </Link>
           <button className={styles.glowBtn} onClick={userLogin}>
             Login
           </button>
-          {/* <button className={styles.glowBtn} onClick={anonymousLogin}>
-            Guest Login
-          </button> */}
           <button id={styles.signUpBtn} onClick={signUpPage}>
             Sign up
           </button>
