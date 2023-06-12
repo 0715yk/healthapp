@@ -76,11 +76,11 @@ const Login = React.forwardRef(({}, ref: ForwardedRef<HTMLDivElement>) => {
       <Modal modalOn={modalOn} closeModal={closeModal} />
       <header>Welcome to Strong</header>
       <main>
-        <section>
+        <section className={styles.loginSection}>
           <h2>Id</h2>
           <input type="text" ref={idRef}></input>
         </section>
-        <section>
+        <section className={styles.loginSection}>
           <h2>Password</h2>
           <input type="password" ref={pwdRef}></input>
         </section>

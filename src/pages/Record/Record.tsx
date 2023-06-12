@@ -37,8 +37,8 @@ const Record = () => {
   return (
     <div className={styles.recordPage}>
       <button className={styles.glowBtn} onClick={completeWorkout}></button>
-      <header className={styles.recordHeader}>
-        <h2>Records</h2>
+      <header>
+        <h2 className={styles.recordGlowBtn}>Records</h2>
       </header>
       <main>
         <article id={styles.totalRecordPart}>
