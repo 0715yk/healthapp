@@ -1,14 +1,15 @@
 import Modal from "src/components/Modal/Modal";
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { customAxios } from "src/utils/axios";
 import styles from "./style.module.css";
 import cookies from "react-cookies";
-import { useResetRecoilState, useSetRecoilState } from "recoil";
+import { useRecoilValue, useResetRecoilState, useSetRecoilState } from "recoil";
 import {
   latestWorkoutDateState,
   latestWorkoutState,
   loadingState,
+  loginStatusState,
   userState,
 } from "src/states";
 
@@ -21,12 +22,16 @@ const DeleteAccount = () => {
   const setLoadingSpinner = useSetRecoilState(loadingState);
   const resetLatestWorkout = useResetRecoilState(latestWorkoutState);
   const resetLatestWorkoutDate = useResetRecoilState(latestWorkoutDateState);
-  const closeModal = async () => {
+  const loginState = useRecoilValue(loginStatusState);
+  const closeModal = useCallback(async () => {
     // 탈퇴 api 호출
     try {
+      console.log(loginState);
       setLoadingSpinner({ isLoading: true });
-      const response = await customAxios.delete(`/users`);
-      if (response.status === 200) {
+      const response = await customAxios.post(`/users/delete`, {
+        loginType: loginState,
+      });
+      if (response.status === 201) {
         setCancelModalOn(false);
         setBtnOption(false);
 
@@ -57,7 +62,14 @@ const DeleteAccount = () => {
         message: "서버 에러 잠시후 다시 시도해주세요.",
       });
     }
-  };
+  }, [
+    loginState,
+    navigate,
+    resetLatestWorkout,
+    resetLatestWorkoutDate,
+    setLoadingSpinner,
+    setUserState,
+  ]);
 
   const onDeleteAccount = () => {
     setModalOn({
