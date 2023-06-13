@@ -26,7 +26,6 @@ const DeleteAccount = () => {
   const closeModal = useCallback(async () => {
     // 탈퇴 api 호출
     try {
-      console.log(loginState);
       setLoadingSpinner({ isLoading: true });
       const response = await customAxios.post(`/users/delete`, {
         loginType: loginState,
