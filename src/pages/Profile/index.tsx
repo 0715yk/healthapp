@@ -51,6 +51,19 @@ const Profile = () => {
         setLoadingSpinner({ isLoading: false });
         console.log(e);
       }
+    } else if (loginState === "google") {
+      try {
+        await customAxios.get("/users/googleLogout");
+        setModalOn({ on: false, message: "" });
+        setUserState({ nickname: "" });
+        cookies.remove("access_token", { path: "/" });
+        setLoginState("us");
+        setLoadingSpinner({ isLoading: false });
+        navigate("/");
+      } catch (e) {
+        setLoadingSpinner({ isLoading: false });
+        console.log(e);
+      }
     } else if (loginState === "us") {
       // 일반 로그인
       setModalOn({ on: false, message: "" });

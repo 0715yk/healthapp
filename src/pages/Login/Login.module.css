@@ -96,3 +96,14 @@
 #signUpBtn {
   font-size: 1.1rem;
 }
+
+.socialLoginGoogle {
+  width: 100% !important;
+  height: 100%;
+  font-size: 1.1rem;
+  outline: none;
+  color: #ffffff;
+  border: 1px solid #ffffff;
+  border-radius: 5px;
+  background: #1b73e8;
+}

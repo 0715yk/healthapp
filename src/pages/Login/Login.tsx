@@ -70,6 +70,15 @@ const Login = React.forwardRef(({}, ref: ForwardedRef<HTMLDivElement>) => {
     setModalOn({ on: false, message: "" });
   };
 
+  const googleLogin = () => {
+    const url =
+      `https://accounts.google.com/o/oauth2/v2/auth?client_id=${process.env.REACT_APP_GOOGLE_CLIENT_ID}` +
+      "&redirect_uri=" +
+      process.env.REACT_APP_GOOGLE_REDIRECT_URL +
+      "&response_type=code" +
+      "&scope=email profile";
+    console.log(url);
+  };
   return (
     <div ref={ref} className={styles.loginPage}>
       <SignUp ref={signupRef} />
@@ -94,6 +103,22 @@ const Login = React.forwardRef(({}, ref: ForwardedRef<HTMLDivElement>) => {
             to={`https://kauth.kakao.com/oauth/authorize?client_id=${process.env.REACT_APP_REST_API_KEY}&redirect_uri=${process.env.REACT_APP_REDIRECT_URI}&response_type=code`}
           >
             <button className={styles.socialLogin}>Kakao Login </button>
+          </Link>
+          <Link
+            className={styles.linkBtn}
+            onClick={(e) => {
+              setLoadingSpinner({ isLoading: true });
+              setLoginStatusState("google");
+            }}
+            to={
+              `https://accounts.google.com/o/oauth2/v2/auth?client_id=${process.env.REACT_APP_GOOGLE_CLIENT_ID}` +
+              "&redirect_uri=" +
+              process.env.REACT_APP_GOOGLE_REDIRECT_URL +
+              "&response_type=code" +
+              "&scope=email profile"
+            }
+          >
+            <button className={styles.socialLoginGoogle}>Google Login </button>
           </Link>
           <button className={styles.glowBtn} onClick={userLogin}>
             Login
