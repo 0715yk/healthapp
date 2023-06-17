@@ -79,24 +79,24 @@ const SignUp = React.forwardRef(({}, ref: ForwardedRef<HTMLDivElement>) => {
   return (
     <div className={styles.signupPage} ref={ref}>
       <Modal modalOn={modalOn} closeModal={closeModal} />
-      <button id={styles.backBtn} onClick={backBtn}>
-        <i className="fas fa-chevron-left"></i>&nbsp;BACK
+      <button className={styles.backBtn} onClick={backBtn}>
+        Back
       </button>
       <header>Sign Up Form</header>
       <main>
-        <section>
+        <section className={styles.signupSection}>
           <h2>Id</h2>
           <input type="text" ref={idRef}></input>
         </section>
-        <section>
+        <section className={styles.signupSection}>
           <h2>Password</h2>
           <input type="password" ref={pwdRef}></input>
         </section>
-        <section>
+        <section className={styles.signupSection}>
           <h2>Nickname</h2>
           <input type="text" ref={nicknameRef}></input>
         </section>
-        <section>
+        <section className={styles.signupSection}>
           <GlowBtn
             props={{
               func: signup,

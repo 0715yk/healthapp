@@ -29,7 +29,7 @@ const Modal = ({
             : {}
         }
       >
-        <section>{modalOn.message}</section>
+        <section className={styles.messageSection}>{modalOn.message}</section>
         <div className={styles.btnWrapper}>
           {btnOption && (
             <>

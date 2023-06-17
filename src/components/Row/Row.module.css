@@ -8,24 +8,17 @@
   display: flex;
   align-items: center;
   justify-content: space-evenly;
-  font-size: 4.5vw;
-}
-
-#kgInput {
-  /* margin-left: 15px; */
-}
-#repsInput {
-  /* margin-left: 15px; */
+  font-size: 1.3rem;
 }
 
 .rowInput input {
   width: 12vw;
   outline: none;
   margin-left: 4px;
+  font-size: 1rem;
 }
 .rowInput span {
   width: 50px;
-  /* margin-left: 4px; */
 }
 
 .clearRowBtn {
@@ -38,5 +31,4 @@
 
 #xBtn {
   width: 5px;
-  /* margin-left: 10px; */
 }

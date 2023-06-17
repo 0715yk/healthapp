@@ -16,6 +16,8 @@ import { customAxios } from "src/utils/axios";
 import Modal from "src/components/Modal/Modal";
 import LatestWorkout from "src/components/LatestWorkout";
 import GlowHeader from "src/components/GlowHeader/GlowHeader";
+import FallbackRender from "src/components/FallbackRender";
+import { ErrorBoundary } from "react-error-boundary";
 
 const WorkoutMain = () => {
   const setLoadingSpinner = useSetRecoilState(loadingState);
@@ -68,45 +70,53 @@ const WorkoutMain = () => {
   };
 
   return (
-    <div className={styles.mainPage}>
-      <Modal modalOn={modalOn} closeModal={closeModal} />
-      <GlowHeader
-        title={"Start Workout"}
-        style={{
-          fontSize: "13vw",
-          textAlign: "left",
-          marginLeft: "15px",
-          paddingTop: "40px",
-        }}
-      />
-      <main>
-        <article>
-          <h2>Quick Start</h2>
-          <button className={styles.strtBtn} onClick={startWorkOut}>
-            Start an Empty Workout
-          </button>
-        </article>
-        <article>
-          <h2>Check Records</h2>
-          <DatePicker
-            className={styles.dateInput}
-            onChange={getWorkoutData}
-            maxDate={new Date()}
-            selected={selectedDate}
-            placeholderText={"Please select a date"}
-            onChangeRaw={(e: React.FocusEvent<HTMLInputElement>) =>
-              e.preventDefault()
-            }
-            withPortal
-          />
-        </article>
-        <article>
-          <LatestWorkout />
-        </article>
-      </main>
-    </div>
+    <ErrorBoundary
+      fallbackRender={FallbackRender}
+      onReset={() => {
+        setTimeout(() => {
+          navigate("/");
+        }, 3000);
+      }}
+    >
+      <div className={styles.mainPage}>
+        <Modal modalOn={modalOn} closeModal={closeModal} />
+        <GlowHeader
+          title={"Start Workout"}
+          style={{
+            fontSize: "13vw",
+            textAlign: "left",
+            marginLeft: "15px",
+            paddingTop: "40px",
+          }}
+        />
+        <main>
+          <article>
+            <h2>Quick Start</h2>
+            <button className={styles.strtBtn} onClick={startWorkOut}>
+              Start an Empty Workout
+            </button>
+          </article>
+          <article>
+            <h2>Check Records</h2>
+            <DatePicker
+              className={styles.dateInput}
+              onChange={getWorkoutData}
+              maxDate={new Date()}
+              selected={selectedDate}
+              placeholderText={"Please select a date"}
+              onChangeRaw={(e: React.FocusEvent<HTMLInputElement>) =>
+                e.preventDefault()
+              }
+              withPortal
+            />
+          </article>
+          <article>
+            <LatestWorkout />
+          </article>
+        </main>
+      </div>
+    </ErrorBoundary>
   );
 };
 
 export default WorkoutMain;
-

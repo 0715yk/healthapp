@@ -5,13 +5,12 @@
   display: flex;
   align-items: center;
   color: white;
-  font-size: 6.5vw;
 }
 
 .title input {
   background-color: black;
   color: white;
-  font-size: 6.5vw;
+  font-size: 1.3rem;
   border: none;
   outline: none;
   width: 100%;
@@ -36,7 +35,8 @@
   margin-top: 15px;
   width: 100%;
   height: 6vh;
-  font-size: 9vw;
+  font-size: 1.8rem;
+  line-height: 100%;
   background-color: white;
   border: 1px solid white;
   color: black;
@@ -45,13 +45,13 @@
 
 #fixBtn {
   margin-left: 10px;
-  font-size: 5.5vw !important;
+  font-size: 1.3rem !important;
   color: white !important;
 }
 
 #deleteBtn {
   margin-left: 10px;
-  font-size: 5.5vw !important;
+  font-size: 1.3rem !important;
   color: white !important;
 }
 
@@ -59,4 +59,5 @@
   overflow-x: scroll;
   white-space: nowrap;
   max-width: 70vw;
+  font-size: 1.3rem;
 }

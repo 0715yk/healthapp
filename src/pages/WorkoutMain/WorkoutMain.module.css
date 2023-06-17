@@ -25,7 +25,7 @@
   width: 100%;
   margin-top: 10px;
   background-color: white;
-  font-size: 6vw;
+  font-size: 1.3rem;
   border: none;
   outline: none;
   padding: 5px 20px;
@@ -55,11 +55,4 @@
   width: 200px;
   outline: none;
   height: 30px;
-}
-
-.record {
-  text-align: left;
-  width: 100%;
-  padding: 3px 0;
-  font-size: 4.5vw;
 }
