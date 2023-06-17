@@ -150,9 +150,7 @@ export const latestWorkoutDateState = atom<string>({
   effects_UNSTABLE: [persistAtom],
 });
 
-export const loginStatusState = atom<
-  "kakao" | "naver" | "us" | "guest" | "google"
->({
+export const loginStatusState = atom<"kakao" | "naver" | "us" | "guest">({
   key: "loginStatusState",
   default: "us",
   effects_UNSTABLE: [persistAtom],

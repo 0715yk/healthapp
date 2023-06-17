@@ -95,22 +95,16 @@ const Login = React.forwardRef(({}, ref: ForwardedRef<HTMLDivElement>) => {
           >
             <button className={styles.socialLogin}>Kakao Login </button>
           </Link>
-          {/* <Link
+          <Link
             className={styles.linkBtn}
             onClick={(e) => {
               setLoadingSpinner({ isLoading: true });
-              setLoginStatusState("google");
+              setLoginStatusState("naver");
             }}
-            to={
-              `https://accounts.google.com/o/oauth2/v2/auth?client_id=${process.env.REACT_APP_GOOGLE_CLIENT_ID}` +
-              "&redirect_uri=" +
-              process.env.REACT_APP_GOOGLE_REDIRECT_URL +
-              "&response_type=code" +
-              "&scope=email profile"
-            }
+            to={`https://nid.naver.com/oauth2.0/authorize?response_type=code&client_id=${process.env.REACT_APP_NAVER_CLIENT_ID}&redirect_uri=${process.env.REACT_APP_NAVER_REDIRECT_URL}&state=prod`}
           >
-            <button className={styles.socialLoginGoogle}>Google Login </button>
-          </Link> */}
+            <button className={styles.socialLoginNaver}>Naver Login </button>
+          </Link>
           <button className={styles.glowBtn} onClick={userLogin}>
             Login
           </button>

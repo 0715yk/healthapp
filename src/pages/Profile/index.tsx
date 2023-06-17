@@ -51,9 +51,9 @@ const Profile = () => {
         setLoadingSpinner({ isLoading: false });
         console.log(e);
       }
-    } else if (loginState === "google") {
+    } else if (loginState === "naver") {
       try {
-        await customAxios.get("/users/googleLogout");
+        await customAxios.get("/users/naverLogout");
         setModalOn({ on: false, message: "" });
         setUserState({ nickname: "" });
         cookies.remove("access_token", { path: "/" });

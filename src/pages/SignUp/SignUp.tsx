@@ -79,8 +79,8 @@ const SignUp = React.forwardRef(({}, ref: ForwardedRef<HTMLDivElement>) => {
   return (
     <div className={styles.signupPage} ref={ref}>
       <Modal modalOn={modalOn} closeModal={closeModal} />
-      <button id={styles.backBtn} onClick={backBtn}>
-        <i className="fas fa-chevron-left"></i>&nbsp;BACK
+      <button className={styles.backBtn} onClick={backBtn}>
+        Back
       </button>
       <header>Sign Up Form</header>
       <main>
