@@ -54,12 +54,11 @@ const LatestWorkout = () => {
   useEffect(() => {
     const socialToken = queryParameters.get("code");
 
-    if (
-      divRef?.current &&
-      (state === "ON" || state === "login" || socialToken)
-    ) {
+    if (state === "ON" || state === "login" || socialToken) {
       setLatestFlag("OFF");
       void getLatest();
+    }
+    if (divRef?.current) {
       const rect = divRef.current.getBoundingClientRect();
       setRectHeight(rect.y);
     }
