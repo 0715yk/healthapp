@@ -1,4 +1,4 @@
-# Welcome to 'Progressive OverHead'!
+# Welcome to 'Progressive Overload'!
 
 ## 백엔드 링크 확인하기 : [백엔드 repo로 이동하기](https://github.com/0715yk/healthapp_be)
 
